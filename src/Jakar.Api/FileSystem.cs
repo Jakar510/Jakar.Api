@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Jakar.Api.Extensions;
 using Jakar.Api.Models;
 using Newtonsoft.Json;
+#pragma warning disable 1591
 
 namespace Jakar.Api
 {

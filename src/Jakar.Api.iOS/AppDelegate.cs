@@ -6,27 +6,20 @@ using Acr.UserDialogs.Infrastructure;
 using Foundation;
 using UIKit;
 
+#pragma warning disable 1591
+
 namespace Jakar.Api.iOS
 {
 	/// <summary>
 	/// The UIApplicationDelegate for the application.
 	/// This class is responsible for launching the User Interface of the application, as well as listening (and optionally responding) to application events from iOS.
+	/// This method (FinishedLaunching) is invoked when the application has loaded and is ready to run.
+	/// In this method you should instantiate the window, load the UI into it and then make the window visible.
+	/// You have 17 seconds to return from this method, or iOS will terminate your application.
 	/// </summary>
-	[Register(nameof(AppDelegate))]
-	public abstract class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+	public abstract class BaseApplication: Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
 	{
-		/// <summary>
-		/// This method is invoked when the application has loaded and is ready to run.
-		/// In this method you should instantiate the window, load the UI into it and then make the window visible.
-		/// You have 17 seconds to return from this method, or iOS will terminate your application.
-		/// </summary>
-		/// <param name="app"></param>
-		/// <param name="options"></param>
-		public override bool FinishedLaunching( UIApplication app, NSDictionary options )
-		{
-			Init("MediaElement_Experimental");
-			return base.FinishedLaunching(app, options);
-		}
+
 
 		/// <summary>
 		/// Add to the subclass: "LoadApplication(new App());"
