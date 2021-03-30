@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>1.0.0</version>
+		<version>1.0.3</version>
 		<title>Base library for all others</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,7 +18,7 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Initial version
+			Fix dependencies.
 		</releaseNotes>
 		<tags>Xamarin.Forms Api Extensions</tags>
 		<language>en-US</language>
@@ -47,7 +47,7 @@
 							version="13.0.1" />
 
 				<dependency id="Acr.UserDialogs"
-							version="7.1.483" />
+							version="7.1.0.483" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 							version="1.1.2" />
@@ -77,7 +77,7 @@
 							version="13.0.1" />
 
 				<dependency id="Acr.UserDialogs"
-							version="7.1.483" />
+							version="7.1.0.483" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 							version="1.1.2" />
@@ -109,7 +109,7 @@
 							version="13.0.1" />
 
 				<dependency id="Acr.UserDialogs"
-							version="7.1.483" />
+							version="7.1.0.483" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 							version="1.1.2" />
@@ -145,7 +145,7 @@
 							version="13.0.1" />
 
 				<dependency id="Acr.UserDialogs"
-							version="7.1.483" />
+							version="7.1.0.483" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 							version="1.1.2" />

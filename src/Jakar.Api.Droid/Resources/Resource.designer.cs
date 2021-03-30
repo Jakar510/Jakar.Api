@@ -8,9 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("Jakar.Api.Android.Resource", IsApplication=false)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("Jakar.Api.Droid.Resource", IsApplication=false)]
 
-namespace Jakar.Api.Android
+namespace Jakar.Api.Droid
 {
 	
 	

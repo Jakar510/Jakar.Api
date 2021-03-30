@@ -1,4 +1,6 @@
 ﻿using Android.OS;
+using Android.Runtime;
+
 #pragma warning disable 1591
 
 namespace Jakar.Api.Droid
@@ -26,6 +28,11 @@ namespace Jakar.Api.Droid
 			Acr.UserDialogs.UserDialogs.Init(this);
 			
 			Instance = this;
+		}
+		public override void OnRequestPermissionsResult( int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults )
+		{
+			Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+			base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 		}
 	}
 }

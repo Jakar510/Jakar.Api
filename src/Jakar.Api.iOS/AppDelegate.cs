@@ -16,26 +16,24 @@ namespace Jakar.Api.iOS
 	public abstract class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
 	{
 		/// <summary>
-		/// This method is invoked when the application has loaded and is ready to run. In this 
-		/// method you should instantiate the window, load the UI into it and then make the window
-		/// visible.
+		/// This method is invoked when the application has loaded and is ready to run.
+		/// In this method you should instantiate the window, load the UI into it and then make the window visible.
 		/// You have 17 seconds to return from this method, or iOS will terminate your application.
 		/// </summary>
 		/// <param name="app"></param>
 		/// <param name="options"></param>
-		/// <returns></returns>
 		public override bool FinishedLaunching( UIApplication app, NSDictionary options )
 		{
-			Start();
+			Init("MediaElement_Experimental");
 			return base.FinishedLaunching(app, options);
 		}
 
 		/// <summary>
 		/// Add to the subclass: "LoadApplication(new App());"
 		/// </summary>
-		protected virtual void Start()
+		protected void Init( params string[] flags )
 		{
-			Xamarin.Forms.Forms.SetFlags("MediaElement_Experimental");
+			Xamarin.Forms.Forms.SetFlags(flags);
 			Xamarin.Forms.Forms.Init();
 			Xamarin.Forms.FormsMaterial.Init();
 
