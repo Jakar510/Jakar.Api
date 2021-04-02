@@ -2,6 +2,9 @@
 
 using System;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api.Exceptions.General
 {
 	public class WiFiException : Exception

@@ -8,6 +8,8 @@ using System.Threading;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
 
+#pragma warning disable 1591
+
 #nullable enable
 namespace Jakar.Api
 {

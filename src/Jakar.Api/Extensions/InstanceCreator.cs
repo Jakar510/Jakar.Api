@@ -3,6 +3,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
+#pragma warning disable 1591
+
 #nullable enable
 namespace Jakar.Api.Extensions
 {

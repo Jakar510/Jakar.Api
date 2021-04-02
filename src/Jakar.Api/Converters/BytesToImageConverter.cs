@@ -4,6 +4,9 @@ using System.Globalization;
 using System.IO;
 using Xamarin.Forms;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api.Converters
 {
 	public class BytesToImageConverter : IValueConverter

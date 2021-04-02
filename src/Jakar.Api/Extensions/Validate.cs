@@ -6,6 +6,9 @@ using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api.Extensions
 {
 	public static class Validate

@@ -2,6 +2,9 @@
 using System.Net;
 using System.Threading;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api.Exceptions.Networking
 {
 	/// <summary>

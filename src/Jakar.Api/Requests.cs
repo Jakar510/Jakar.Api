@@ -10,6 +10,9 @@ using Jakar.Api.Extensions;
 using Jakar.Api.Interfaces;
 using Xamarin.Forms;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api
 {
 	public static class Requests

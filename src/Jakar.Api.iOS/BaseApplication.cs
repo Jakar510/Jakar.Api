@@ -8,6 +8,7 @@ using UIKit;
 
 #pragma warning disable 1591
 
+#nullable enable
 namespace Jakar.Api.iOS
 {
 	/// <summary>
@@ -17,10 +18,8 @@ namespace Jakar.Api.iOS
 	/// In this method you should instantiate the window, load the UI into it and then make the window visible.
 	/// You have 17 seconds to return from this method, or iOS will terminate your application.
 	/// </summary>
-	public abstract class BaseApplication: Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+	public abstract class BaseApplication : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
 	{
-
-
 		/// <summary>
 		/// Add to the subclass: "LoadApplication(new App());"
 		/// </summary>

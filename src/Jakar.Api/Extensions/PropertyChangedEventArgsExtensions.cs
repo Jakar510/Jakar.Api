@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 using Xamarin.Forms;
 
+#pragma warning disable 1591
+
 #nullable enable
 namespace Jakar.Api.Extensions
 {

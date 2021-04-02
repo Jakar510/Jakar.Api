@@ -5,6 +5,8 @@ using Jakar.Api.Interfaces;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
+#pragma warning disable 1591
+
 #nullable enable
 namespace Jakar.Api
 {

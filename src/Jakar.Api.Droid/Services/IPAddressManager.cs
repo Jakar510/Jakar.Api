@@ -22,7 +22,7 @@ namespace Jakar.Api.Droid.Services
 			try
 			{
 				using var intent = new Intent(Settings.ActionWifiSettings);
-				MainActivity.Instance.StartActivity(intent);
+				BaseApplication.Instance.StartActivity(intent);
 			}
 			catch ( Exception ex )
 			{

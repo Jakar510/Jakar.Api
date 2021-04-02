@@ -4,6 +4,8 @@ using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+#pragma warning disable 1591
+
 #nullable enable
 namespace Jakar.Api.Converters
 {

@@ -7,6 +7,8 @@ using Acr.UserDialogs;
 using Jakar.Api.Exceptions.Networking;
 using Xamarin.Forms;
 
+#pragma warning disable 1591
+
 #nullable enable
 namespace Jakar.Api
 {

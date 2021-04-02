@@ -21,7 +21,10 @@
 	// https://gist.github.com/kraigspear/2c3de568cc7ae3c5c360bcac7e9db92a
 
 
+	
+#pragma warning disable 1591
 
+#nullable enable
 	public interface INetworkManager
 	{
 		public string? GetIdentifier();

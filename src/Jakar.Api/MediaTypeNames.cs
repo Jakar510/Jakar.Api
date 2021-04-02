@@ -1,5 +1,8 @@
 ﻿// unset
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api
 {
 	public static class MediaTypeNames

@@ -1,6 +1,9 @@
 ﻿using System;
 using Jakar.Api.Enumerations;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api.Extensions
 {
 	public static class MimeTypeExtensions

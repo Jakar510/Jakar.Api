@@ -6,6 +6,9 @@ using System.IO;
 using Jakar.Api.Enumerations;
 using Jakar.Api.Extensions;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api.Models
 {
 	[Serializable]

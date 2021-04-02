@@ -4,6 +4,9 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api.Models
 {
 	public class FileData : LocalFile

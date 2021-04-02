@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api
 {
 	public static class Versions

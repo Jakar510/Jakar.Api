@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api
 {
 	public static class UserPreferences

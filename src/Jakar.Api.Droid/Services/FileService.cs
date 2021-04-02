@@ -24,7 +24,7 @@ namespace Jakar.Api.Droid.Services
 
 			using var client = new WebClient();
 
-			Java.IO.File? root = MainActivity.Instance.GetExternalFilesDir(MediaStore.Downloads.ContentType);
+			Java.IO.File? root = BaseApplication.Instance.GetExternalFilesDir(MediaStore.Downloads.ContentType);
 			if ( root is null ) throw new NullReferenceException(nameof(root));
 			string path = Path.Combine(root.AbsolutePath, fileName);
 

@@ -3,6 +3,8 @@ using Android.Runtime;
 
 #pragma warning disable 1591
 
+#nullable enable
+
 namespace Jakar.Api.Droid
 {
 	public abstract class BaseApplication : Xamarin.Forms.Platform.Android.FormsAppCompatActivity

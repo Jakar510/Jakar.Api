@@ -2,6 +2,9 @@
 
 using Xamarin.Forms.Internals;
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api.Extensions
 {
 	[Preserve(true, false)]

@@ -1,5 +1,8 @@
 ﻿namespace Jakar.Api
 {
+#pragma warning disable 1591
+
+#nullable enable
 	public static class DeviceInfo
 	{
 		internal static readonly string VersionNumber = Xamarin.Essentials.AppInfo.VersionString;
