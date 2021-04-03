@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Jakar.Api.Extensions;
+
 
 #pragma warning disable 1591
 
@@ -13,7 +15,7 @@ namespace Jakar.Api.Exceptions.General
 		public FeedBackTrackerException( string message ) : base(message) { }
 		public FeedBackTrackerException( string message, Exception inner ) : base(message, inner) { }
 
-		public FeedBackTrackerException( Dictionary<string, string> dict ) : this(Debug.Current.PrettyJson(dict ?? throw new ArgumentNullException(nameof(dict)))) { }
-		public FeedBackTrackerException( Dictionary<string, string> dict, Exception inner ) : this(Debug.Current.PrettyJson(dict ?? throw new ArgumentNullException(nameof(dict))), inner) { }
+		public FeedBackTrackerException( Dictionary<string, string> dict ) : this(dict.ToPrettyJson()) { }
+		public FeedBackTrackerException( Dictionary<string, string> dict, Exception inner ) : this(dict.ToPrettyJson(), inner) { }
 	}
 }

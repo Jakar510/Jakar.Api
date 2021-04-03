@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Acr.UserDialogs.Infrastructure;
-using Foundation;
+﻿using Acr.UserDialogs.Infrastructure;
 using UIKit;
+
 
 #pragma warning disable 1591
 

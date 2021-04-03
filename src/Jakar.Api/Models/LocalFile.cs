@@ -1,10 +1,11 @@
 ﻿// unset
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Threading.Tasks;
 using Jakar.Api.Enumerations;
 using Jakar.Api.Extensions;
+
 
 #pragma warning disable 1591
 
@@ -12,33 +13,51 @@ using Jakar.Api.Extensions;
 namespace Jakar.Api.Models
 {
 	[Serializable]
-	public class LocalFile : IDisposable
+	public class LocalFile : IDisposable, IAsyncDisposable
 	{
+		public bool IsTemporary { get; init; }
 		public FileInfo Info { get; }
 		public string FileName { get; }
 		public MimeType Mime { get; private set; }
 		public string Path => Info.FullName;
 		public bool Exists => File.Exists(Path);
-		public void Encrypt() => File.Encrypt(Path);
-		public void Decrypt() => File.Decrypt(Path);
 
-
-		public LocalFile( string path ) : this(path, System.IO.Path.GetFileName(path)) { }
-		public LocalFile( FileInfo path ) : this(path ?? throw new ArgumentNullException(nameof(path)), System.IO.Path.GetFileName(path.FullName)) { }
-		public LocalFile( string path, string name ) : this(new FileInfo(path), name) { }
-		public LocalFile( FileInfo info, string name )
+		protected static string FromUri( Uri uri )
 		{
+			if ( !uri.IsFile ) throw new ArgumentException("Uri is not a file.", nameof(uri));
+
+			return uri.AbsolutePath;
+		}
+
+		public LocalFile( Uri path, bool temporary = false ) : this(FromUri(path), temporary) { }
+		public LocalFile( string path, bool temporary = false ) : this(path, System.IO.Path.GetFileName(path), temporary) { }
+		public LocalFile( string path, string name, bool temporary = false ) : this(new FileInfo(path), name, temporary) { }
+		public LocalFile( FileInfo path, bool temporary = false ) : this(path ?? throw new ArgumentNullException(nameof(path)), System.IO.Path.GetFileName(path.FullName), temporary) { }
+
+		public LocalFile( FileInfo info, string name, bool temporary = false )
+		{
+			IsTemporary = temporary;
 			Info = info;
 			FileName = name;
 		}
 
+		public static implicit operator LocalFile( string info ) => new(info);
+		public static implicit operator LocalFile( FileInfo info ) => new(info);
+		public static implicit operator LocalFile( Uri info ) => new(info);
+
+
+		public void Encrypt() => File.Encrypt(Path);
+		public void Decrypt() => File.Decrypt(Path);
+
 		public Uri ToUri() => ToUri(MimeType.Unknown);
+
 		public Uri ToUri( MimeType mime )
 		{
 			if ( string.IsNullOrWhiteSpace(Path) )
 				throw new NullReferenceException(nameof(Path));
 
 			Mime = mime;
+
 			if ( !Path.StartsWith("/", StringComparison.InvariantCultureIgnoreCase) )
 				return new Uri($"{Mime.ToUriScheme()}://{Path}", UriKind.Absolute);
 
@@ -49,9 +68,10 @@ namespace Jakar.Api.Models
 
 		public void Dispose()
 		{
-			Dispose(true);
+			Dispose(IsTemporary);
 			GC.SuppressFinalize(this);
 		}
+
 		protected virtual void Dispose( bool remove )
 		{
 			if ( string.IsNullOrWhiteSpace(Path) ) return;
@@ -60,9 +80,13 @@ namespace Jakar.Api.Models
 				File.Delete(Path);
 		}
 
-		public static implicit operator LocalFile( FileInfo info ) => new(info);
-		public static LocalFile FromFileInfo( FileInfo info ) => new(info);
+		public ValueTask DisposeAsync()
+		{
+			Dispose();
+			return new ValueTask(Task.CompletedTask);
+		}
 	}
+
 
 
 	// ReSharper disable once ClassNeverInstantiated.Global

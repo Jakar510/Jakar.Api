@@ -9,6 +9,8 @@ namespace Jakar.Api
 	{
 		public const string URL_ENCODED_CONTENT = "application/x-www-form-urlencoded";
 
+
+
 		public static class Text
 		{
 			public const string Plain = "text/plain";
@@ -16,6 +18,8 @@ namespace Jakar.Api
 			public const string Xml = "text/xml";
 			public const string RichText = "text/richtext";
 		}
+
+
 
 		public static class Application
 		{
@@ -27,6 +31,8 @@ namespace Jakar.Api
 			public const string Json = "application/json";
 			public const string Xml = "application/xml";
 		}
+
+
 
 		public static class Image
 		{

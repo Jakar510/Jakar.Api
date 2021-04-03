@@ -6,6 +6,8 @@ using Android.Provider;
 using Jakar.Api.Droid.Services;
 using Jakar.Api.Interfaces;
 using Xamarin.Forms;
+
+
 #pragma warning disable 1591
 
 #nullable enable

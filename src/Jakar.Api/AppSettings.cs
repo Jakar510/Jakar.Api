@@ -1,6 +1,8 @@
 ﻿// unset
 
 using System;
+
+
 #pragma warning disable 1591
 
 namespace Jakar.Api
@@ -17,7 +19,7 @@ namespace Jakar.Api
 		public object? CurrentViewPage { get; set; }
 
 		public string? ScreenShotAddress { get; set; }
-		
+
 		public string? AppName { get; set; }
 
 		public long Version { get; set; }

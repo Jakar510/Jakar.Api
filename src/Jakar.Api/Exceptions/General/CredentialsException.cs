@@ -1,5 +1,6 @@
 ﻿using System;
 
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -13,12 +14,9 @@ namespace Jakar.Api.Exceptions.General
 
 		protected static string CreateMessage( string? user, string? password ) => $"User: \"{user?.ToUpper() ?? "null"}\" | password: \"{password?.ToUpper() ?? "null"}\"";
 
-		public static void ThrowIfInvalid(string? user, string? password )
+		public static void ThrowIfInvalid( string? user, string? password )
 		{
-			if ( string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(password) )
-			{
-				throw new CredentialsException(user, password);
-			}
+			if ( string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(password) ) { throw new CredentialsException(user, password); }
 		}
 	}
 }

@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -20,19 +21,20 @@ namespace Jakar.Api
 				   {
 					   //Query permission
 					   PermissionStatus.Granted when granted is null => default,
-					   PermissionStatus.Granted => await granted().ConfigureAwait(true),
+					   PermissionStatus.Granted                      => await granted().ConfigureAwait(true),
 
 					   //Permission denied
 					   PermissionStatus.Denied when denial is null => default,
-					   PermissionStatus.Denied => await denial().ConfigureAwait(true),
+					   PermissionStatus.Denied                     => await denial().ConfigureAwait(true),
 
 					   //Permission denied
 					   PermissionStatus.Unknown when unknown is null => default,
-					   PermissionStatus.Unknown => await unknown().ConfigureAwait(true),
+					   PermissionStatus.Unknown                      => await unknown().ConfigureAwait(true),
 
 					   _ => default
 				   };
 		}
+
 		internal static async Task Handle( PermissionStatus status, Func<Task>? denial, Func<Task>? granted, Func<Task>? unknown )
 		{
 			switch ( status )
@@ -40,12 +42,15 @@ namespace Jakar.Api
 				//Query permission
 				case PermissionStatus.Granted when granted is null:
 					return;
+
 				case PermissionStatus.Granted:
 					await granted().ConfigureAwait(true);
 					break;
+
 				//Permission denied
 				case PermissionStatus.Unknown when unknown is null:
 					return;
+
 				case PermissionStatus.Unknown:
 					await unknown().ConfigureAwait(true);
 					break;
@@ -53,35 +58,43 @@ namespace Jakar.Api
 				case PermissionStatus.Denied: // Notify user permission was denied
 					if ( denial is null )
 						return;
+
 					await denial().ConfigureAwait(true);
 					break;
+
 				case PermissionStatus.Disabled:
 					break;
+
 				case PermissionStatus.Restricted:
 					break;
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(status), status, null);
 			}
 		}
+
 		internal static T? Handle<T>( PermissionStatus status, Func<T>? denial, Func<T>? granted, Func<T>? unknown )
 		{
 			return status switch
 				   {
 					   //Query permission
 					   PermissionStatus.Granted when granted is null => default,
-					   PermissionStatus.Granted => granted(),
+					   PermissionStatus.Granted                      => granted(),
+
 					   //Permission denied
 					   PermissionStatus.Unknown when unknown is null => default,
-					   PermissionStatus.Unknown => unknown(),
+					   PermissionStatus.Unknown                      => unknown(),
+
 					   // Notify user permission was denied
 					   PermissionStatus.Denied when denial is null => default,
-					   PermissionStatus.Denied => denial(),
+					   PermissionStatus.Denied                     => denial(),
 
-					   PermissionStatus.Disabled => default,
+					   PermissionStatus.Disabled   => default,
 					   PermissionStatus.Restricted => default,
-					   _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
+					   _                           => throw new ArgumentOutOfRangeException(nameof(status), status, null)
 				   };
 		}
+
 		internal static void Handle( PermissionStatus status, Action? denial, Action? granted, Action? unknown )
 		{
 			switch ( status )
@@ -89,29 +102,37 @@ namespace Jakar.Api
 				//Query permission
 				case PermissionStatus.Granted when granted is null:
 					return;
+
 				case PermissionStatus.Granted:
 					granted();
 					return;
+
 				//Permission denied
 				case PermissionStatus.Unknown when unknown is null:
 					return;
+
 				case PermissionStatus.Unknown:
 					unknown();
 					return;
+
 				case PermissionStatus.Denied when denial is null:
 					return;
+
 				case PermissionStatus.Denied:
 					denial();
 					return;
 
 				case PermissionStatus.Disabled:
 					break;
+
 				case PermissionStatus.Restricted:
 					break;
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(status), status, null);
 			}
 		}
+
 		internal static void Handle( PermissionStatus status, ICommand? denial, ICommand? granted, ICommand? unknown )
 		{
 			switch ( status )
@@ -119,58 +140,81 @@ namespace Jakar.Api
 				//Query permission
 				case PermissionStatus.Granted when granted is null:
 					return;
+
 				case PermissionStatus.Granted:
 					granted.Execute(null);
 					return;
+
 				//Permission denied
 				case PermissionStatus.Unknown when unknown is null:
 					return;
+
 				case PermissionStatus.Unknown:
 					unknown.Execute(null);
 					return;
+
 				case PermissionStatus.Denied when denial is null:
 					return;
+
 				case PermissionStatus.Denied:
 					denial.Execute(null);
 					return;
 
 				case PermissionStatus.Disabled:
 					break;
+
 				case PermissionStatus.Restricted:
 					break;
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(status), status, null);
 			}
 		}
-		internal static void Handle<T>( PermissionStatus status, Command<T>? denial, Command<T>? granted, Command<T>? unknown, T obj )
+
+		internal static void Handle<T>( PermissionStatus status,
+										Command<T>? denial,
+										Command<T>? granted,
+										Command<T>? unknown,
+										T obj
+		)
 		{
 			switch ( status )
 			{
 				//Query permission
 				case PermissionStatus.Granted when granted is null:
 					return;
+
 				case PermissionStatus.Granted:
 					if ( granted.CanExecute(obj) )
 						granted.Execute(obj);
+
 					return;
+
 				//Permission denied
 				case PermissionStatus.Unknown when unknown is null:
 					return;
+
 				case PermissionStatus.Unknown:
 					if ( unknown.CanExecute(obj) )
 						unknown.Execute(obj);
+
 					return;
+
 				case PermissionStatus.Denied when denial is null:
 					return;
+
 				case PermissionStatus.Denied:
 					if ( denial.CanExecute(obj) )
 						denial.Execute(obj);
+
 					return;
 
 				case PermissionStatus.Disabled:
 					break;
+
 				case PermissionStatus.Restricted:
 					break;
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(status), status, null);
 			}
@@ -194,6 +238,7 @@ namespace Jakar.Api
 				return PermissionStatus.Unknown;
 			}
 		}
+
 		internal static async Task<PermissionStatus> CameraPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Camera()).ConfigureAwait(true);
 		internal static async Task<PermissionStatus> StorageReadPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.StorageRead()).ConfigureAwait(true);
 		internal static async Task<PermissionStatus> StorageWritePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.StorageWrite()).ConfigureAwait(true);

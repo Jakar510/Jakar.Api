@@ -1,4 +1,6 @@
 ﻿using UIKit;
+
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -15,12 +17,12 @@ namespace Jakar.Api.iOS.Extensions
 
 		public static void CompressionPriorities( this UIView view, in float value, params UILayoutConstraintAxis[] directions )
 		{
-			foreach ( UILayoutConstraintAxis axis in directions ) { view.SetContentCompressionResistancePriority(value, axis); }
+			foreach ( var axis in directions ) { view.SetContentCompressionResistancePriority(value, axis); }
 		}
 
 		public static void HuggingPriority( this UIView view, in float value, params UILayoutConstraintAxis[] directions )
 		{
-			foreach ( UILayoutConstraintAxis axis in directions ) { view.SetContentHuggingPriority(value, axis); }
+			foreach ( var axis in directions ) { view.SetContentHuggingPriority(value, axis); }
 		}
 	}
 }

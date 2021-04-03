@@ -8,6 +8,7 @@ using System.Threading;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
 
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -35,6 +36,7 @@ namespace Jakar.Api
 		}
 
 
+
 		public class Item
 		{
 			public string DisplayName { get; init; }
@@ -50,6 +52,7 @@ namespace Jakar.Api
 			public CultureInfo Info => new(ShortName);
 
 			public Item() : this(string.Empty, string.Empty, SupportedLanguage.English) { }
+
 			public Item( string name, string shortName, SupportedLanguage language )
 			{
 				DisplayName = name;
@@ -92,6 +95,7 @@ namespace Jakar.Api
 					Thai
 				};
 		}
+
 
 
 		internal static ObservableCollection<Item> Languages { get; } = new(Item.ALL);
@@ -142,6 +146,7 @@ namespace Jakar.Api
 				SelectedLanguageName = _selectedLanguage.DisplayName;
 			}
 		}
+
 		//internal Language SelectedLanguage { get; set; }
 
 
@@ -161,6 +166,7 @@ namespace Jakar.Api
 		public Language()
 		{
 			string id = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
 			// ReSharper disable once VirtualMemberCallInConstructor
 			CultureInfo = new CultureInfo(id);
 

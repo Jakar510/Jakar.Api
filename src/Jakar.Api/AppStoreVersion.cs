@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Plugin.LatestVersion;
 
+
 namespace Jakar.Api
 {
 	internal static class AppStoreVersion
@@ -12,7 +13,7 @@ namespace Jakar.Api
 		public static string InstalledVersionNumber => CrossLatestVersion.Current.InstalledVersionNumber;
 		public static async Task OpenAppInStore() => await CrossLatestVersion.Current.OpenAppInStore().ConfigureAwait(true);
 
-		public static async Task<bool> VerifyAsync(string NewVersionAvailable, string NewVersionUpdateNowOrLater, string yes, string no)
+		public static async Task<bool> VerifyAsync( string NewVersionAvailable, string NewVersionUpdateNowOrLater, string yes, string no )
 		{
 			bool isLatest = await IsLatest().ConfigureAwait(true);
 

@@ -1,5 +1,7 @@
 ﻿using Android.Views;
 using Xamarin.Forms;
+
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -12,10 +14,10 @@ namespace Jakar.Api.Droid.Extensions
 		{
 			return forms switch
 				   {
-					   LayoutAlignment.Start => GravityFlags.Top,
+					   LayoutAlignment.Start  => GravityFlags.Top,
 					   LayoutAlignment.Center => GravityFlags.CenterVertical,
-					   LayoutAlignment.End => GravityFlags.Bottom,
-					   _ => GravityFlags.FillHorizontal
+					   LayoutAlignment.End    => GravityFlags.Bottom,
+					   _                      => GravityFlags.FillHorizontal
 				   };
 		}
 
@@ -23,10 +25,10 @@ namespace Jakar.Api.Droid.Extensions
 		{
 			return forms switch
 				   {
-					   LayoutAlignment.Start => GravityFlags.Start,
+					   LayoutAlignment.Start  => GravityFlags.Start,
 					   LayoutAlignment.Center => GravityFlags.CenterHorizontal,
-					   LayoutAlignment.End => GravityFlags.End,
-					   _ => GravityFlags.FillVertical
+					   LayoutAlignment.End    => GravityFlags.End,
+					   _                      => GravityFlags.FillVertical
 				   };
 		}
 	}

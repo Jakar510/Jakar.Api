@@ -13,6 +13,7 @@ using Plugin.Screenshot;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -26,9 +27,11 @@ namespace Jakar.Api
 			{
 				Uri = uri,
 			};
+
 		private static IFileService _FileService { get; } = DependencyService.Get<IFileService>();
 
 		public static async Task ShareRequest( string title, string text, Uri uri ) => await ShareRequest(title, text, uri.ToString()).ConfigureAwait(true);
+
 		public static async Task ShareRequest( string title, string text, string uri )
 		{
 			try { await Xamarin.Essentials.Share.RequestAsync(GetTextRequest(title, text, uri)).ConfigureAwait(true); }
@@ -37,11 +40,20 @@ namespace Jakar.Api
 
 
 		public static async Task<bool> ShareFile( Uri uri, string shareTitle ) => await ShareFile(uri.ToString() ?? throw new ArgumentNullException(nameof(uri)), shareTitle).ConfigureAwait(true);
-		public static async Task<bool> ShareFile( FileInfo info, string shareTitle ) => await ShareFile(info.FullName ?? throw new ArgumentNullException(nameof(info)), shareTitle).ConfigureAwait(true);
+
+		public static async Task<bool> ShareFile( FileInfo info, string shareTitle ) =>
+			await ShareFile(info.FullName ?? throw new ArgumentNullException(nameof(info)), shareTitle).ConfigureAwait(true);
+
 		public static async Task<bool> ShareFile( string filePath, string shareTitle ) => await ShareFile(new ShareFile(filePath), shareTitle).ConfigureAwait(true);
-		public static async Task<bool> ShareFile( Uri uri, string shareTitle, string mime ) => await ShareFile(uri.ToString() ?? throw new ArgumentNullException(nameof(uri)), shareTitle, mime).ConfigureAwait(true);
-		public static async Task<bool> ShareFile( FileInfo info, string shareTitle, string mime ) => await ShareFile(info.FullName ?? throw new ArgumentNullException(nameof(info)), shareTitle, mime).ConfigureAwait(true);
+
+		public static async Task<bool> ShareFile( Uri uri, string shareTitle, string mime ) =>
+			await ShareFile(uri.ToString() ?? throw new ArgumentNullException(nameof(uri)), shareTitle, mime).ConfigureAwait(true);
+
+		public static async Task<bool> ShareFile( FileInfo info, string shareTitle, string mime ) =>
+			await ShareFile(info.FullName ?? throw new ArgumentNullException(nameof(info)), shareTitle, mime).ConfigureAwait(true);
+
 		public static async Task<bool> ShareFile( string filePath, string shareTitle, string mime ) => await new ShareFile(filePath, mime).ShareFile(shareTitle).ConfigureAwait(true);
+
 		public static async Task<bool> ShareFile( this ShareFile shareFile, string shareTitle )
 		{
 			try
@@ -78,13 +90,16 @@ namespace Jakar.Api
 
 			return default;
 		}
+
 		public static async Task<bool> Open( string url ) => await Open(new Uri(url)).ConfigureAwait(true);
+
 		public static async Task<bool> Open( Uri url )
 		{
 			if ( await Launcher.CanOpenAsync(url).ConfigureAwait(true) ) { return await Launcher.TryOpenAsync(url).ConfigureAwait(true); }
 
 			return false;
 		}
+
 		public static async Task<bool> OpenBrowser( Uri uri )
 		{
 			try
@@ -129,9 +144,11 @@ namespace Jakar.Api
 							AllowCropping = false,
 							Location = await LocationManager.GetLocation().ConfigureAwait(true),
 						};
+
 			MediaFile photo = await CrossMedia.Current.TakePhotoAsync(options, token).ConfigureAwait(true);
 			return photo;
 		}
+
 		public static async Task<MediaFile> GetPhoto( PickMediaOptions? options = null, CancellationToken token = default )
 		{
 			options ??= new PickMediaOptions()
@@ -141,6 +158,7 @@ namespace Jakar.Api
 							RotateImage = false,
 							ModalPresentationStyle = MediaPickerModalPresentationStyle.FullScreen,
 						};
+
 			MediaFile photo = await CrossMedia.Current.PickPhotoAsync(options, token).ConfigureAwait(true);
 			return photo;
 		}
@@ -158,31 +176,38 @@ namespace Jakar.Api
 							AllowCropping = false,
 							Location = await LocationManager.GetLocation().ConfigureAwait(true),
 						};
+
 			MediaFile photo = await CrossMedia.Current.TakeVideoAsync(options, token).ConfigureAwait(true);
 			return photo;
 		}
+
 		public static async Task<MediaFile> GetVideo( CancellationToken token = default ) => await CrossMedia.Current.PickVideoAsync(token).ConfigureAwait(true);
 
 
 		private static Memory<byte> _ScreenShotBuffer { get; set; }
 		public static bool ScreenShotAvailable => _ScreenShotBuffer.IsEmpty;
+
 		public static async Task BufferScreenShot()
 		{
 			byte[] bytes = await CrossScreenshot.Current.CaptureAsync().ConfigureAwait(true);
 
 			_ScreenShotBuffer = new Memory<byte>(bytes);
 		}
+
 		public static async Task<string> GetScreenShot()
 		{
 			byte[] screenShot = await TakeScreenShot().ConfigureAwait(true);
 			return await WriteScreenShot(screenShot).ConfigureAwait(true);
 		}
+
 		public static async Task<byte[]> TakeScreenShot() => await MainThread.InvokeOnMainThreadAsync(CrossScreenshot.Current.CaptureAsync).ConfigureAwait(true);
 
 		public static async Task<string> WriteScreenShot() => await WriteScreenShot(_ScreenShotBuffer.ToArray()).ConfigureAwait(true);
+
 		public static async Task<string> WriteScreenShot( byte[] screenShot )
 		{
-			await FileSystem.Current.WriteToFileAsync(FileSystem.ScreenShot, screenShot).ConfigureAwait(true);
+			await using var file = new FileData(FileSystem.ScreenShot);
+			await file.WriteToFileAsync(screenShot).ConfigureAwait(true);
 
 			return FileSystem.ScreenShot;
 		}
@@ -207,6 +232,7 @@ namespace Jakar.Api
 		public static UriImageSource GetImageSource( string url ) => GetImageSource(new Uri(url), 5);
 		public static UriImageSource GetImageSource( string url, int days ) => GetImageSource(new Uri(url), days);
 		public static UriImageSource GetImageSource( Uri url, int days ) => GetImageSource(url, new TimeSpan(days, 0, 0, 0));
+
 		public static UriImageSource GetImageSource( Uri url, TimeSpan time ) =>
 			new()
 			{

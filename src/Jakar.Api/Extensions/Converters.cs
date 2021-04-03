@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 namespace Jakar.Api.Extensions
 {
@@ -25,11 +27,29 @@ namespace Jakar.Api.Extensions
 
 		public static byte[] FromBase64String( this string s ) => Convert.FromBase64String(s);
 		public static TResult JsonFromBase64String<TResult>( this string s ) => s.JsonFromBase64String<TResult>(Encoding.UTF8);
+
 		public static TResult JsonFromBase64String<TResult>( this string s, Encoding encoding )
 		{
 			byte[] bytes = s.FromBase64String();
 			string temp = encoding.GetString(bytes);
 			return temp.FromJson<TResult>();
+		}
+
+
+		public static string ToPrettyJson( this object jsonSerializablePayload )
+		{
+			if ( jsonSerializablePayload is null ) throw new ArgumentNullException(nameof(jsonSerializablePayload));
+
+			string json = jsonSerializablePayload.ToJson();
+			return json.ToPrettyJson();
+		}
+
+		public static string ToPrettyJson( this string? json )
+		{
+			if ( string.IsNullOrWhiteSpace(json) ) throw new ArgumentNullException(nameof(json));
+
+			JToken parsedJson = JToken.Parse(json);
+			return parsedJson.ToString(Formatting.Indented);
 		}
 
 
@@ -42,7 +62,9 @@ namespace Jakar.Api.Extensions
 			string temp = JsonConvert.SerializeObject(jsonSerializablePayload);
 			return temp.ToBase64();
 		}
+
 		internal static string ToBase64( this string data ) => data.ToBase64(Encoding.UTF8);
+
 		internal static string ToBase64( this string data, Encoding encoding )
 		{
 			byte[] payload = encoding.GetBytes(data);

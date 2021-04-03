@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using Jakar.Api.Extensions;
 using Newtonsoft.Json;
 
+
 #pragma warning disable 1591
 
-namespace Jakar.Api.Models
+namespace Jakar.Api.Models.Users
 {
 	[Serializable]
 	public class Accounts
@@ -14,7 +15,10 @@ namespace Jakar.Api.Models
 		public Dictionary<long, User> All { get; set; } = new();
 
 
-		public static Accounts FromString( string json ) => string.IsNullOrWhiteSpace(json) ? new Accounts() : json.FromJson<Accounts>();
+		public static Accounts FromString( string json ) => string.IsNullOrWhiteSpace(json)
+																? new Accounts()
+																: json.FromJson<Accounts>();
+
 		public string ToJson() => JsonConvert.SerializeObject(this);
 	}
 }

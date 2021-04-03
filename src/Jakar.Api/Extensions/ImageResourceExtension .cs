@@ -3,17 +3,19 @@ using System.Reflection;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 #pragma warning disable 1591
 
 #nullable enable
 namespace Jakar.Api.Extensions
 {
 	[ContentProperty(nameof(Source))]
-	public abstract  class ImageResourceExtension : IMarkupExtension
+	public abstract class ImageResourceExtension : IMarkupExtension
 	{
 		public string? Source { get; set; }
 
 		protected abstract string GetPath( string fileName ); // Path.to.file.in.assembly
+
 		public object? ProvideValue( IServiceProvider serviceProvider )
 		{
 			if ( Source is null ) { return null; }

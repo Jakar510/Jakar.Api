@@ -1,6 +1,7 @@
 ﻿using Android.OS;
 using Android.Runtime;
 
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -9,10 +10,9 @@ namespace Jakar.Api.Droid
 {
 	public abstract class BaseApplication : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
 	{
-#pragma warning disable 8618
+		#pragma warning disable 8618
 		public static BaseApplication Instance { get; protected set; }
-#pragma warning restore 8618
-		
+		#pragma warning restore 8618
 
 
 		protected void Init( Bundle savedInstanceState, params string[] flags )
@@ -23,10 +23,10 @@ namespace Jakar.Api.Droid
 			Xamarin.Forms.Forms.Init(this, savedInstanceState);
 			Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
 			Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-			
+
 			Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, savedInstanceState);
 			Acr.UserDialogs.UserDialogs.Init(this);
-			
+
 			Instance = this;
 		}
 

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+
 
 #pragma warning disable 1591
 
@@ -35,5 +37,9 @@ namespace Jakar.Api.Extensions
 				}
 			}
 		}
+
+		public static void AddHeader( this WebRequest request, IDictionary<HttpRequestHeader, object> headers ) { headers.ForEach(request.AddHeader); }
+
+		public static void AddHeader( this WebRequest request, HttpRequestHeader key, object value ) { request.Headers[key] = value.ToString(); }
 	}
 }

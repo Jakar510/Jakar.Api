@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
+
 namespace Jakar.Api
 {
 	internal class LocationManager
@@ -16,6 +17,7 @@ namespace Jakar.Api
 			Status = default;
 			Location = null;
 		}
+
 		protected async Task<StatusState> GetLocationAsync()
 		{
 			try
@@ -27,7 +29,9 @@ namespace Jakar.Api
 				if ( Location is null )
 					return StatusState.UnknownError;
 
-				Status = Location.IsFromMockProvider ? StatusState.IsFromMockProvider : StatusState.Success;
+				Status = Location.IsFromMockProvider
+							 ? StatusState.IsFromMockProvider
+							 : StatusState.Success;
 			}
 			catch ( FeatureNotSupportedException ) // Handle not supported on device exception
 			{
@@ -49,6 +53,7 @@ namespace Jakar.Api
 
 			return Status;
 		}
+
 		internal async Task<bool> Update()
 		{
 			if ( await Permissions.LocationWhenInUsePermission().ConfigureAwait(true) != PermissionStatus.Granted ) { return false; }
@@ -56,6 +61,7 @@ namespace Jakar.Api
 			StatusState status = await GetLocationAsync().ConfigureAwait(true);
 			return status == StatusState.Success;
 		}
+
 
 
 		public enum StatusState
@@ -68,6 +74,7 @@ namespace Jakar.Api
 			FeatureNotSupported,
 			IsFromMockProvider,
 		}
+
 
 
 		internal static async Task<Plugin.Media.Abstractions.Location?> GetLocation()

@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Essentials;
 
+
 namespace Jakar.Api
 {
 	internal class BarometerReader
@@ -27,6 +28,7 @@ namespace Jakar.Api
 		}
 
 		public bool StartBarometer() => StartBarometer(SensorSpeed.UI);
+
 		public bool StartBarometer( SensorSpeed speed )
 		{
 			try
@@ -48,12 +50,14 @@ namespace Jakar.Api
 				return false;
 			}
 		}
+
 		public bool StopBarometer()
 		{
 			try
 			{
 				if ( Barometer.IsMonitoring )
 					Barometer.Stop();
+
 				return true;
 			}
 			catch ( FeatureNotSupportedException fnsEx )

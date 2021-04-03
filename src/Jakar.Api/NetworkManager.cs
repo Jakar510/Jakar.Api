@@ -5,6 +5,7 @@ using Jakar.Api.Interfaces;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -17,14 +18,19 @@ namespace Jakar.Api
 		public static string? GetIdentifier() => _manager.GetIdentifier();
 		public static void OpenWifiSettings() => _manager.OpenWifiSettings();
 		public static string? GetIPAddress() => _manager.GetIPAddress();
+
 		public static string? GetIPAddressRange()
 		{
 			string? ip = GetIPAddress();
-			return string.IsNullOrWhiteSpace(ip) ? null : ip.Substring(0, ip.LastIndexOf(".", StringComparison.InvariantCultureIgnoreCase) + 1);
+
+			return string.IsNullOrWhiteSpace(ip)
+					   ? null
+					   : ip.Substring(0, ip.LastIndexOf(".", StringComparison.InvariantCultureIgnoreCase) + 1);
 		}
 
 		public static bool IsConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;
 		public static bool IsWiFiConnected => IsConnected && Connectivity.ConnectionProfiles.Any(p => p == ConnectionProfile.WiFi || p == ConnectionProfile.Ethernet);
+
 
 
 		public class WifiConfig
@@ -39,8 +45,10 @@ namespace Jakar.Api
 				Password = password;
 				JoinOnce = joinOnce;
 			}
+
 			public WifiConfig( string ssid, string password ) : this(ssid, password, true) { }
 		}
+
 
 
 		public static void ThrowIfNotConnected()

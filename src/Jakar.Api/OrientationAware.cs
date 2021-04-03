@@ -2,6 +2,7 @@
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -27,16 +28,19 @@ namespace Jakar.Api
 		//Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Height
 		//public static bool IsPhone { get; } = DeviceInfo.Idiom == DeviceIdiom.Phone;
 		public OrientationService() : this(SIZE_NOT_ALLOCATED, SIZE_NOT_ALLOCATED) { }
+
 		public OrientationService( double width, double height )
 		{
 			_Width = width;
 			_Height = height;
 		}
+
 		public void OnSizeAllocated( ContentPage page )
 		{
 			if ( page is null ) throw new ArgumentNullException(nameof(page));
 			OnSizeAllocated(page.Width, page.Height);
 		}
+
 		public void OnSizeAllocated( double width, double height )
 		{
 			if ( Equals(_Width, width) && Equals(_Height, height) ) return;
@@ -60,11 +64,14 @@ namespace Jakar.Api
 
 			return GetOrientation(page.Width, page.Height);
 		}
+
 		public static DisplayOrientation GetOrientation( double width, double height )
 		{
 			if ( Equals(width, SIZE_NOT_ALLOCATED) || Equals(height, SIZE_NOT_ALLOCATED) ) return DisplayOrientation.Unknown;
 
-			return ( width < height ) ? DisplayOrientation.Portrait : DisplayOrientation.Landscape;
+			return ( width < height )
+					   ? DisplayOrientation.Portrait
+					   : DisplayOrientation.Landscape;
 		}
 
 
@@ -73,12 +80,14 @@ namespace Jakar.Api
 		private static OrientationService Create() => new();
 
 
+
 		public class RotationEventArgs : EventArgs
 		{
 			public DisplayOrientation Orientation { get; }
 			public RotationEventArgs( DisplayOrientation orientation ) => Orientation = orientation;
 		}
 	}
+
 
 
 	public class OrientationContentPage : ContentPage

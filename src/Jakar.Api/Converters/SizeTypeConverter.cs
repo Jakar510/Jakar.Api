@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -13,6 +14,7 @@ namespace Jakar.Api.Converters
 	{
 		public override bool CanConvertFrom( Type? sourceType ) => sourceType is null || sourceType == typeof(string);
 		public override object ConvertFromInvariantString( string value ) => Convert(value);
+
 		public Size Convert( string value )
 		{
 			if ( string.IsNullOrWhiteSpace(value) ) throw new InvalidOperationException($"Cannot convert \"{value}\" into {typeof(Size)}");
@@ -30,11 +32,12 @@ namespace Jakar.Api.Converters
 
 			throw new InvalidOperationException($"Cannot convert \"{value}\" into {typeof(Size)}");
 		}
+
 		public string ConvertToInvariantString( object value ) =>
 			value switch
 			{
 				Size size => $"{size.Width},{size.Height}",
-				_ => value.ToString()
+				_         => value.ToString()
 			};
 	}
 }

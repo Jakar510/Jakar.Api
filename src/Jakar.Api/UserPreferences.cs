@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -22,6 +23,7 @@ namespace Jakar.Api
 
 
 		public static string GetPassword( string key ) => GetPasswordAsync(key).Result;
+
 		public static async Task<string> GetPasswordAsync( string key )
 		{
 			try { return await SecureStorage.GetAsync(key).ConfigureAwait(true); }
@@ -31,7 +33,9 @@ namespace Jakar.Api
 				return string.Empty;
 			}
 		}
+
 		public static bool SetPassword( string key, string value ) => MainThread.InvokeOnMainThreadAsync(async () => await SetPasswordAsync(key, value).ConfigureAwait(true)).Result;
+
 		public static async Task<bool> SetPasswordAsync( string key, string value )
 		{
 			try

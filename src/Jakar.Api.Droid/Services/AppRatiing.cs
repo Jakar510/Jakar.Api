@@ -4,9 +4,12 @@ using Android.Content.PM;
 using Jakar.Api.Droid.Services;
 using Jakar.Api.Interfaces;
 using AUri = Android.Net.Uri;
+
+
 #pragma warning disable 1591
 
 [assembly: Xamarin.Forms.Dependency(typeof(AppRating))]
+
 namespace Jakar.Api.Droid.Services
 {
 	public class AppRating : IAppRating

@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using Plugin.Media.Abstractions;
 
+
 #pragma warning disable 1591
 
 #nullable enable

@@ -8,6 +8,8 @@ using AGridLayout = Android.Widget.GridLayout;
 using AContext = Android.Content.Context;
 using AView = Android.Views.View;
 using AObject = Java.Lang.Object;
+
+
 #pragma warning disable 1591
 
 #nullable enable
@@ -19,6 +21,8 @@ namespace Jakar.Api.Droid.Extensions
 		Match,
 		Wrap,
 	}
+
+
 
 	[global::Android.Runtime.Preserve(AllMembers = true)]
 	public enum GridSpec
@@ -33,6 +37,8 @@ namespace Jakar.Api.Droid.Extensions
 		Start,
 		TopAlignment
 	}
+
+
 
 	[global::Android.Runtime.Preserve(AllMembers = true)]
 	public static class AndroidLayoutExtensions
@@ -71,12 +77,15 @@ namespace Jakar.Api.Droid.Extensions
 
 		// -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-		public static AGridLayout.Spec GetSpec( GridSpec spec, float weight ) => AGridLayout.InvokeSpec(AGridLayout.Undefined, SpecMapper[spec], weight) ?? throw new NullReferenceException(nameof(AGridLayout.InvokeSpec));
+		public static AGridLayout.Spec GetSpec( GridSpec spec, float weight ) =>
+			AGridLayout.InvokeSpec(AGridLayout.Undefined, SpecMapper[spec], weight) ?? throw new NullReferenceException(nameof(AGridLayout.InvokeSpec));
+
 		public static void SetSpec( this AView view, GridSpec spec, float weight )
 		{
-			switch (view.LayoutParameters)
+			switch ( view.LayoutParameters )
 			{
 				case null: return;
+
 				case AGridLayout.LayoutParams parameters:
 					parameters.ColumnSpec = GetSpec(spec, weight);
 					break;
@@ -84,6 +93,7 @@ namespace Jakar.Api.Droid.Extensions
 
 			// throw new ArgumentException("view's LayoutParameters is not Android.Widget.GridLayout.LayoutParams", nameof(view));
 		}
+
 		public static void Add( this AGridLayout stack,
 								AView view,
 								int row,
@@ -97,7 +107,8 @@ namespace Jakar.Api.Droid.Extensions
 								int topMargin = 4,
 								int leftMargin = 10,
 								int rightMargin = 10,
-								[CallerMemberName] string caller = "" )
+								[CallerMemberName] string caller = ""
+		)
 		{
 			stack.Add(view,
 					  row,
@@ -114,6 +125,7 @@ namespace Jakar.Api.Droid.Extensions
 					  caller
 					 );
 		}
+
 		public static void Add( this AGridLayout stack,
 								AView view,
 								int row,
@@ -127,7 +139,8 @@ namespace Jakar.Api.Droid.Extensions
 								int topMargin = 4,
 								int leftMargin = 10,
 								int rightMargin = 10,
-								[CallerMemberName] string caller = "" )
+								[CallerMemberName] string caller = ""
+		)
 		{
 			stack.Add(view,
 					  row,
@@ -144,6 +157,7 @@ namespace Jakar.Api.Droid.Extensions
 					  caller
 					 );
 		}
+
 		public static void Add( this AGridLayout stack,
 								AView view,
 								int row,
@@ -157,7 +171,8 @@ namespace Jakar.Api.Droid.Extensions
 								int topMargin = 4,
 								int leftMargin = 10,
 								int rightMargin = 10,
-								[CallerMemberName] string caller = "" )
+								[CallerMemberName] string caller = ""
+		)
 		{
 			if ( stack is null )
 				throw new NullReferenceException(nameof(stack));
@@ -175,9 +190,11 @@ namespace Jakar.Api.Droid.Extensions
 												 LeftMargin = leftMargin,
 												 RightMargin = rightMargin,
 											 };
+
 					{
 						if ( gravity != null )
 							layoutParams.SetGravity((GravityFlags) gravity);
+
 						stack.AddView(view, layoutParams);
 					}
 				},
@@ -192,13 +209,15 @@ namespace Jakar.Api.Droid.Extensions
 								Layout width,
 								Layout height,
 								GravityFlags? gravity = null,
-								[CallerMemberName] string caller = "" )
+								[CallerMemberName] string caller = ""
+		)
 		{
 			if ( stack is null ) throw new NullReferenceException(nameof(stack));
 
 			Run(() =>
 				{
 					using var layoutParams = new LinearLayout.LayoutParams(LayoutMapper[width], LayoutMapper[height]);
+
 					{
 						if ( gravity != null ) layoutParams.Gravity = (GravityFlags) gravity;
 						stack.AddView(view, layoutParams);
@@ -214,13 +233,15 @@ namespace Jakar.Api.Droid.Extensions
 								AView view,
 								Layout width = Layout.Wrap,
 								Layout height = Layout.Wrap,
-								[CallerMemberName] string caller = "" )
+								[CallerMemberName] string caller = ""
+		)
 		{
 			if ( stack is null ) throw new NullReferenceException(nameof(stack));
 
 			Run(() =>
 				{
 					using var layoutParams = new RelativeLayout.LayoutParams(LayoutMapper[width], LayoutMapper[height]);
+
 					{
 						stack.AddView(view, layoutParams);
 					}
@@ -236,7 +257,8 @@ namespace Jakar.Api.Droid.Extensions
 											   ViewGroup? root,
 											   int id,
 											   bool attach = true,
-											   [CallerMemberName] string caller = "" )
+											   [CallerMemberName] string caller = ""
+		)
 		{
 			AObject? temp = context.GetSystemService(AContext.LayoutInflaterService);
 			var inflater = (LayoutInflater) ( temp ?? throw new NullReferenceException(nameof(AContext.LayoutInflaterService)) );
