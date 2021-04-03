@@ -1,6 +1,6 @@
 # Jakar.Api
 
-Contributions are Welcome.
+**Contributions and Ideas are Welcome.**
 
 Base library for all others. 
 
