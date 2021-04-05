@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>1.2.0</version>
+		<version>1.2.1</version>
 		<title>Base library for all others</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,16 +18,7 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Added Extensions:
-			• Enum to number
-			• iOS drawing
-			• iOS layout extensions.
-			• ICollection
-			• IList
-			• IDictionary
-			• WebRequest
-
-			Reworked FileData, LocalFile, and FileSystem Api.
+			added overloads for some iOS layout extensions.
 		</releaseNotes>
 		<tags>Xamarin.Forms Api Extensions</tags>
 		<language>en-US</language>
