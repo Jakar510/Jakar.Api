@@ -16,7 +16,7 @@ namespace Jakar.Api.Converters.Json
 			string result = value switch
 							{
 								int number => number.ToString(),
-								TEnum n    => ( Enum.ToObject(typeof(TEnum), n) ).ToString(),
+								TEnum n    => Enum.ToObject(typeof(TEnum), n).ToString(),
 								_          => throw new JsonReaderException(nameof(value))
 							};
 

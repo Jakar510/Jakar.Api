@@ -13,8 +13,8 @@ namespace Jakar.Api
 	{
 		public static string GetPreferenceName( object value, string name ) => GetName(value.GetType(), name);
 		public static string GetPreferenceName( Type type, string name ) => GetName(type, name);
-		public static string GetName( Type type, string name, [CallerMemberName] string caller = "" ) => $"{AppSettings.Current.AppName}.{type.FullName}.{caller}.{name}";
-		public static string GetShortName( Type type, string name ) => $"{AppSettings.Current.AppName}.{type.FullName}.{name}";
+		public static string GetName( Type type, string name, [CallerMemberName] string caller = "" ) => $"{ApiServices.Current.AppName}.{type.FullName}.{caller}.{name}";
+		public static string GetShortName( Type type, string name ) => $"{ApiServices.Current.AppName}.{type.FullName}.{name}";
 
 
 		//public static string GetPreferenceName(object type, string name, [CallerMemberName] string caller = "") => GetName(type?.GetType(), name, caller);
@@ -34,21 +34,8 @@ namespace Jakar.Api
 			}
 		}
 
-		public static bool SetPassword( string key, string value ) => MainThread.InvokeOnMainThreadAsync(async () => await SetPasswordAsync(key, value).ConfigureAwait(true)).Result;
+		public static void SetPassword( string key, string value ) => MainThread.InvokeOnMainThreadAsync(async () => await SetPasswordAsync(key, value).ConfigureAwait(true)).Wait();
 
-		public static async Task<bool> SetPasswordAsync( string key, string value )
-		{
-			try
-			{
-				await SecureStorage.SetAsync(key, value).ConfigureAwait(true);
-				return true;
-			}
-			catch ( Exception e )
-			{
-				// Possible that device doesn't support secure storage on device.
-				await Debug.Current.HandleExceptionAsync(e).ConfigureAwait(true);
-				return false;
-			}
-		}
+		public static async Task SetPasswordAsync( string key, string value ) { await SecureStorage.SetAsync(key, value).ConfigureAwait(true); }
 	}
 }

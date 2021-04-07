@@ -223,20 +223,11 @@ namespace Jakar.Api
 
 		private static async Task<PermissionStatus> CheckAndRequestPermissionAsync<T>( T permission ) where T : Xamarin.Essentials.Permissions.BasePermission, new()
 		{
-			try
-			{
-				PermissionStatus status = await permission.CheckStatusAsync().ConfigureAwait(true);
+			PermissionStatus status = await permission.CheckStatusAsync().ConfigureAwait(true);
 
-				if ( status != PermissionStatus.Granted ) { status = await permission.RequestAsync().ConfigureAwait(true); }
+			if ( status != PermissionStatus.Granted ) { status = await permission.RequestAsync().ConfigureAwait(true); }
 
-				return status;
-			}
-			catch ( Exception e )
-			{
-				//Something went wrong
-				await Debug.Current.HandleExceptionAsync(e).ConfigureAwait(true);
-				return PermissionStatus.Unknown;
-			}
+			return status;
 		}
 
 		internal static async Task<PermissionStatus> CameraPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Camera()).ConfigureAwait(true);

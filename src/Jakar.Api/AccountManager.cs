@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Jakar.Api.Extensions;
+using Jakar.Api.Interfaces;
 using Jakar.Api.Models;
 using Jakar.Api.Models.Users;
 
@@ -10,24 +13,23 @@ using Jakar.Api.Models.Users;
 
 namespace Jakar.Api
 {
-	public class AccountManager
+	public class AccountManager<TUser, TActiveUser> : ICollection<TUser> where TUser : class, IUser
+																   where TActiveUser : class, ICurrentUser<TUser>, new()
 	{
-		public static AccountManager Current => _Service.Value;
-		private static Lazy<AccountManager> _Service { get; } = new(Create, false);
-		private static AccountManager Create() => new();
+		protected Accounts<TUser, TActiveUser> _Accounts { get; set; } = new();
+		public TActiveUser CurrentUser => _Accounts.Active;
 
 
-		private Accounts _Accounts { get; set; } = new();
 		public AccountManager() { Task.Run(Load); }
 
-		private async Task Load()
+		protected virtual async Task Load()
 		{
 			await using var file = new FileData(FileSystem.AccountsFileName);
-			Accounts? items = await file.ReadFromFileAsync<Accounts>().ConfigureAwait(true);
-			_Accounts = items ?? new Accounts();
+			Accounts<TUser, TActiveUser>? items = await file.ReadFromFileAsync<Accounts<TUser, TActiveUser>>().ConfigureAwait(true);
+			_Accounts = items ?? new Accounts<TUser, TActiveUser>();
 		}
 
-		private async Task Save()
+		protected virtual async Task Save()
 		{
 			await using var file = new FileData(FileSystem.AccountsFileName);
 			string json = _Accounts.ToJson();
@@ -36,47 +38,57 @@ namespace Jakar.Api
 
 		public async Task Logout()
 		{
-			_Accounts.Active.User = null;
+			_Accounts.Active.User = default;
 			await Save().ConfigureAwait(true);
 		}
 
 
-		public User? GetAccount() => _Accounts.Active.User;
+		public TUser? Get() => _Accounts.Active.User;
+		public IEnumerable<TUser> Get( Func<TUser, bool> check ) => _Accounts.Where(check);
+		public TUser? Get( long id ) => _Accounts.All.FirstOrDefault(item => item.Id == id);
+		public TUser? Get( TUser user ) => _Accounts.All.FirstOrDefault(item => item.Id == user.Id);
+		public TUser? Get( string userName ) => Get(s => s.UserName == userName).FirstOrDefault();
 
-		public User? GetAccount( long id ) => _Accounts.All.TryGetValue(id, out User? user)
-												  ? user
-												  : null;
 
-		public User? GetAccount( string userName ) => GetAccount(s => s.UserName == userName);
-
-		public User? GetAccount( Func<User, bool> check )
+		public void Add( TUser user )
 		{
-			Dictionary<long, User>.ValueCollection users = _Accounts.All.Values;
+			if ( Contains(user) ) { return; }
 
-			return users.FirstOrDefault(check);
+			_Accounts.All.Add(user);
 		}
 
-		public User? GetAccount( User user )
+		public void Add( IEnumerable<TUser> users )
 		{
-			Dictionary<long, User>.ValueCollection users = _Accounts.All.Values;
-
-			return users.FirstOrDefault(item => item == user);
+			foreach ( var item in users ) { Add(item); }
 		}
 
+		public int Count => _Accounts.All.Count;
+		public bool IsReadOnly => false;
 
-		public long? GetAccountID( User user ) => _Accounts.All.FirstOrDefault(item => item.Value == user).Key;
+
+		public IEnumerable<TUser> Active() => Get(item => item.IsActive);
+		public IEnumerable<TUser> Disabled() => Get(item => !item.IsActive);
 
 
-		public long AddAccount( User user ) => AddAccount(_Accounts.All.Count, user);
+		public void Clear() => _Accounts.All.Clear();
+		public bool Contains( TUser user ) => Get(user) is not null;
+		public void CopyTo( TUser[] array, int arrayIndex ) { _Accounts.All.CopyTo(array, arrayIndex); }
+		public bool Remove( TUser item ) => _Accounts.All.Remove(item);
 
-		public long AddAccount( long id, User user )
-		{
-			if ( GetAccount(user) != null )
-				return GetAccountID(user) ?? throw new NullReferenceException(nameof(GetAccountID));
 
-			_Accounts.All.Add(id, user);
 
-			return id;
-		}
+
+		public IEnumerator<TUser> GetEnumerator() => _Accounts.All.GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
+
+		// public int IndexOf( TUser item ) { return _Accounts.All.IndexOf(item); }
+		// public void Insert( int index, TUser item ) { _Accounts.All.Insert(index, item); }
+		// public void RemoveAt( int index ) { _Accounts.All.RemoveAt(index); }
+		
+		// public TUser this[ int index ]
+		// {
+		// 	get => _Accounts.All[index];
+		// 	set => _Accounts.All[index] = value;
+		// }
 	}
 }

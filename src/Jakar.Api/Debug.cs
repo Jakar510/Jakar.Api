@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Jakar.Api.Exceptions.General;
 using Jakar.Api.Extensions;
 using Jakar.Api.Models;
 using Microsoft.AppCenter;
@@ -20,28 +22,72 @@ namespace Jakar.Api
 {
 	public class Debug
 	{
-		public static Debug Current => _Service.Value;
-		private static Lazy<Debug> _Service { get; } = new(Create, false);
-		private static Debug Create() => new();
+		// public static Debug Current => _Service.Value;
+		// private static Lazy<Debug> _Service { get; } = new(Create, false);
+		// private static Debug Create() => new();
+
 
 		public bool CanDebug => Debugger.IsAttached;
 		public bool UseDebugLogin => CanDebug;
 		public Guid? InstallId { get; protected set; }
 
+		protected bool _ApiEnabled { get; private set; }
 
-		public virtual async Task StartAppCenter( string app_center_id )
+		private ApiServices? _services;
+
+		protected ApiServices _Services
 		{
+			get => _services ?? throw new ApiDisabledException($"Must call {nameof(StartAppCenter)} first.", new NullReferenceException(nameof(_services)));
+			private set => _services = value;
+		}
+
+
+		public void Start( ApiServices services ) => _Services = services;
+
+		public void Start( string app_center_id, ApiServices services )
+		{
+			Start(services);
+
+			Task.Run(async () => await StartAppCenterAsync(app_center_id).ConfigureAwait(true));
+		}
+
+		public void StartAppCenter( string app_center_id, ApiServices services, params Type[] appCenterServices )
+		{
+			Start(services);
+
+			Task.Run(async () => await StartAppCenterAsync(app_center_id, appCenterServices).ConfigureAwait(true));
+		}
+
+		public virtual async Task StartAppCenterAsync( string app_center_id ) => await StartAppCenterAsync(app_center_id, typeof(Analytics), typeof(Crashes)).ConfigureAwait(true);
+
+		public virtual async Task StartAppCenterAsync( string app_center_id, params Type[] services )
+		{
+			_ApiEnabled = true;
+
 			VersionTracking.Track();
-			AppCenter.Start($"ios={app_center_id};android={app_center_id}", typeof(Analytics), typeof(Crashes));
+
+			AppCenter.Start($"ios={app_center_id};android={app_center_id}", services);
 
 			AppCenter.LogLevel = CanDebug
 									 ? LogLevel.Verbose
 									 : LogLevel.Error; //AppCenter.LogLevel = LogLevel.Debug;
 
 			InstallId = await AppCenter.GetInstallIdAsync().ConfigureAwait(true);
-			AppCenter.SetUserId(InstallId?.ToString());
+			InstallId ??= Guid.NewGuid();
 
-			AppSettings.CrashDataPending = await Crashes.HasCrashedInLastSessionAsync().ConfigureAwait(true);
+			AppCenter.SetUserId(InstallId.ToString());
+
+			_Services.CrashDataPending = await Crashes.HasCrashedInLastSessionAsync().ConfigureAwait(true);
+		}
+
+
+		protected void ThrowIfNotEnabled()
+		{
+			if ( _ApiEnabled ) { return; }
+
+			if ( _services is null ) { throw new ApiDisabledException($"Must call {nameof(StartAppCenter)} first.", new NullReferenceException(nameof(_services))); }
+
+			throw new ApiDisabledException($"Must call {nameof(StartAppCenter)} first.");
 		}
 
 
@@ -49,99 +95,87 @@ namespace Jakar.Api
 
 		public async Task HandleExceptionAsync( Exception e )
 		{
-			if ( !AppSettings.Current.SendCrashes ) { return; }
+			ThrowIfNotEnabled();
+
+			if ( !_Services.SendCrashes ) { return; }
 
 			byte[] screenShot = await Share.TakeScreenShot().ConfigureAwait(true);
 
-			//Dictionary<string, string> dict = GetAppStateFromError(e); // HandleException
-			//Dictionary<string, object> state = GetAppState(e);
-			PrintException(e); // HandleException
+			PrintException(e);
 
 			await TrackError(e, screenShot).ConfigureAwait(true);
 		}
 
-		protected async Task SaveAppState( IDictionary<string, object?> payload )
+		protected async Task SaveAppState( Dictionary<string, object?> payload )
 		{
 			await using var file = new FileData(FileSystem.AppStateFileName);
-
-			try { await file.WriteToFileAsync(payload).ConfigureAwait(true); }
-			catch ( Exception ex )
-			{
-				PrintException(ex); // SaveAppState
-			}
+			await file.WriteToFileAsync(payload).ConfigureAwait(true);
 		}
 
-		public async Task<bool> SaveFeedBackAppState( IDictionary<string, string> feedback )
+		public async Task SaveFeedBackAppState( Dictionary<string, string?> feedback, string key = "feedback" )
 		{
-			try
-			{
-				IDictionary<string, object?> result = GetAppState();
-				result["feedback"] = feedback;
+			var result = new Dictionary<string, object> { [nameof(AppState)] = AppState(), [key] = feedback };
 
-				await using var file = new FileData(FileSystem.AccountsFileName);
-				await file.WriteToFileAsync(result).ConfigureAwait(true);
-
-				return true;
-			}
-			catch ( Exception ex )
-			{
-				PrintMessage(ex.ToString()); // SaveFeedBackAppState
-				Crashes.TrackError(ex);
-				return false;
-			}
+			await using var file = new FileData(FileSystem.AccountsFileName);
+			await file.WriteToFileAsync(result).ConfigureAwait(true);
 		}
 
 
-		protected void PrintException( Exception e )
-		{
-			if ( !CanDebug ) { return; }
-
-			System.Diagnostics.Debug.WriteLine("------------------------------------------------ Exception Start -----------------------------------------------\n\n");
-			System.Diagnostics.Debug.WriteLine(e.Source);
-			System.Diagnostics.Debug.WriteLine("\n----------------------------------------------------------------------------------------------------------------\n");
-			System.Diagnostics.Debug.WriteLine(e.Data);
-			System.Diagnostics.Debug.WriteLine("\n----------------------------------------------------------------------------------------------------------------\n");
-			System.Diagnostics.Debug.WriteLine(e.ToString());
-			System.Diagnostics.Debug.WriteLine("\n----------------------------------------------------------------------------------------------------------------\n");
-			System.Diagnostics.Debug.WriteLine(e.StackTrace);
-			System.Diagnostics.Debug.WriteLine("\n\n------------------------------------------------ Exception End -------------------------------------------------");
-		}
-
-		protected virtual IDictionary<string, string> GetAppStateFromError( Exception e )
+		protected virtual Dictionary<string, string> GetAppStateFromError( Exception e )
 		{
 			if ( e is null ) throw new ArgumentNullException(nameof(e));
 
-			Dictionary<string, string> dict = new()
-											  {
-												  ["activeTreeLevel"] = AppSettings.Current.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(AppSettings.CurrentViewPage)),
-												  ["AppName"] = AppSettings.Current.AppName ?? throw new NullReferenceException(nameof(AppSettings.AppName)),
-												  ["Date"] = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", Language.Current.CultureInfo),
-												  ["Device"] = DeviceInfo.DeviceId,
-												  ["CurrentVersion"] = DeviceInfo.VersionNumber,
-												  ["source"] = e.Source,
-												  ["CurrentLanguage"] = Language.Current.SelectedLanguage.DisplayName
-											  };
-
-			IDictionary t = e.Data;
-			foreach ( DictionaryEntry o in t.Cast<DictionaryEntry>().Where(o => o.Key is { } && o.Value is { }) ) { dict[o.Key.ToString()] = o.Value.ToString(); }
+			Dictionary<string, string> dict = AppState();
+			Update(ref dict, e);
 
 			return dict;
 		}
 
-		protected virtual IDictionary<string, object?>? GetInnerExceptions( Exception e, IDictionary<string, object?> dict )
+		protected virtual void Update( ref Dictionary<string, string> dict, Exception e )
+		{
+			dict[nameof(e.Source)] = e.Source;
+			dict[nameof(e.Message)] = e.Message;
+			dict[nameof(e.Source)] = e.Source;
+			dict[nameof(e.StackTrace)] = e.StackTrace;
+			dict[nameof(e.ToString)] = e.ToString();
+		}
+
+		protected virtual void Update( ref Dictionary<string, object?> dict, Exception e )
+		{
+			dict[nameof(e.Source)] = e.Source;
+			dict[nameof(e.Message)] = e.Message;
+			dict[nameof(e.Source)] = e.Source;
+			dict[nameof(e.StackTrace)] = e.StackTrace;
+			dict[nameof(e.ToString)] = e.ToString();
+		}
+
+		protected virtual Dictionary<string, object?> AppState( Exception e )
+		{
+			if ( e is null ) throw new ArgumentNullException(nameof(e));
+
+			var inner = new Dictionary<string, object?>();
+
+			var dict = new Dictionary<string, object?>
+					   {
+						   [nameof(AppState)] = AppState(),
+						   [nameof(e.InnerException)] = GetInnerExceptions(e, ref inner),
+						   [nameof(e.Data)] = GetData(e)
+					   };
+
+			Update(ref dict, e);
+
+			return dict;
+		}
+
+		protected virtual Dictionary<string, object?>? GetInnerExceptions( Exception e, ref Dictionary<string, object?> dict )
 		{
 			if ( e is null ) throw new ArgumentNullException(nameof(e));
 			if ( e.InnerException is null ) { return null; }
 
-			Dictionary<string, object?> inner = new()
-												{
-													[nameof(e.Message)] = e.InnerException.Message,
-													[nameof(e.Source)] = e.InnerException.Source,
-													[nameof(e.StackTrace)] = e.InnerException.StackTrace,
-													[nameof(e.ToString)] = e.InnerException.ToString(),
-												};
+			var inner = new Dictionary<string, object?>();
+			Update(ref inner, e);
 
-			IDictionary<string, object?>? result = GetInnerExceptions(e, inner);
+			Dictionary<string, object?>? result = GetInnerExceptions(e, ref inner);
 			if ( result is null ) { return dict; }
 
 			dict[nameof(e.InnerException)] = result;
@@ -149,48 +183,38 @@ namespace Jakar.Api
 			return dict;
 		}
 
-		protected virtual IDictionary<string, object?> GetAppState( Exception e )
+		protected static Dictionary<string, string> GetData( Exception e )
 		{
-			if ( e is null ) throw new ArgumentNullException(nameof(e));
-			IDictionary<string, object?> dict = GetAppState();
+			var data = new Dictionary<string, string>();
 
-			dict[nameof(e.Message)] = e.Message;
-			dict[nameof(e.Source)] = e.Source;
-			dict[nameof(e.StackTrace)] = e.StackTrace;
-			dict[nameof(e.ToString)] = e.ToString();
+			foreach ( DictionaryEntry o in e.Data.Cast<DictionaryEntry>().Where(o => o.Key is not null && o.Value is not null) ) { data[o.Key.ToString()] = o.Value.ToString(); }
 
-			var inner = new Dictionary<string, object?>();
-			dict[nameof(e.InnerException)] = GetInnerExceptions(e, inner) ?? inner;
-
-			IDictionary t = e.Data;
-			foreach ( DictionaryEntry o in t ) { dict[o.Key.ToString()] = o.Value.ToString(); }
-
-			return dict;
+			return data;
 		}
 
-		protected virtual IDictionary<string, object?> GetAppState() =>
-			new Dictionary<string, object?>()
+		protected virtual Dictionary<string, string> AppState() =>
+			new()
 			{
-				["activeTreeLevel"] = AppSettings.Current.CurrentViewPage?.ToString(),
-				["AppName"] = AppSettings.Current.AppName,
-				["Date"] = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", Language.Current.CultureInfo),
-				["Device"] = DeviceInfo.DeviceId,
-				["CurrentVersion"] = DeviceInfo.VersionNumber,
-				["CurrentLanguage"] = Language.Current.SelectedLanguage.DisplayName,
+				[nameof(ApiServices.CurrentViewPage)] = _Services.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(_Services.CurrentViewPage)),
+				[nameof(ApiServices.AppName)] = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
+				[nameof(DateTime)] = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", LanguageApi.Current.CultureInfo),
+				[nameof(DeviceInfo.DeviceId)] = DeviceInfo.DeviceId,
+				[nameof(DeviceInfo.versionNumber)] = DeviceInfo.versionNumber,
+				[nameof(LanguageApi.SelectedLanguage)] = LanguageApi.Current.SelectedLanguage.DisplayName
 			};
 
 
-		public async Task TrackError( Exception e ) => await TrackError(e, GetAppStateFromError(e), GetAppState(e)).ConfigureAwait(true);
-		public async Task TrackError( Exception e, byte[] screenShot ) => await TrackError(e, GetAppStateFromError(e), GetAppState(e), screenShot).ConfigureAwait(true);
-		public async Task TrackError( Exception ex, IDictionary<string, string>? eventDetails ) => await TrackError(ex, eventDetails, appState: null).ConfigureAwait(true);
+		public async Task TrackError( Exception e ) => await TrackError(e, GetAppStateFromError(e), AppState(e)).ConfigureAwait(true);
+		public async Task TrackError( Exception e, byte[] screenShot ) => await TrackError(e, GetAppStateFromError(e), AppState(e), screenShot).ConfigureAwait(true);
+		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails ) => await TrackError(ex, eventDetails, appState: null).ConfigureAwait(true);
 
-		public async Task TrackError( Exception ex, IDictionary<string, string>? eventDetails, IDictionary<string, object?>? appState ) => await TrackError(ex,
-																																							eventDetails,
-																																							appState,
-																																							null,
-																																							null).ConfigureAwait(true);
+		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails, Dictionary<string, object?>? appState ) => await TrackError(ex,
+																																						  eventDetails,
+																																						  appState,
+																																						  null,
+																																						  null).ConfigureAwait(true);
 
-		public async Task TrackError( Exception ex, IDictionary<string, string>? eventDetails, IDictionary<string, object?>? appState, byte[] screenShot ) =>
+		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails, Dictionary<string, object?>? appState, byte[] screenShot ) =>
 			await TrackError(ex,
 							 eventDetails,
 							 appState,
@@ -199,8 +223,8 @@ namespace Jakar.Api
 							 screenShot).ConfigureAwait(true);
 
 		public async Task TrackError( Exception ex,
-									  IDictionary<string, string>? eventDetails,
-									  IDictionary<string, object?>? appState,
+									  Dictionary<string, string>? eventDetails,
+									  Dictionary<string, object?>? appState,
 									  string? incomingText,
 									  string? outgoingText
 		) => await TrackError(ex,
@@ -211,14 +235,14 @@ namespace Jakar.Api
 							  null).ConfigureAwait(true);
 
 		public async Task TrackError( Exception ex,
-									  IDictionary<string, string>? eventDetails,
-									  IDictionary<string, object?>? appState,
+									  Dictionary<string, string>? eventDetails,
+									  Dictionary<string, object?>? appState,
 									  string? incomingText,
 									  string? outgoingText,
 									  byte[]? screenShot
 		)
 		{
-			if ( !AppSettings.Current.SendCrashes ) { return; }
+			if ( !_Services.SendCrashes ) { return; }
 
 			if ( appState is not null ) await SaveAppState(appState).ConfigureAwait(true);
 
@@ -257,38 +281,52 @@ namespace Jakar.Api
 			await TrackError(ex, eventDetails, attachments.ToArray()).ConfigureAwait(true);
 		}
 
-		public Task TrackError( Exception ex, IDictionary<string, string>? eventDetails, params ErrorAttachmentLog[] attachments )
+		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails, params ErrorAttachmentLog[] attachments )
 		{
-			if ( !AppSettings.Current.SendCrashes ) { return Task.CompletedTask; }
+			ThrowIfNotEnabled();
+
+			if ( !_Services.SendCrashes ) { return; }
 
 			if ( ex == null ) throw new ArgumentNullException(nameof(ex));
 
 			Crashes.TrackError(ex, eventDetails, attachments);
-			return Task.CompletedTask;
+			await Task.CompletedTask;
 		}
 
 
-		public void TrackEvent( string source )
+		public void TrackEvent( [CallerMemberName] string source = "" )
 		{
-			if ( !AppSettings.Current.SendCrashes ) { return; }
+			ThrowIfNotEnabled();
 
-			TrackEvent(source,
-					   new Dictionary<string, string>()
-					   {
-						   ["DeviceID"] = DeviceInfo.DeviceId,
-						   ["AppName"] = AppSettings.Current.AppName ?? throw new NullReferenceException(nameof(AppSettings.Current.AppName)),
-						   ["Date"] = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", Language.Current.CultureInfo),
-						   ["CurrentLanguage"] = Language.Current.SelectedLanguage.DisplayName,
-					   });
+			if ( !_Services.SendCrashes ) { return; }
+
+			TrackEvent(AppState(), source);
 		}
 
-		protected void TrackEvent( string source, IDictionary<string, string> eventDetails )
+		protected void TrackEvent( Dictionary<string, string> eventDetails, [CallerMemberName] string source = "" )
 		{
-			if ( !AppSettings.Current.SendCrashes ) { return; }
+			ThrowIfNotEnabled();
+
+			if ( !_Services.SendCrashes ) { return; }
 
 			Analytics.TrackEvent(source, eventDetails);
 		}
 
+
+		protected void PrintException( Exception e )
+		{
+			if ( !CanDebug ) { return; }
+
+			System.Diagnostics.Debug.WriteLine("------------------------------------------------ Exception Start -----------------------------------------------\n\n");
+			System.Diagnostics.Debug.WriteLine(e.Source);
+			System.Diagnostics.Debug.WriteLine("\n----------------------------------------------------------------------------------------------------------------\n");
+			System.Diagnostics.Debug.WriteLine(e.Data);
+			System.Diagnostics.Debug.WriteLine("\n----------------------------------------------------------------------------------------------------------------\n");
+			System.Diagnostics.Debug.WriteLine(e.ToString());
+			System.Diagnostics.Debug.WriteLine("\n----------------------------------------------------------------------------------------------------------------\n");
+			System.Diagnostics.Debug.WriteLine(e.StackTrace);
+			System.Diagnostics.Debug.WriteLine("\n\n------------------------------------------------ Exception End -------------------------------------------------");
+		}
 
 		public void PrintMessage( string s, string start = "--------- information ------------" )
 		{

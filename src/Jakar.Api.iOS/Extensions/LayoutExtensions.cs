@@ -22,8 +22,10 @@ namespace Jakar.Api.iOS.Extensions
 			view.UpdateConstraintsIfNeeded();
 		}
 
-		public static void AddFull( this UITableViewCell cell, in UIView view ) => cell.ContentView.AddFull(view);
-		public static void SetAccessory( this UITableViewCell cell, in UIView view ) => cell.EditingAccessoryView = cell.AccessoryView = view;
+
+		public static void SetContent( this UITableViewCell cell, in UIView view ) => cell.ContentView.AddFull(view);
+		public static void SetAccessory( this UITableViewCell cell, in UIView view ) => cell.AccessoryView = view;
+		public static void SetEditAccessory( this UITableViewCell cell, in UIView view ) => cell.EditingAccessoryView = view;
 
 
 		public static void LeftExtended( this UIView view, in UIView parent, in UIView right ) => view.SetBounds(parent.TopAnchor, parent.BottomAnchor, parent.LeftAnchor, right.LeftAnchor);

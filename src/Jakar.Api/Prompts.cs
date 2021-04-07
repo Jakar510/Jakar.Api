@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
+using Jakar.Api.Exceptions.General;
 using Jakar.Api.Exceptions.Networking;
 using Xamarin.Forms;
 
@@ -15,12 +16,25 @@ namespace Jakar.Api
 {
 	public class Prompts
 	{
-		public static Prompts Current => _Service.Value;
-		private static Lazy<Prompts> _Service { get; } = new(Create, false);
-		private static Prompts Create() => new();
-
-
 		protected IUserDialogs _Prompts { get; } = UserDialogs.Instance;
+
+		private ApiServices? _services;
+
+		protected ApiServices _Services
+		{
+			get => _services ?? throw new ApiDisabledException($"Must call {nameof(Start)} first.", new NullReferenceException(nameof(_services)));
+			private set => _services = value;
+		}
+		private Debug? _debug;
+
+		protected Debug _Debug
+		{
+			get => _debug ?? throw new ApiDisabledException($"Must call {nameof(Start)} first.", new NullReferenceException(nameof(_services)));
+			private set => _debug = value;
+		}
+
+		public void Start( ApiServices services ) => _Services = services;
+		public void Start( Debug services ) => _Debug = services;
 
 
 		internal void ShowLoading( string title ) => ShowLoading(title, MaskType.Black);
@@ -187,7 +201,7 @@ namespace Jakar.Api
 				case TimeoutException: break;
 
 				default:
-					await Debug.Current.HandleExceptionAsync(e).ConfigureAwait(true);
+					await _Debug.HandleExceptionAsync(e).ConfigureAwait(true);
 					break;
 			}
 
@@ -196,7 +210,7 @@ namespace Jakar.Api
 
 		public bool HandleException( Exception e )
 		{
-			if ( !( e is OperationCanceledException ) && !( e is NameResolutionException ) && !( e is RequestAbortedException ) && !( e is TimeoutException ) ) { Debug.Current.HandleException(e); }
+			if ( !( e is OperationCanceledException ) && !( e is NameResolutionException ) && !( e is RequestAbortedException ) && !( e is TimeoutException ) ) { _Debug.HandleException(e); }
 
 			return InternalHandleException(e);
 		}
@@ -209,7 +223,7 @@ namespace Jakar.Api
 													   string message,
 													   string yes,
 													   string no,
-													   string SendFeedBackPrompt,
+													   string sendFeedBackPrompt,
 													   Page page,
 													   Exception e
 		) where TFeedBackPage : Page, new()
@@ -217,15 +231,15 @@ namespace Jakar.Api
 			if ( page is null ) throw new ArgumentNullException(nameof(page));
 			if ( e is null ) throw new ArgumentNullException(nameof(e));
 
-			await Debug.Current.HandleExceptionAsync(e).ConfigureAwait(true);
+			await _Debug.HandleExceptionAsync(e).ConfigureAwait(true);
 
-			if ( await Check(title, $"{message}\n\n{SendFeedBackPrompt}", yes, no).ConfigureAwait(true) )
+			if ( await Check(title, $"{message}\n\n{sendFeedBackPrompt}", yes, no).ConfigureAwait(true) )
 			{
-				AppSettings.Current.ScreenShotAddress = await Share.GetScreenShot().ConfigureAwait(true);
+				_Services.ScreenShotAddress = await Share.GetScreenShot().ConfigureAwait(true);
 
 				await page.Navigation.PushAsync(new TFeedBackPage()).ConfigureAwait(true);
 			}
-			else { AppSettings.Current.ScreenShotAddress = null; }
+			else { _Services.ScreenShotAddress = null; }
 		}
 
 
@@ -235,7 +249,7 @@ namespace Jakar.Api
 
 		internal void DebugMessage( Exception e, string ok, [CallerMemberName] string caller = "" )
 		{
-			if ( !Debug.Current.CanDebug ) return;
+			if ( !_Debug.CanDebug ) return;
 
 			if ( !string.IsNullOrWhiteSpace(caller) ) { caller = $"DEBUG: {caller}"; }
 

@@ -18,8 +18,8 @@ namespace Jakar.Api.Extensions
 
 		private static readonly Regex _emailRegex = new(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
-		public static string FormatNumber<T>( this T number, int maxDecimals = 4 ) => Regex.Replace(string.Format(Language.Current.CultureInfo, $"{{0:n{maxDecimals}}}", number),
-																									$"[{Language.Current.CultureInfo.NumberFormat.NumberDecimalSeparator}]?0+$",
+		public static string FormatNumber<T>( this T number, int maxDecimals = 4 ) => Regex.Replace(string.Format(LanguageApi.Current.CultureInfo, $"{{0:n{maxDecimals}}}", number),
+																									$"[{LanguageApi.Current.CultureInfo.NumberFormat.NumberDecimalSeparator}]?0+$",
 																									"");
 
 
@@ -76,7 +76,7 @@ namespace Jakar.Api.Extensions
 		{
 			if ( string.IsNullOrWhiteSpace(item) ) return false;
 
-			item = item.ToLower(Language.Current.CultureInfo);
+			item = item.ToLower(LanguageApi.Current.CultureInfo);
 			return item == Demo || item == "demo";
 		}
 

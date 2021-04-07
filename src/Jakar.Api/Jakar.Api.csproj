@@ -21,7 +21,7 @@
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.2.0" />
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Xam.Plugin.LatestVersion" Version="1.1.2" />
+    <PackageReference Include="Xam.Plugin.LatestVersion" Version="2.0.0" />
     <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
     <PackageReference Include="Xam.Plugin.Screenshot" Version="2.0.3" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />

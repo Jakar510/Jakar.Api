@@ -1,6 +1,4 @@
-﻿// unset
-
-using System;
+﻿using System;
 using System.Globalization;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,36 +10,19 @@ using Xamarin.Forms.Xaml;
 namespace Jakar.Api.Converters
 {
 	[Xamarin.Forms.Internals.Preserve(true, false)]
-	[TypeConversion(typeof(Size?))]
-	public class NullableSizeConverter : TypeConverter, IValueConverter, IExtendedTypeConverter
+	[TypeConversion(typeof(FontAttributes?))]
+	public class NullableFontAttributesConverter : TypeConverter, IValueConverter, IExtendedTypeConverter // IExtendedTypeConverter 
 	{
+		protected readonly FontAttributesConverter _converter = new();
+		
 		public override bool CanConvertFrom( Type? sourceType ) => sourceType is null || sourceType == typeof(string);
 		public override object? ConvertFromInvariantString( string? value ) => Convert(value);
 
-		public Size? Convert( string? value )
-		{
-			if ( string.IsNullOrWhiteSpace(value) ) return null;
-			string[] items = value.Split(',');
-
-			switch ( items.Length )
-			{
-				case 1:
-					double w = double.Parse(items[0]);
-					return new Size(w, w);
-
-				case 2:
-					return new Size(double.Parse(items[0]), double.Parse(items[1]));
-			}
-
-			throw new InvalidOperationException($"Cannot convert \"{value}\" into {typeof(Size)}");
-		}
-
-		public string? ConvertToInvariantString( object? value ) =>
+		public FontAttributes? Convert( string? value ) =>
 			value switch
 			{
-				null      => null,
-				Size size => $"{size.Width},{size.Height}",
-				_         => value.ToString()
+				null => null,
+				_    => (FontAttributes) _converter.ConvertFromInvariantString(value)
 			};
 		
 		public object? Convert( object? value, Type targetType, object parameter, CultureInfo culture ) => Convert(value?.ToString());

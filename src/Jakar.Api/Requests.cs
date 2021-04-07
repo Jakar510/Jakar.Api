@@ -53,13 +53,17 @@ namespace Jakar.Api
 				return string.Empty;
 
 			string result = parameters.Aggregate("?",
-												 ( current, element ) => current + ( string.IsNullOrWhiteSpace(element)
-																						 ? ""
-																						 : $"{element}&" ));
+												 CondenseParameters);
 
 			result = result.Remove(result.Length - 1);
 
 			return result;
+		}
+		private static string CondenseParameters( string current, string element )
+		{
+			return current + ( string.IsNullOrWhiteSpace(element)
+								   ? ""
+								   : $"{element}&" );
 		}
 
 
@@ -228,7 +232,7 @@ namespace Jakar.Api
 			public static async Task<string> PostJson( Uri url, string payload, int timeout, CancellationToken token ) => await TryPost(Post,
 																																		url,
 																																		payload,
-																																		MediaTypeNames.Application.Json,
+																																		MediaTypeNames.Application.JSON,
 																																		timeout,
 																																		token).ConfigureAwait(true);
 

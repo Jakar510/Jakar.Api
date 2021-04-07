@@ -53,7 +53,7 @@ namespace Jakar.Api.Extensions
 				   };
 		}
 
-		public static string ToFileName( this MimeType mime ) => mime.ToFileName(AppSettings.Current.AppName ?? throw new NullReferenceException(nameof(AppSettings.Current.AppName)));
+		public static string ToFileName( this MimeType mime ) => mime.ToFileName(ApiServices.Current.AppName ?? throw new NullReferenceException(nameof(ApiServices.Current.AppName)));
 
 		public static string ToFileName( this MimeType mime, string fileName )
 		{

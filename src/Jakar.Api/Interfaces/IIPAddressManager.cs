@@ -27,7 +27,7 @@
 	public interface INetworkManager
 	{
 		public string? GetIdentifier();
-		public string? GetIPAddress();
+		public string? GetIpAddress();
 
 		public void OpenWifiSettings();
 

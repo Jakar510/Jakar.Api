@@ -1,24 +1,26 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Jakar.Api.Extensions;
+using Jakar.Api.Interfaces;
 using Newtonsoft.Json;
 
 
 #pragma warning disable 1591
 
+#nullable enable
 namespace Jakar.Api.Models.Users
 {
 	[Serializable]
-	public class Accounts
+	public class Accounts<TUser, TActiveUser> : IEnumerable<TUser> where TUser : class, IUser
+																   where TActiveUser : class, ICurrentUser<TUser>, new()
 	{
-		public CurrentUser Active { get; } = new();
-		public Dictionary<long, User> All { get; set; } = new();
+		public TActiveUser Active { get; } = new();
 
 
-		public static Accounts FromString( string json ) => string.IsNullOrWhiteSpace(json)
-																? new Accounts()
-																: json.FromJson<Accounts>();
+		public List<TUser> All { get; set; } = new();
 
-		public string ToJson() => JsonConvert.SerializeObject(this);
+		public IEnumerator<TUser> GetEnumerator() => All.GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 }

@@ -5,15 +5,15 @@
 	#nullable enable
 	public static class DeviceInfo
 	{
-		internal static readonly string VersionNumber = Xamarin.Essentials.AppInfo.VersionString;
-		internal static readonly string BuildNumber = Xamarin.Essentials.AppInfo.BuildString;
-		public static readonly string PackageName = Xamarin.Essentials.AppInfo.PackageName;
-		internal static readonly string DeviceModel = Xamarin.Essentials.DeviceInfo.Model;
-		internal static readonly string Manufacturer = Xamarin.Essentials.DeviceInfo.Manufacturer;
-		internal static readonly string Version = Xamarin.Essentials.DeviceInfo.VersionString;
-		internal static readonly string DevicePlatform = Xamarin.Essentials.DeviceInfo.Platform.ToString();
+		internal static readonly string versionNumber = Xamarin.Essentials.AppInfo.VersionString;
+		internal static readonly string buildNumber = Xamarin.Essentials.AppInfo.BuildString;
+		public static readonly string _packageName = Xamarin.Essentials.AppInfo.PackageName;
+		internal static readonly string deviceModel = Xamarin.Essentials.DeviceInfo.Model;
+		internal static readonly string manufacturer = Xamarin.Essentials.DeviceInfo.Manufacturer;
+		internal static readonly string version = Xamarin.Essentials.DeviceInfo.VersionString;
+		internal static readonly string devicePlatform = Xamarin.Essentials.DeviceInfo.Platform.ToString();
 
-		public static string FullVersion { get; } = $"{VersionNumber}.{BuildNumber}";
-		public static string DeviceId { get; } = $"{Manufacturer}  {DeviceModel}: {DevicePlatform} {Version} | {VersionNumber} [{BuildNumber}]";
+		public static string FullVersion { get; } = $"{versionNumber}.{buildNumber}";
+		public static string DeviceId { get; } = $"{manufacturer}  {deviceModel}: {devicePlatform} {version} | {versionNumber} [{buildNumber}]";
 	}
 }

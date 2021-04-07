@@ -1,6 +1,7 @@
 ﻿// unset
 
 using System;
+using System.Globalization;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,7 +13,7 @@ namespace Jakar.Api.Converters
 {
 	[Xamarin.Forms.Internals.Preserve(true, false)]
 	[TypeConversion(typeof(ImageSource))]
-	public class NullableImageSourceConverter : TypeConverter // IExtendedTypeConverter 
+	public class NullableImageSourceConverter : TypeConverter, IValueConverter, IExtendedTypeConverter // IExtendedTypeConverter 
 	{
 		private readonly ImageSourceConverter _converter = new();
 		public override bool CanConvertFrom( Type? sourceType ) => sourceType is null || sourceType == typeof(string);
@@ -24,5 +25,12 @@ namespace Jakar.Api.Converters
 				: (ImageSource) _converter.ConvertFromInvariantString(value);
 
 		public string? ConvertToInvariantString( object? _ ) => throw new NotImplementedException();
+
+		
+		public object? Convert( object? value, Type targetType, object parameter, CultureInfo culture ) => Convert(value?.ToString());
+		public object? ConvertBack( object? value, Type targetType, object parameter, CultureInfo culture ) => value?.ToString();
+
+		public object? ConvertFrom( CultureInfo culture, object value, IServiceProvider serviceProvider ) => Convert(value?.ToString());
+		public object? ConvertFromInvariantString( string? value, IServiceProvider serviceProvider ) => Convert(value);
 	}
 }

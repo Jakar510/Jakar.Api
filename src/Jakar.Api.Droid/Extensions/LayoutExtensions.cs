@@ -70,7 +70,8 @@ namespace Jakar.Api.Droid.Extensions
 			catch ( Exception )
 			{
 				var temp = new StackTrace();
-				Debug.Current.PrintMessage(temp.ToString());
+				Console.WriteLine($"------------------------- {caller} -------------------------\n\n");
+				Console.WriteLine(temp + "\n\n");
 				throw;
 			}
 		}

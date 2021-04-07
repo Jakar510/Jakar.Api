@@ -16,13 +16,8 @@ using Newtonsoft.Json;
 
 namespace Jakar.Api
 {
-	public class FileSystem
+	public static class FileSystem
 	{
-		public static FileSystem Current => _Service.Value;
-		private static Lazy<FileSystem> _Service { get; } = new(Create, false);
-		private static FileSystem Create() => new();
-
-
 		public static string AppStateFileName { get; } = GetCacheDataPath("AppState.json");
 		public static string DebugFileName { get; } = GetCacheDataPath("debug.txt");
 		public static string FeedBackFileName { get; } = GetCacheDataPath("feedback.json");
@@ -30,15 +25,15 @@ namespace Jakar.Api
 		public static string IncomingFileName { get; } = GetCacheDataPath("Incoming.json");
 
 		public static string AccountsFileName { get; } = GetAppDataPath($"accounts.json");
-		public static string ZipFileName { get; } = GetAppDataPath($"{AppSettings.Current.AppName}.zip");
-		public static string ScreenShot { get; } = GetCacheDataPath($"{AppSettings.Current.AppName}.png");
+		public static string ZipFileName { get; } = GetAppDataPath($"{ApiServices.Current.AppName}.zip");
+		public static string ScreenShot { get; } = GetCacheDataPath($"{ApiServices.Current.AppName}.png");
 
 
 		public static string GetAppDataPath( string fileName ) => Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, fileName);
 		public static string GetCacheDataPath( string fileName ) => Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, fileName);
 
 
-		public void CreateZipCache()
+		public static void CreateZipCache()
 		{
 			if ( File.Exists(ZipFileName) )
 				File.Delete(ZipFileName);
@@ -46,21 +41,21 @@ namespace Jakar.Api
 			ZipCache();
 		}
 
-		public void ZipCache() => ZipCache(Xamarin.Essentials.FileSystem.CacheDirectory);
+		public static void ZipCache() => ZipCache(Xamarin.Essentials.FileSystem.CacheDirectory);
 
-		public void ZipCache( string path ) => ZipFile.CreateFromDirectory(path,
-																		   ZipFileName,
-																		   CompressionLevel.Optimal,
-																		   true,
-																		   Encoding.UTF8);
+		public static void ZipCache( string path ) => ZipFile.CreateFromDirectory(path,
+																				  ZipFileName,
+																				  CompressionLevel.Optimal,
+																				  true,
+																				  Encoding.UTF8);
 
-		public async Task<string> ZipAsync( params string[] args ) => await ZipAsync(args.ToList()).ConfigureAwait(true);
-		public async Task<string> ZipAsync( params FileData[] files ) => await ZipAsync(files.ToList()).ConfigureAwait(true);
-		public async Task<string> ZipAsync( params LocalFile[] args ) => await ZipAsync(args.ToList()).ConfigureAwait(true);
-		public async Task<string> ZipAsync( IEnumerable<string> files ) => await ZipAsync(files.Select(item => new FileData(item))).ConfigureAwait(true);
-		public async Task<string> ZipAsync( IEnumerable<LocalFile> args ) => await ZipAsync(args.Select(item => new FileData(item))).ConfigureAwait(true);
+		public static async Task<string> ZipAsync( params string[] args ) => await ZipAsync(args.ToList()).ConfigureAwait(true);
+		public static async Task<string> ZipAsync( params FileData[] files ) => await ZipAsync(files.ToList()).ConfigureAwait(true);
+		public static async Task<string> ZipAsync( params LocalFile[] args ) => await ZipAsync(args.ToList()).ConfigureAwait(true);
+		public static async Task<string> ZipAsync( IEnumerable<string> files ) => await ZipAsync(files.Select(item => new FileData(item))).ConfigureAwait(true);
+		public static async Task<string> ZipAsync( IEnumerable<LocalFile> args ) => await ZipAsync(args.Select(item => new FileData(item))).ConfigureAwait(true);
 
-		public async Task<string> ZipAsync( IEnumerable<FileData> args )
+		public static async Task<string> ZipAsync( IEnumerable<FileData> args )
 		{
 			if ( args is null ) throw new ArgumentNullException(nameof(args));
 
@@ -100,14 +95,14 @@ namespace Jakar.Api
 		// }
 
 
-		public async Task<FileData> SaveFileAsync( string filename, Uri uri, CancellationToken token ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), uri, token).ConfigureAwait(true);
+		public static async Task<FileData> SaveFileAsync( string filename, Uri uri, CancellationToken token ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), uri, token).ConfigureAwait(true);
 
-		public async Task<FileData> SaveFileAsync( string filename, Stream stream ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), stream).ConfigureAwait(true);
+		public static async Task<FileData> SaveFileAsync( string filename, Stream stream ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), stream).ConfigureAwait(true);
 
-		public async Task<FileData> SaveFileAsync( string filename, byte[] payload ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), payload).ConfigureAwait(true);
+		public static async Task<FileData> SaveFileAsync( string filename, byte[] payload ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), payload).ConfigureAwait(true);
 
-		public FileData SaveFile( string filename, string link ) => FileData.SaveFile(filename, new Uri(link));
+		public static FileData SaveFile( string filename, string link ) => FileData.SaveFile(filename, new Uri(link));
 
-		public FileData SaveFile( string filename, Uri link ) => FileData.SaveFile(GetCacheDataPath(filename), link);
+		public static FileData SaveFile( string filename, Uri link ) => FileData.SaveFile(GetCacheDataPath(filename), link);
 	}
 }

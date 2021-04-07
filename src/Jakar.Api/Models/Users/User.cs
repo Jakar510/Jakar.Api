@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Jakar.Api.Interfaces;
 using Newtonsoft.Json;
 
 
@@ -9,7 +10,7 @@ using Newtonsoft.Json;
 namespace Jakar.Api.Models.Users
 {
 	[Serializable]
-	public class User
+	public class User : IUser
 	{
 		[JsonProperty(nameof(IsActive), Required = Required.Always)]
 		public long Id { get; set; }

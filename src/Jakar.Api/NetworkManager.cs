@@ -17,11 +17,11 @@ namespace Jakar.Api
 
 		public static string? GetIdentifier() => _manager.GetIdentifier();
 		public static void OpenWifiSettings() => _manager.OpenWifiSettings();
-		public static string? GetIPAddress() => _manager.GetIPAddress();
+		public static string? GetIpAddress() => _manager.GetIpAddress();
 
-		public static string? GetIPAddressRange()
+		public static string? GetIpAddressRange()
 		{
-			string? ip = GetIPAddress();
+			string? ip = GetIpAddress();
 
 			return string.IsNullOrWhiteSpace(ip)
 					   ? null
@@ -30,25 +30,6 @@ namespace Jakar.Api
 
 		public static bool IsConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;
 		public static bool IsWiFiConnected => IsConnected && Connectivity.ConnectionProfiles.Any(p => p == ConnectionProfile.WiFi || p == ConnectionProfile.Ethernet);
-
-
-
-		public class WifiConfig
-		{
-			public bool JoinOnce { get; }
-			public string Ssid { get; }
-			public string Password { get; }
-
-			public WifiConfig( string ssid, string password, bool joinOnce )
-			{
-				Ssid = ssid;
-				Password = password;
-				JoinOnce = joinOnce;
-			}
-
-			public WifiConfig( string ssid, string password ) : this(ssid, password, true) { }
-		}
-
 
 
 		public static void ThrowIfNotConnected()

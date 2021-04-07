@@ -23,55 +23,21 @@ namespace Jakar.Api
 		private void Barometer_ReadingChanged( object sender, BarometerChangedEventArgs e )
 		{
 			Data = e.Reading;
-			Text = Data.PressureInHectopascals.ToString(Language.Current.CultureInfo);
+			Text = Data.PressureInHectopascals.ToString(LanguageApi.Current.CultureInfo);
 			Value = Data.PressureInHectopascals;
 		}
 
-		public bool StartBarometer() => StartBarometer(SensorSpeed.UI);
+		public void StartBarometer() => StartBarometer(SensorSpeed.UI);
 
-		public bool StartBarometer( SensorSpeed speed )
+		public void StartBarometer( SensorSpeed speed )
 		{
-			try
-			{
-				Speed = speed;
-				Barometer.Start(speed);
-				return true;
-			}
-			catch ( FeatureNotSupportedException fnsEx )
-			{
-				// Feature not supported on device
-				Debug.Current.HandleException(fnsEx);
-				return false;
-			}
-			catch ( Exception ex )
-			{
-				// Other error has occurred.
-				Debug.Current.HandleException(ex);
-				return false;
-			}
+			Speed = speed;
+			Barometer.Start(speed);
 		}
 
-		public bool StopBarometer()
+		public void StopBarometer()
 		{
-			try
-			{
-				if ( Barometer.IsMonitoring )
-					Barometer.Stop();
-
-				return true;
-			}
-			catch ( FeatureNotSupportedException fnsEx )
-			{
-				// Feature not supported on device
-				Debug.Current.HandleException(fnsEx);
-				return false;
-			}
-			catch ( Exception ex )
-			{
-				// Other error has occurred.
-				Debug.Current.HandleException(ex);
-				return false;
-			}
+			if ( Barometer.IsMonitoring ) { Barometer.Stop(); }
 		}
 	}
 }

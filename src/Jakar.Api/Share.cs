@@ -32,63 +32,41 @@ namespace Jakar.Api
 
 		public static async Task ShareRequest( string title, string text, Uri uri ) => await ShareRequest(title, text, uri.ToString()).ConfigureAwait(true);
 
-		public static async Task ShareRequest( string title, string text, string uri )
-		{
-			try { await Xamarin.Essentials.Share.RequestAsync(GetTextRequest(title, text, uri)).ConfigureAwait(true); }
-			catch ( Exception e ) { await Debug.Current.HandleExceptionAsync(e).ConfigureAwait(true); }
-		}
+		public static async Task ShareRequest( string title, string text, string uri ) { await Xamarin.Essentials.Share.RequestAsync(GetTextRequest(title, text, uri)).ConfigureAwait(true); }
 
 
-		public static async Task<bool> ShareFile( Uri uri, string shareTitle ) => await ShareFile(uri.ToString() ?? throw new ArgumentNullException(nameof(uri)), shareTitle).ConfigureAwait(true);
+		public static async Task ShareFile( Uri uri, string shareTitle ) => await ShareFile(uri.ToString() ?? throw new ArgumentNullException(nameof(uri)), shareTitle).ConfigureAwait(true);
 
-		public static async Task<bool> ShareFile( FileInfo info, string shareTitle ) =>
+		public static async Task ShareFile( FileInfo info, string shareTitle ) =>
 			await ShareFile(info.FullName ?? throw new ArgumentNullException(nameof(info)), shareTitle).ConfigureAwait(true);
 
-		public static async Task<bool> ShareFile( string filePath, string shareTitle ) => await ShareFile(new ShareFile(filePath), shareTitle).ConfigureAwait(true);
+		public static async Task ShareFile( string filePath, string shareTitle ) => await ShareFile(new ShareFile(filePath), shareTitle).ConfigureAwait(true);
 
-		public static async Task<bool> ShareFile( Uri uri, string shareTitle, string mime ) =>
+		public static async Task ShareFile( Uri uri, string shareTitle, string mime ) =>
 			await ShareFile(uri.ToString() ?? throw new ArgumentNullException(nameof(uri)), shareTitle, mime).ConfigureAwait(true);
 
-		public static async Task<bool> ShareFile( FileInfo info, string shareTitle, string mime ) =>
+		public static async Task ShareFile( FileInfo info, string shareTitle, string mime ) =>
 			await ShareFile(info.FullName ?? throw new ArgumentNullException(nameof(info)), shareTitle, mime).ConfigureAwait(true);
 
-		public static async Task<bool> ShareFile( string filePath, string shareTitle, string mime ) => await new ShareFile(filePath, mime).ShareFile(shareTitle).ConfigureAwait(true);
+		public static async Task ShareFile( string filePath, string shareTitle, string mime ) => await new ShareFile(filePath, mime).ShareFile(shareTitle).ConfigureAwait(true);
 
-		public static async Task<bool> ShareFile( this ShareFile shareFile, string shareTitle )
+		public static async Task ShareFile( this ShareFile shareFile, string shareTitle )
 		{
-			try
-			{
-				var request = new ShareFileRequest(shareTitle, shareFile);
-				await Xamarin.Essentials.Share.RequestAsync(request).ConfigureAwait(true);
-
-				return true;
-			}
-			catch ( Exception e )
-			{
-				await Debug.Current.HandleExceptionAsync(e).ConfigureAwait(true);
-				return false;
-			}
+			var request = new ShareFileRequest(shareTitle, shareFile);
+			await Xamarin.Essentials.Share.RequestAsync(request).ConfigureAwait(true);
 		}
 
 
 		public static async Task<LocalFile?> OpenOfficeDoc( Uri link, MimeType mime )
 		{
-			try
-			{
-				LocalFile info = await _FileService.DownloadFile(link, mime.ToFileName() ?? throw new NullReferenceException(nameof(mime))).ConfigureAwait(true);
+			LocalFile info = await _FileService.DownloadFile(link, mime.ToFileName() ?? throw new NullReferenceException(nameof(mime))).ConfigureAwait(true);
 
-				var url = info.ToUri(mime);
+			var url = info.ToUri(mime);
 
-				if ( Device.RuntimePlatform == Device.Android )
-					await Launcher.OpenAsync(url).ConfigureAwait(true);
-				else
-					await ShareFile(info.Info, "", mime.ToString()).ConfigureAwait(true);
+			if ( Device.RuntimePlatform == Device.Android ) { await Launcher.OpenAsync(url).ConfigureAwait(true); }
+			else { await ShareFile(info.Info, "", mime.ToString()).ConfigureAwait(true); }
 
-				return info;
-			}
-			catch ( Exception e ) { await Debug.Current.HandleExceptionAsync(e).ConfigureAwait(true); }
-
-			return default;
+			return info;
 		}
 
 		public static async Task<bool> Open( string url ) => await Open(new Uri(url)).ConfigureAwait(true);
@@ -100,19 +78,7 @@ namespace Jakar.Api
 			return false;
 		}
 
-		public static async Task<bool> OpenBrowser( Uri uri )
-		{
-			try
-			{
-				await Browser.OpenAsync(uri, BrowserLaunchMode.SystemPreferred).ConfigureAwait(true);
-				return true;
-			}
-			catch ( Exception e )
-			{
-				await Debug.Current.HandleExceptionAsync(e).ConfigureAwait(true);
-				return false;
-			}
-		}
+		public static async Task OpenBrowser( Uri uri, BrowserLaunchMode launchMode = BrowserLaunchMode.SystemPreferred ) { await Browser.OpenAsync(uri, launchMode).ConfigureAwait(true); }
 
 
 		public static void SetupCrossMedia( Page page, string title, string message, string ok )

@@ -18,38 +18,38 @@ namespace Jakar.Api
 			Location = null;
 		}
 
-		protected async Task<StatusState> GetLocationAsync()
+		protected async Task<StatusState> GetLocationAsync(GeolocationAccuracy accuracy = GeolocationAccuracy.Best)
 		{
-			try
-			{
-				Reset();
-				var request = new GeolocationRequest(GeolocationAccuracy.Best);
-				Location = await Geolocation.GetLocationAsync(request).ConfigureAwait(true);
+			Reset();
+			var request = new GeolocationRequest(accuracy);
+			Location = await Geolocation.GetLocationAsync(request).ConfigureAwait(true);
 
-				if ( Location is null )
-					return StatusState.UnknownError;
+			if ( Location is null )
+				return StatusState.UnknownError;
 
-				Status = Location.IsFromMockProvider
-							 ? StatusState.IsFromMockProvider
-							 : StatusState.Success;
-			}
-			catch ( FeatureNotSupportedException ) // Handle not supported on device exception
-			{
-				Status = StatusState.FeatureNotSupported;
-			}
-			catch ( FeatureNotEnabledException ) // Handle not enabled on device exception
-			{
-				Status = StatusState.FeatureNotEnabled;
-			}
-			catch ( PermissionException ) // Handle permission exception
-			{
-				Status = StatusState.PermissionIssue;
-			}
-			catch ( Exception ex ) // Unable to get location
-			{
-				await Debug.Current.HandleExceptionAsync(ex).ConfigureAwait(true);
-				Status = StatusState.UnknownError;
-			}
+			Status = Location.IsFromMockProvider
+						 ? StatusState.IsFromMockProvider
+						 : StatusState.Success;
+
+			// try
+			// {
+			// }
+			// catch ( FeatureNotSupportedException ) // Handle not supported on device exception
+			// {
+			// 	Status = StatusState.FeatureNotSupported;
+			// }
+			// catch ( FeatureNotEnabledException ) // Handle not enabled on device exception
+			// {
+			// 	Status = StatusState.FeatureNotEnabled;
+			// }
+			// catch ( PermissionException ) // Handle permission exception
+			// {
+			// 	Status = StatusState.PermissionIssue;
+			// }
+			// catch ( Exception ) // Unable to get location
+			// {
+			// 	Status = StatusState.UnknownError;
+			// }
 
 			return Status;
 		}
