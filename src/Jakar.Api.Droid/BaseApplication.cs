@@ -17,8 +17,6 @@ namespace Jakar.Api.Droid
 
 		protected void Init( Bundle savedInstanceState, params string[] flags )
 		{
-			base.OnCreate(savedInstanceState);
-
 			Xamarin.Forms.Forms.SetFlags(flags);
 			Xamarin.Forms.Forms.Init(this, savedInstanceState);
 			Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
