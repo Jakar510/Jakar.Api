@@ -112,7 +112,7 @@ namespace Jakar.Api
 							PhotoSize = PhotoSize.Full,
 							RotateImage = false,
 							AllowCropping = false,
-							Location = await LocationManager.GetLocation().ConfigureAwait(true),
+							Location = ( await LocationManager.GetLocation().ConfigureAwait(true) )?.ToPluginLocation(),
 						};
 
 			MediaFile photo = await CrossMedia.Current.TakePhotoAsync(options, token).ConfigureAwait(true);
@@ -144,7 +144,7 @@ namespace Jakar.Api
 							PhotoSize = PhotoSize.Full,
 							RotateImage = false,
 							AllowCropping = false,
-							Location = await LocationManager.GetLocation().ConfigureAwait(true),
+							Location = ( await LocationManager.GetLocation().ConfigureAwait(true) )?.ToPluginLocation(),
 						};
 
 			MediaFile photo = await CrossMedia.Current.TakeVideoAsync(options, token).ConfigureAwait(true);

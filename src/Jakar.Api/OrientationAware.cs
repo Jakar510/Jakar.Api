@@ -29,7 +29,7 @@ namespace Jakar.Api
 		//public static bool IsPhone { get; } = DeviceInfo.Idiom == DeviceIdiom.Phone;
 		public OrientationService() : this(SIZE_NOT_ALLOCATED, SIZE_NOT_ALLOCATED) { }
 
-		public OrientationService( double width, double height )
+		public OrientationService( in double width, in double height )
 		{
 			_Width = width;
 			_Height = height;
@@ -41,7 +41,7 @@ namespace Jakar.Api
 			OnSizeAllocated(page.Width, page.Height);
 		}
 
-		public void OnSizeAllocated( double width, double height )
+		public void OnSizeAllocated( in double width, in double height )
 		{
 			if ( Equals(_Width, width) && Equals(_Height, height) ) return;
 
@@ -65,7 +65,7 @@ namespace Jakar.Api
 			return GetOrientation(page.Width, page.Height);
 		}
 
-		public static DisplayOrientation GetOrientation( double width, double height )
+		public static DisplayOrientation GetOrientation( in double width, in double height )
 		{
 			if ( Equals(width, SIZE_NOT_ALLOCATED) || Equals(height, SIZE_NOT_ALLOCATED) ) return DisplayOrientation.Unknown;
 
@@ -73,11 +73,6 @@ namespace Jakar.Api
 					   ? DisplayOrientation.Portrait
 					   : DisplayOrientation.Landscape;
 		}
-
-
-		public static OrientationService Current => _Service.Value;
-		private static Lazy<OrientationService> _Service { get; } = new(Create, false);
-		private static OrientationService Create() => new();
 
 
 
@@ -94,6 +89,11 @@ namespace Jakar.Api
 	{
 		public OrientationService Orientation { get; set; }
 		protected OrientationContentPage() : base() => Orientation = new OrientationService(Width, Height);
-		protected override void OnSizeAllocated( double width, double height ) { Orientation.OnSizeAllocated(width, height); }
+
+		protected override void OnSizeAllocated( double width, double height )
+		{
+			base.OnSizeAllocated(width, height);
+			Orientation.OnSizeAllocated(width, height);
+		}
 	}
 }

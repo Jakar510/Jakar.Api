@@ -22,11 +22,6 @@ namespace Jakar.Api
 {
 	public class Debug
 	{
-		// public static Debug Current => _Service.Value;
-		// private static Lazy<Debug> _Service { get; } = new(Create, false);
-		// private static Debug Create() => new();
-
-
 		public bool CanDebug => Debugger.IsAttached;
 		public bool UseDebugLogin => CanDebug;
 		public Guid? InstallId { get; protected set; }

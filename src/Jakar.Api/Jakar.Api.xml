@@ -42,5 +42,12 @@
              A complete response was not received from the remote server.
             </summary>
         </member>
+        <member name="M:Jakar.Api.Prompts.InternalHandleException(System.Exception)">
+            <summary>
+            switch the type of exception to show what ever prompt you want
+            </summary>
+            <param name="e"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

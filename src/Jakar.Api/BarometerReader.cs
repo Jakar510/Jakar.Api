@@ -9,11 +9,6 @@ namespace Jakar.Api
 {
 	public class BarometerReader
 	{
-		public static BarometerReader Current => _Service.Value;
-		private static Lazy<BarometerReader> _Service { get; } = new(Create, false);
-		private static BarometerReader Create() => new();
-
-
 		// Set speed delay for monitoring changes.
 		public SensorSpeed Speed { get; protected set; } = SensorSpeed.Default;
 		public string? Text { get; protected set; }
@@ -30,15 +25,15 @@ namespace Jakar.Api
 			Value = Data.PressureInHectopascals;
 		}
 
-		public void StartBarometer() => StartBarometer(SensorSpeed.UI);
+		public void Start() => Start(SensorSpeed.UI);
 
-		public void StartBarometer( SensorSpeed speed )
+		public void Start( SensorSpeed speed )
 		{
 			Speed = speed;
 			Barometer.Start(speed);
 		}
 
-		public void StopBarometer()
+		public void Stop()
 		{
 			if ( Barometer.IsMonitoring ) { Barometer.Stop(); }
 		}

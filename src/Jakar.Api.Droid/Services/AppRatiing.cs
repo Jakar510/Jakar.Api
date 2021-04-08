@@ -16,8 +16,8 @@ namespace Jakar.Api.Droid.Services
 	{
 		public void RateApp()
 		{
-			Context context = global::Android.App.Application.Context;
-			string url = $"market://details?id={DeviceInfo._packageName}";
+			Context context = BaseApplication.Instance;
+			string url = $"market://details?id={DeviceInfo.PackageName}";
 
 			try
 			{
@@ -36,7 +36,7 @@ namespace Jakar.Api.Droid.Services
 			{
 				// if Google Play fails to load, open the App link on the browser 
 
-				string playStoreUrl = $@"https://play.google.com/store/apps/details?id={DeviceInfo._packageName}"; //Add here the url of your application on the store
+				string playStoreUrl = $@"https://play.google.com/store/apps/details?id={DeviceInfo.PackageName}"; //Add here the url of your application on the store
 
 				var browserIntent = new Intent(Intent.ActionView, AUri.Parse(playStoreUrl));
 				browserIntent.AddFlags(ActivityFlags.NewTask | ActivityFlags.ResetTaskIfNeeded);

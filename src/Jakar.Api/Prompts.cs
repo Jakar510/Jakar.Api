@@ -14,7 +14,7 @@ using Xamarin.Forms;
 #nullable enable
 namespace Jakar.Api
 {
-	public class Prompts
+	public abstract class Prompts
 	{
 		protected IUserDialogs _Prompts { get; } = UserDialogs.Instance;
 
@@ -178,8 +178,8 @@ namespace Jakar.Api
 		}
 
 
-		public virtual Task HandleExceptionAsync( Exception e, Page page, CancellationToken token ) => throw new NotImplementedException();
-		public virtual Task HandleExceptionAsync<TFeedBackPage>( Exception e, Page page, CancellationToken token ) where TFeedBackPage : Page, new() => throw new NotImplementedException();
+		public abstract Task HandleExceptionAsync( Exception e, Page page, CancellationToken token );
+		public abstract Task HandleExceptionAsync<TFeedBackPage>( Exception e, Page page, CancellationToken token );
 
 		public async Task<bool> HandleExceptionAsync( Exception e, CancellationToken token )
 		{
@@ -210,13 +210,17 @@ namespace Jakar.Api
 
 		public bool HandleException( Exception e )
 		{
-			if ( !( e is OperationCanceledException ) && !( e is NameResolutionException ) && !( e is RequestAbortedException ) && !( e is TimeoutException ) ) { _Debug.HandleException(e); }
+			if ( e is not OperationCanceledException && e is not NameResolutionException && e is not RequestAbortedException && e is not TimeoutException ) { _Debug.HandleException(e); }
 
 			return InternalHandleException(e);
 		}
 
-
-		protected virtual bool InternalHandleException( Exception e ) => true; // switch the type of exception to show what ever prompt you want
+		/// <summary>
+		/// switch the type of exception to show what ever prompt you want
+		/// </summary>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		protected abstract bool InternalHandleException( Exception e );
 
 
 		public async Task SendFeedBack<TFeedBackPage>( string title,

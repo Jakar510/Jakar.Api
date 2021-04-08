@@ -23,6 +23,12 @@ namespace Jakar.Api
 
 		public TAppSettings Settings { get; } = new();
 
+		public LocationManager Location { get; } = new();
+
+		public BarometerReader Barometer { get; } = new();
+
+		public LanguageApi Language { get; } = LanguageApi.Current;
+
 
 		/// <summary>
 		/// appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
