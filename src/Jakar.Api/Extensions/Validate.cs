@@ -68,7 +68,9 @@ namespace Jakar.Api.Extensions
 		}
 
 
+		public static bool IsValidPort( this string s ) => int.TryParse(s, out int port) && port.IsValidPort();
 		public static bool IsValidPort( this int port ) => port > 0 && port <= 65535;
+
 		public static bool IsDouble( this string argsNewTextValue ) => double.TryParse(argsNewTextValue, out double _);
 		public static bool IsInteger( this string argsNewTextValue ) => int.TryParse(argsNewTextValue, out int _);
 

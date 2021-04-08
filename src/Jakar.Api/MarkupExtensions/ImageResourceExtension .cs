@@ -7,7 +7,7 @@ using Xamarin.Forms.Xaml;
 #pragma warning disable 1591
 
 #nullable enable
-namespace Jakar.Api.Extensions
+namespace Jakar.Api.MarkupExtensions
 {
 	[ContentProperty(nameof(Source))]
 	public abstract class ImageResourceExtension : IMarkupExtension

@@ -22,19 +22,19 @@ namespace Jakar.Api
 
 		protected ApiServices _Services
 		{
-			get => _services ?? throw new ApiDisabledException($"Must call {nameof(Start)} first.", new NullReferenceException(nameof(_services)));
+			get => _services ?? throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_services)));
 			private set => _services = value;
 		}
 		private Debug? _debug;
 
 		protected Debug _Debug
 		{
-			get => _debug ?? throw new ApiDisabledException($"Must call {nameof(Start)} first.", new NullReferenceException(nameof(_services)));
+			get => _debug ?? throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_services)));
 			private set => _debug = value;
 		}
 
-		public void Start( ApiServices services ) => _Services = services;
-		public void Start( Debug services ) => _Debug = services;
+		public void Init( ApiServices services ) => _Services = services;
+		public void Init( Debug services ) => _Debug = services;
 
 
 		internal void ShowLoading( string title ) => ShowLoading(title, MaskType.Black);

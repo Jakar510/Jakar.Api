@@ -36,6 +36,7 @@ namespace Jakar.Api.iOS.Extensions
 			foreach ( UILayoutConstraintAxis axis in directions ) { view.SetContentHuggingPriority(value, axis); }
 		}
 
+
 		public static LayoutPriority ToLayoutPriority( this UILayoutPriority priority ) => priority switch
 																						   {
 																							   UILayoutPriority.Required => LayoutPriority.Required,
@@ -46,6 +47,22 @@ namespace Jakar.Api.iOS.Extensions
 																							   UILayoutPriority.SceneSizeStayPut => LayoutPriority.Average,
 																							   UILayoutPriority.DragThatCannotResizeScene => LayoutPriority.BelowAverage,
 																							   _ => throw new ArgumentOutOfRangeException(nameof(priority), priority, null)
+																						   };
+
+		public static UILayoutPriority ToLayoutPriority( this LayoutPriority priority ) => priority switch
+																						   {
+																							   LayoutPriority.Required     => UILayoutPriority.Required,
+																							   LayoutPriority.Highest      => UILayoutPriority.Required,
+																							   LayoutPriority.High         => UILayoutPriority.DefaultHigh,
+																							   LayoutPriority.Lowest       => UILayoutPriority.FittingSizeLevel,
+																							   LayoutPriority.AboveAverage => UILayoutPriority.DragThatCanResizeScene,
+																							   LayoutPriority.Average      => UILayoutPriority.SceneSizeStayPut,
+																							   LayoutPriority.BelowAverage => UILayoutPriority.DragThatCannotResizeScene,
+																							   LayoutPriority.Low          => UILayoutPriority.DefaultLow,
+																							   LayoutPriority.VeryLow      => UILayoutPriority.FittingSizeLevel,
+																							   LayoutPriority.Minimum      => UILayoutPriority.FittingSizeLevel,
+																							   LayoutPriority.Zero         => 0,
+																							   _                           => throw new ArgumentOutOfRangeException(nameof(priority), priority, null)
 																						   };
 	}
 }

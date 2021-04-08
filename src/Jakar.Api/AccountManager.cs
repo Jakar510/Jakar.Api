@@ -14,7 +14,7 @@ using Jakar.Api.Models.Users;
 namespace Jakar.Api
 {
 	public class AccountManager<TUser, TActiveUser> : ICollection<TUser> where TUser : class, IUser
-																   where TActiveUser : class, ICurrentUser<TUser>, new()
+																		 where TActiveUser : class, ICurrentUser<TUser>, new()
 	{
 		protected Accounts<TUser, TActiveUser> _Accounts { get; set; } = new();
 		public TActiveUser CurrentUser => _Accounts.Active;
@@ -76,15 +76,13 @@ namespace Jakar.Api
 		public bool Remove( TUser item ) => _Accounts.All.Remove(item);
 
 
-
-
 		public IEnumerator<TUser> GetEnumerator() => _Accounts.All.GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
 
 		// public int IndexOf( TUser item ) { return _Accounts.All.IndexOf(item); }
 		// public void Insert( int index, TUser item ) { _Accounts.All.Insert(index, item); }
 		// public void RemoveAt( int index ) { _Accounts.All.RemoveAt(index); }
-		
+
 		// public TUser this[ int index ]
 		// {
 		// 	get => _Accounts.All[index];

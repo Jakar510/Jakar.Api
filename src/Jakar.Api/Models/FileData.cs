@@ -215,7 +215,7 @@ namespace Jakar.Api.Models
 
 			var req = WebRequest.Create(uri);
 			req.Method = "GET";
-			req.ContentType = MediaTypeNames.URL_ENCODED_CONTENT;
+			req.ContentType = MediaTypeNames.Application.URL_ENCODED_CONTENT;
 
 			using WebResponse resp = await req.GetResponseAsync(token).ConfigureAwait(true);
 

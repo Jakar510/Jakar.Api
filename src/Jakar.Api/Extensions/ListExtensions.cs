@@ -8,7 +8,7 @@ using System.Linq;
 namespace Jakar.Api.Extensions
 {
 	[Xamarin.Forms.Internals.Preserve(true, false)]
-	public static class Extensions
+	public static class ListExtensions
 	{
 		public static bool IsEqual<TValue>( this TValue value, TValue other ) => Equals(value, other);
 		public static bool IsOneOf<TValue>( this TValue value, params TValue[] items ) => items.Any(other => value.IsEqual(other));

@@ -38,7 +38,7 @@ namespace Jakar.Api
 			get => (ApiServices<TDebug, TPrompts, TAccounts, TUser, TActiveUser>) ApiServices.Current;
 			set => ApiServices.Current = value;
 		}
-		
+
 		// public static Language Current => _Service.Value;
 		// private static Lazy<Language> _Service { get; } = new(Create, false);
 		// private static Language Create() => new();
@@ -49,11 +49,19 @@ namespace Jakar.Api
 
 		public TPrompts Prompts { get; } = new();
 
-		protected ApiServices()
+		/// <summary>
+		/// appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
+		/// </summary>
+		/// <param name="app_center_id"></param>
+		/// <param name="appCenterServices"></param>
+		protected ApiServices( in string app_center_id, params Type[] appCenterServices )
 		{
-			Prompts.Start(Debug);
-			Prompts.Start(this);
-			Debug.Start(this);
+			Prompts.Init(Debug);
+
+
+			Prompts.Init(this);
+
+			Debug.Init(this, app_center_id, appCenterServices);
 		}
 	}
 }

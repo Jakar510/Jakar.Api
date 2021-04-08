@@ -11,90 +11,119 @@ namespace Jakar.Api.iOS.Extensions
 {
 	public static partial class LayoutExtensions
 	{
-		public static IList<NSLayoutConstraint> PartOfParent( this UIView view,
-															  in UIView parent,
-															  in nfloat leftFactor,
-															  in nfloat rightFactor,
-															  in nfloat topFactor,
-															  in nfloat bottomFactor
-		)
+	#region WidthOf
+
+		public static NSLayoutConstraint WidthOf( this UIView view, in UIView other, in nfloat leftFactor, in nfloat rightFactor ) =>
+			view.WidthOf(other, Math.Abs(leftFactor - rightFactor).ToNFloat());
+
+		public static NSLayoutConstraint WidthOf( this UIView view, in UIView other, in nfloat factor )
 		{
-			IList<NSLayoutConstraint> results = view.HorizontalPartOfParent(parent, leftFactor, rightFactor);
-			view.VerticalPartOfParent(parent, topFactor, bottomFactor).ForEach(results.Add);
-			return results;
+			NSLayoutConstraint anchor = view.WidthAnchor.ConstraintEqualTo(other.WidthAnchor, factor);
+			anchor.Active = true;
+			return anchor;
 		}
 
-		public static IList<NSLayoutConstraint> HorizontalPartOfParent( this UIView view, in UIView parent, in nfloat leftFactor, in nfloat rightFactor )
+		public static NSLayoutConstraint MinimumWidthOf( this UIView view, in UIView other, in nfloat factor )
 		{
-			var constraints = new List<NSLayoutConstraint>
-							  {
-								  view.LeftOfParent(parent, leftFactor),
-								  view.RightOfParent(parent, rightFactor),
-								  view.WidthOfParent(parent, leftFactor, rightFactor)
-							  };
-
-			return constraints;
+			NSLayoutConstraint anchor = view.WidthAnchor.ConstraintGreaterThanOrEqualTo(other.WidthAnchor, factor);
+			anchor.Active = true;
+			return anchor;
 		}
 
-		public static IList<NSLayoutConstraint> VerticalPartOfParent( this UIView view, in UIView parent, in nfloat topFactor, in nfloat bottomFactor )
+		public static NSLayoutConstraint MaximumWidthOf( this UIView view, in UIView other, in nfloat factor )
 		{
-			var constraints = new List<NSLayoutConstraint>
-							  {
-								  view.TopOfParent(parent, topFactor),
-								  view.BottomOfParent(parent, bottomFactor)
-							  };
-
-			return constraints;
+			NSLayoutConstraint anchor = view.WidthAnchor.ConstraintLessThanOrEqualTo(other.WidthAnchor, factor);
+			anchor.Active = true;
+			return anchor;
 		}
 
+	#endregion
 
-		public static NSLayoutConstraint WidthOfParent( this UIView view, in UIView parent, in nfloat leftFactor, in nfloat rightFactor ) =>
-			view.WidthOfParent(parent, Math.Abs(leftFactor - rightFactor).ToNFloat());
 
-		public static NSLayoutConstraint WidthOfParent( this UIView view, in UIView parent, in nfloat factor )
+	#region HeightOf
+
+		public static NSLayoutConstraint HeightOf( this UIView view, in UIView other, in nfloat topFactor, in nfloat bottomFactor ) =>
+			view.HeightOf(other, Math.Abs(topFactor - bottomFactor).ToNFloat());
+
+		public static NSLayoutConstraint HeightOf( this UIView view, in UIView other, in nfloat factor )
 		{
-			NSLayoutConstraint anchor = view.WidthAnchor.ConstraintEqualTo(parent.WidthAnchor, factor);
+			NSLayoutConstraint anchor = view.HeightAnchor.ConstraintEqualTo(other.HeightAnchor, factor);
+			anchor.Active = true;
+			return anchor;
+		}
+
+		public static NSLayoutConstraint MinimumHeightOf( this UIView view, in UIView other, in nfloat factor )
+		{
+			NSLayoutConstraint anchor = view.HeightAnchor.ConstraintGreaterThanOrEqualTo(other.WidthAnchor, factor);
+			anchor.Active = true;
+			return anchor;
+		}
+
+		public static NSLayoutConstraint MaximumHeightOf( this UIView view, in UIView other, in nfloat factor )
+		{
+			NSLayoutConstraint anchor = view.HeightAnchor.ConstraintLessThanOrEqualTo(other.WidthAnchor, factor);
+			anchor.Active = true;
+			return anchor;
+		}
+
+	#endregion
+
+
+		public static NSLayoutConstraint LeftOf( this UIView view, in UIView other )
+		{
+			NSLayoutConstraint anchor = view.LeftAnchor.ConstraintEqualTo(other.RightAnchor);
+			anchor.Active = true;
+			return anchor;
+		}
+
+		public static NSLayoutConstraint LeftOf( this UIView view, in UIView other, in nfloat factor )
+		{
+			NSLayoutConstraint anchor = view.LeftAnchor.ConstraintEqualTo(other.RightAnchor, factor);
 			anchor.Active = true;
 			return anchor;
 		}
 
 
-		public static NSLayoutConstraint LeftOfParent( this UIView view, in UIView parent, in nfloat factor )
+		public static NSLayoutConstraint RightOf( this UIView view, in UIView other )
 		{
-			NSLayoutConstraint anchor = view.LeftAnchor.ConstraintEqualTo(parent.LeftAnchor, factor);
+			NSLayoutConstraint anchor = view.RightAnchor.ConstraintEqualTo(other.LeftAnchor);
 			anchor.Active = true;
 			return anchor;
 		}
 
-		public static NSLayoutConstraint RightOfParent( this UIView view, in UIView parent, in nfloat factor )
+		public static NSLayoutConstraint RightOf( this UIView view, in UIView other, in nfloat factor )
 		{
-			NSLayoutConstraint anchor = view.RightAnchor.ConstraintEqualTo(parent.RightAnchor, factor);
-			anchor.Active = true;
-			return anchor;
-		}
-
-
-		public static NSLayoutConstraint HeightOfParent( this UIView view, in UIView parent, in nfloat topFactor, in nfloat bottomFactor ) =>
-			view.HeightOfParent(parent, Math.Abs(topFactor - bottomFactor).ToNFloat());
-
-		public static NSLayoutConstraint HeightOfParent( this UIView view, in UIView parent, in nfloat factor )
-		{
-			NSLayoutConstraint anchor = view.HeightAnchor.ConstraintEqualTo(parent.HeightAnchor, factor);
+			NSLayoutConstraint anchor = view.RightAnchor.ConstraintEqualTo(other.RightAnchor, factor);
 			anchor.Active = true;
 			return anchor;
 		}
 
 
-		public static NSLayoutConstraint TopOfParent( this UIView view, in UIView parent, in nfloat factor )
+		public static NSLayoutConstraint BelowOf( this UIView view, in UIView other )
 		{
-			NSLayoutConstraint anchor = view.TopAnchor.ConstraintEqualTo(parent.TopAnchor, factor);
+			NSLayoutConstraint anchor = view.TopAnchor.ConstraintEqualTo(other.BottomAnchor);
 			anchor.Active = true;
 			return anchor;
 		}
 
-		public static NSLayoutConstraint BottomOfParent( this UIView view, in UIView parent, in nfloat factor )
+		public static NSLayoutConstraint BelowOf( this UIView view, in UIView other, in nfloat factor )
 		{
-			NSLayoutConstraint anchor = view.BottomAnchor.ConstraintEqualTo(parent.BottomAnchor, factor);
+			NSLayoutConstraint anchor = view.TopAnchor.ConstraintEqualTo(other.BottomAnchor, factor);
+			anchor.Active = true;
+			return anchor;
+		}
+
+
+		public static NSLayoutConstraint AboveOf( this UIView view, in UIView other )
+		{
+			NSLayoutConstraint anchor = view.BottomAnchor.ConstraintEqualTo(other.TopAnchor);
+			anchor.Active = true;
+			return anchor;
+		}
+
+		public static NSLayoutConstraint AboveOf( this UIView view, in UIView other, in nfloat factor )
+		{
+			NSLayoutConstraint anchor = view.BottomAnchor.ConstraintEqualTo(other.TopAnchor, factor);
 			anchor.Active = true;
 			return anchor;
 		}

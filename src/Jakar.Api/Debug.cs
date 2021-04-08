@@ -37,28 +37,23 @@ namespace Jakar.Api
 
 		protected ApiServices _Services
 		{
-			get => _services ?? throw new ApiDisabledException($"Must call {nameof(StartAppCenter)} first.", new NullReferenceException(nameof(_services)));
+			get => _services ?? throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_services)));
 			private set => _services = value;
 		}
 
 
-		public void Start( ApiServices services ) => _Services = services;
-
-		public void Start( string app_center_id, ApiServices services )
+		public void Init( ApiServices services, string app_center_id, params Type[] appCenterServices )
 		{
-			Start(services);
-
-			Task.Run(async () => await StartAppCenterAsync(app_center_id).ConfigureAwait(true));
-		}
-
-		public void StartAppCenter( string app_center_id, ApiServices services, params Type[] appCenterServices )
-		{
-			Start(services);
+			_Services = services;
 
 			Task.Run(async () => await StartAppCenterAsync(app_center_id, appCenterServices).ConfigureAwait(true));
 		}
 
-		public virtual async Task StartAppCenterAsync( string app_center_id ) => await StartAppCenterAsync(app_center_id, typeof(Analytics), typeof(Crashes)).ConfigureAwait(true);
+		public async Task InitAsync( ApiServices services, string app_center_id, params Type[] appCenterServices )
+		{
+			_Services = services;
+			await StartAppCenterAsync(app_center_id, appCenterServices).ConfigureAwait(true);
+		}
 
 		public virtual async Task StartAppCenterAsync( string app_center_id, params Type[] services )
 		{
@@ -85,9 +80,9 @@ namespace Jakar.Api
 		{
 			if ( _ApiEnabled ) { return; }
 
-			if ( _services is null ) { throw new ApiDisabledException($"Must call {nameof(StartAppCenter)} first.", new NullReferenceException(nameof(_services))); }
+			if ( _services is null ) { throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_services))); }
 
-			throw new ApiDisabledException($"Must call {nameof(StartAppCenter)} first.");
+			throw new ApiDisabledException($"Must call {nameof(Init)} first.");
 		}
 
 
