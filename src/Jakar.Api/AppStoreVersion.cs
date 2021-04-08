@@ -2,9 +2,12 @@
 using Plugin.LatestVersion;
 
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api
 {
-	internal static class AppStoreVersion
+	public static class AppStoreVersion
 	{
 		// https://github.com/edsnider/latestversionplugin
 

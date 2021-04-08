@@ -12,15 +12,14 @@ using Xamarin.Essentials;
 #nullable enable
 namespace Jakar.Api
 {
-	[SuppressMessage("ReSharper", "StringLiteralTypo")]
 	public class LanguageApi
 	{
-		internal static ObservableCollection<Language> Languages { get; } = new(Language.All);
+		public static ObservableCollection<Language> Languages { get; } = new(Language.All);
 
 
-		internal SupportedLanguage currentLangVersion = (SupportedLanguage) Preferences.Get(nameof(CurrentLangVersion), (int) SupportedLanguage.English);
+		public SupportedLanguage currentLangVersion = (SupportedLanguage) Preferences.Get(nameof(CurrentLangVersion), (int) SupportedLanguage.English);
 
-		internal SupportedLanguage CurrentLangVersion
+		public SupportedLanguage CurrentLangVersion
 		{
 			get => currentLangVersion;
 			private set
@@ -60,7 +59,7 @@ namespace Jakar.Api
 			}
 		}
 
-		//internal Language SelectedLanguage { get; set; }
+		//public Language SelectedLanguage { get; set; }
 
 
 		private CultureInfo? _currentCultureInfo;

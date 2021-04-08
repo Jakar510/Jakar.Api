@@ -15,7 +15,7 @@ namespace Jakar.Api
 {
 	public static class Permissions
 	{
-		internal static async Task<T?> Handle<T>( PermissionStatus status, Func<Task<T>>? denial, Func<Task<T>>? granted, Func<Task<T>>? unknown )
+		public static async Task<T?> Handle<T>( PermissionStatus status, Func<Task<T>>? denial, Func<Task<T>>? granted, Func<Task<T>>? unknown )
 		{
 			return status switch
 				   {
@@ -35,7 +35,7 @@ namespace Jakar.Api
 				   };
 		}
 
-		internal static async Task Handle( PermissionStatus status, Func<Task>? denial, Func<Task>? granted, Func<Task>? unknown )
+		public static async Task Handle( PermissionStatus status, Func<Task>? denial, Func<Task>? granted, Func<Task>? unknown )
 		{
 			switch ( status )
 			{
@@ -73,7 +73,7 @@ namespace Jakar.Api
 			}
 		}
 
-		internal static T? Handle<T>( PermissionStatus status, Func<T>? denial, Func<T>? granted, Func<T>? unknown )
+		public static T? Handle<T>( PermissionStatus status, Func<T>? denial, Func<T>? granted, Func<T>? unknown )
 		{
 			return status switch
 				   {
@@ -95,7 +95,7 @@ namespace Jakar.Api
 				   };
 		}
 
-		internal static void Handle( PermissionStatus status, Action? denial, Action? granted, Action? unknown )
+		public static void Handle( PermissionStatus status, Action? denial, Action? granted, Action? unknown )
 		{
 			switch ( status )
 			{
@@ -133,7 +133,7 @@ namespace Jakar.Api
 			}
 		}
 
-		internal static void Handle( PermissionStatus status, ICommand? denial, ICommand? granted, ICommand? unknown )
+		public static void Handle( PermissionStatus status, ICommand? denial, ICommand? granted, ICommand? unknown )
 		{
 			switch ( status )
 			{
@@ -171,7 +171,7 @@ namespace Jakar.Api
 			}
 		}
 
-		internal static void Handle<T>( PermissionStatus status,
+		public static void Handle<T>( PermissionStatus status,
 										Command<T>? denial,
 										Command<T>? granted,
 										Command<T>? unknown,
@@ -230,23 +230,23 @@ namespace Jakar.Api
 			return status;
 		}
 
-		internal static async Task<PermissionStatus> CameraPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Camera()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> StorageReadPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.StorageRead()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> StorageWritePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.StorageWrite()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> MediaLibraryPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Media()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> SensorsPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Sensors()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> LocationWhenInUsePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.LocationWhenInUse()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> LocationAlwaysPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.LocationAlways()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> PhotosPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Photos()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> CalendarReadPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.CalendarRead()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> CalendarWritePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.CalendarWrite()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> RemindersPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Reminders()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> SmsPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Sms()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> ContactsReadPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.ContactsRead()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> ContactsWritePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.ContactsWrite()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> MicrophonePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Microphone()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> PhonePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Phone()).ConfigureAwait(true);
-		internal static async Task<PermissionStatus> SpeechPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Speech()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> CameraPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Camera()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> StorageReadPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.StorageRead()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> StorageWritePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.StorageWrite()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> MediaLibraryPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Media()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> SensorsPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Sensors()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> LocationWhenInUsePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.LocationWhenInUse()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> LocationAlwaysPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.LocationAlways()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> PhotosPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Photos()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> CalendarReadPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.CalendarRead()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> CalendarWritePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.CalendarWrite()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> RemindersPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Reminders()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> SmsPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Sms()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> ContactsReadPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.ContactsRead()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> ContactsWritePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.ContactsWrite()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> MicrophonePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Microphone()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> PhonePermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Phone()).ConfigureAwait(true);
+		public static async Task<PermissionStatus> SpeechPermission() => await CheckAndRequestPermissionAsync(new Xamarin.Essentials.Permissions.Speech()).ConfigureAwait(true);
 
 		/*
 

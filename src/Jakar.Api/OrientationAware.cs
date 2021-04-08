@@ -17,7 +17,7 @@ namespace Jakar.Api
 
 		public event EventHandler<RotationEventArgs>? OnOrientationChanged;
 
-		internal DisplayOrientation Orientation { get; set; }
+		public DisplayOrientation Orientation { get; set; }
 
 
 		//Xamarin.Essentials.DeviceIdiom.Phone

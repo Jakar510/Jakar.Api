@@ -74,7 +74,7 @@ namespace Jakar.Api.Extensions
 		public static bool IsDouble( this string argsNewTextValue ) => double.TryParse(argsNewTextValue, out double _);
 		public static bool IsInteger( this string argsNewTextValue ) => int.TryParse(argsNewTextValue, out int _);
 
-		internal static bool IsDemo( this string item )
+		public static bool IsDemo( this string item )
 		{
 			if ( string.IsNullOrWhiteSpace(item) ) return false;
 

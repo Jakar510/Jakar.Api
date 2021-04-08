@@ -13,7 +13,7 @@ namespace Jakar.Api.Extensions
 	public static class InstanceCreator
 	{
 		public static TItem Create<TItem>( params object[] args ) => (TItem) Activator.CreateInstance(typeof(TItem), args);
-		internal static NullReferenceException CreateException( params Type[] args ) => new($"constructor not found. Requested arg types: {args}");
+		public static NullReferenceException CreateException( params Type[] args ) => new($"constructor not found. Requested arg types: {args}");
 	}
 
 

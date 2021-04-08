@@ -37,9 +37,9 @@ namespace Jakar.Api
 		public void Init( Debug services ) => _Debug = services;
 
 
-		internal void ShowLoading( string title ) => ShowLoading(title, MaskType.Black);
-		internal void ShowLoading( string title, MaskType mask ) => _Prompts.ShowLoading(title, mask);
-		internal void HideLoading() => _Prompts.HideLoading();
+		public void ShowLoading( string title ) => ShowLoading(title, MaskType.Black);
+		public void ShowLoading( string title, MaskType mask ) => _Prompts.ShowLoading(title, mask);
+		public void HideLoading() => _Prompts.HideLoading();
 
 
 		public ICommand LoadingCommand( Func<CancellationToken, Task> func, Page page, string cancel ) => LoadingCommand(func, MaskType.Black, cancel, page);
@@ -247,7 +247,7 @@ namespace Jakar.Api
 		protected void Alert( string title, string message, string ok ) => _Prompts.Alert(message, title, ok);
 
 
-		internal void DebugMessage( Exception e, string ok, [CallerMemberName] string caller = "" )
+		public void DebugMessage( Exception e, string ok, [CallerMemberName] string caller = "" )
 		{
 			if ( !_Debug.CanDebug ) return;
 

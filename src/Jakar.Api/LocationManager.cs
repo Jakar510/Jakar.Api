@@ -3,11 +3,14 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api
 {
-	internal class LocationManager
+	public class LocationManager
 	{
-		internal static LocationManager Current { get; } = new();
+		public static LocationManager Current { get; } = new();
 
 		public StatusState Status { get; protected set; }
 		public Location? Location { get; protected set; }
@@ -54,7 +57,7 @@ namespace Jakar.Api
 			return Status;
 		}
 
-		internal async Task<bool> Update()
+		public async Task<bool> Update()
 		{
 			if ( await Permissions.LocationWhenInUsePermission().ConfigureAwait(true) != PermissionStatus.Granted ) { return false; }
 
@@ -77,7 +80,7 @@ namespace Jakar.Api
 
 
 
-		internal static async Task<Plugin.Media.Abstractions.Location?> GetLocation()
+		public static async Task<Plugin.Media.Abstractions.Location?> GetLocation()
 		{
 			if ( !await Current.Update().ConfigureAwait(true) ) return null;
 

@@ -2,9 +2,12 @@
 using Xamarin.Essentials;
 
 
+#pragma warning disable 1591
+
+#nullable enable
 namespace Jakar.Api
 {
-	internal class BarometerReader
+	public class BarometerReader
 	{
 		public static BarometerReader Current => _Service.Value;
 		private static Lazy<BarometerReader> _Service { get; } = new(Create, false);

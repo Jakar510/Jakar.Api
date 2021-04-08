@@ -194,7 +194,7 @@ namespace Jakar.Api
 				[nameof(IAppSettings.AppName)] = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
 				[nameof(DateTime)] = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", LanguageApi.Current.CultureInfo),
 				[nameof(DeviceInfo.DeviceId)] = DeviceInfo.DeviceId,
-				[nameof(DeviceInfo.versionNumber)] = DeviceInfo.versionNumber,
+				[nameof(DeviceInfo.VersionNumber)] = DeviceInfo.VersionNumber,
 				[nameof(LanguageApi.SelectedLanguage)] = LanguageApi.Current.SelectedLanguage.DisplayName
 			};
 
