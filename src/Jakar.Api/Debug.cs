@@ -33,23 +33,23 @@ namespace Jakar.Api
 
 		protected bool _ApiEnabled { get; private set; }
 
-		private ApiServices? _services;
+		private IAppSettings? _services;
 
-		protected ApiServices _Services
+		protected IAppSettings _Services
 		{
 			get => _services ?? throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_services)));
 			private set => _services = value;
 		}
 
 
-		public void Init( ApiServices services, string app_center_id, params Type[] appCenterServices )
+		public void Init( IAppSettings services, string app_center_id, params Type[] appCenterServices )
 		{
 			_Services = services;
 
 			Task.Run(async () => await StartAppCenterAsync(app_center_id, appCenterServices).ConfigureAwait(true));
 		}
 
-		public async Task InitAsync( ApiServices services, string app_center_id, params Type[] appCenterServices )
+		public async Task InitAsync( IAppSettings services, string app_center_id, params Type[] appCenterServices )
 		{
 			_Services = services;
 			await StartAppCenterAsync(app_center_id, appCenterServices).ConfigureAwait(true);
@@ -190,8 +190,8 @@ namespace Jakar.Api
 		protected virtual Dictionary<string, string> AppState() =>
 			new()
 			{
-				[nameof(ApiServices.CurrentViewPage)] = _Services.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(_Services.CurrentViewPage)),
-				[nameof(ApiServices.AppName)] = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
+				[nameof(IAppSettings.CurrentViewPage)] = _Services.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(_Services.CurrentViewPage)),
+				[nameof(IAppSettings.AppName)] = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
 				[nameof(DateTime)] = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", LanguageApi.Current.CultureInfo),
 				[nameof(DeviceInfo.DeviceId)] = DeviceInfo.DeviceId,
 				[nameof(DeviceInfo.versionNumber)] = DeviceInfo.versionNumber,

@@ -11,10 +11,8 @@ namespace Jakar.Api
 {
 	public static class UserPreferences
 	{
-		public static string GetPreferenceName( object value, string name ) => GetName(value.GetType(), name);
-		public static string GetPreferenceName( Type type, string name ) => GetName(type, name);
-		public static string GetName( Type type, string name, [CallerMemberName] string caller = "" ) => $"{ApiServices.Current.AppName}.{type.FullName}.{caller}.{name}";
-		public static string GetShortName( Type type, string name ) => $"{ApiServices.Current.AppName}.{type.FullName}.{name}";
+		public static string GetName( this IAppSettings settings, object value, string name, [CallerMemberName] string caller = "" ) => settings.GetName(value.GetType(), name, caller);
+		public static string GetName( this IAppSettings settings, Type type, string name, [CallerMemberName] string caller = "" ) => $"{settings.AppName}.{type.FullName}.{caller}.{name}";
 
 
 		//public static string GetPreferenceName(object type, string name, [CallerMemberName] string caller = "") => GetName(type?.GetType(), name, caller);

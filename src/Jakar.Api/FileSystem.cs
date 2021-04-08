@@ -25,8 +25,8 @@ namespace Jakar.Api
 		public static string IncomingFileName { get; } = GetCacheDataPath("Incoming.json");
 
 		public static string AccountsFileName { get; } = GetAppDataPath($"accounts.json");
-		public static string ZipFileName { get; } = GetAppDataPath($"{ApiServices.Current.AppName}.zip");
-		public static string ScreenShot { get; } = GetCacheDataPath($"{ApiServices.Current.AppName}.png");
+		public static string ZipFileName { get; } = GetAppDataPath("AppData.zip");
+		public static string ScreenShot { get; } = GetCacheDataPath("ScreenShot.png");
 
 
 		public static string GetAppDataPath( string fileName ) => Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, fileName);

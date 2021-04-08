@@ -11,6 +11,7 @@ namespace Jakar.Api.Extensions
 	{
 		public static string ToUriScheme( this MimeType mime )
 		{
+			// TODO: get more uri schemes
 			// https://docs.microsoft.com/en-us/office/client-developer/office-uri-schemes
 			return mime switch
 				   {
@@ -53,7 +54,7 @@ namespace Jakar.Api.Extensions
 				   };
 		}
 
-		public static string ToFileName( this MimeType mime ) => mime.ToFileName(ApiServices.Current.AppName ?? throw new NullReferenceException(nameof(ApiServices.Current.AppName)));
+		public static string ToFileName( this MimeType mime, IAppSettings settings ) => mime.ToFileName(settings.AppName ?? throw new NullReferenceException(nameof(IAppSettings.AppName)));
 
 		public static string ToFileName( this MimeType mime, string fileName )
 		{
@@ -63,16 +64,19 @@ namespace Jakar.Api.Extensions
 								   MimeType.Css        => "css",
 								   MimeType.Vbs        => "vbs",
 
+
 								   MimeType.Doc  => "doc",
 								   MimeType.Docx => "docx",
 								   MimeType.Xls  => "xls",
 								   MimeType.Xlsx => "xlsx",
+
 
 								   MimeType.Icon => "icon",
 								   MimeType.Gif  => "gif",
 								   MimeType.Png  => "png",
 								   MimeType.Jpeg => "jpeg",
 								   MimeType.Jpg  => "jpg",
+
 
 								   MimeType.Mov     => "mov",
 								   MimeType.Mp4     => "mp4",
@@ -94,8 +98,10 @@ namespace Jakar.Api.Extensions
 
 								   MimeType.Pdf => "pdf",
 
+
 								   MimeType.Zip    => "zip",
 								   MimeType.Stream => "data",
+
 
 								   MimeType.Unknown => throw new ArgumentOutOfRangeException(nameof(mime)),
 								   MimeType.NotSet  => throw new ArgumentOutOfRangeException(nameof(mime)),

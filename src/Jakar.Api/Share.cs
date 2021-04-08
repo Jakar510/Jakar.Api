@@ -19,9 +19,10 @@ using Xamarin.Forms;
 #nullable enable
 namespace Jakar.Api
 {
-	[SuppressMessage("ReSharper", "UnusedMember.Global")]
 	public static class Share
 	{
+		// TODO: add MimType extensions and overloads for ShareFile
+
 		private static ShareTextRequest GetTextRequest( string title, string text, string uri ) =>
 			new(text, title)
 			{
@@ -30,25 +31,25 @@ namespace Jakar.Api
 
 		private static IFileService _FileService { get; } = DependencyService.Get<IFileService>();
 
-		public static async Task ShareRequest( string title, string text, Uri uri ) => await ShareRequest(title, text, uri.ToString()).ConfigureAwait(true);
+		public static async Task ShareRequest( this string title, string text, Uri uri ) => await ShareRequest(title, text, uri.ToString()).ConfigureAwait(true);
 
-		public static async Task ShareRequest( string title, string text, string uri ) { await Xamarin.Essentials.Share.RequestAsync(GetTextRequest(title, text, uri)).ConfigureAwait(true); }
+		public static async Task ShareRequest( this string title, string text, string uri ) { await Xamarin.Essentials.Share.RequestAsync(GetTextRequest(title, text, uri)).ConfigureAwait(true); }
 
 
-		public static async Task ShareFile( Uri uri, string shareTitle ) => await ShareFile(uri.ToString() ?? throw new ArgumentNullException(nameof(uri)), shareTitle).ConfigureAwait(true);
+		public static async Task ShareFile( this Uri uri, string shareTitle ) => await ShareFile(uri.ToString() ?? throw new ArgumentNullException(nameof(uri)), shareTitle).ConfigureAwait(true);
 
-		public static async Task ShareFile( FileInfo info, string shareTitle ) =>
+		public static async Task ShareFile( this FileInfo info, string shareTitle ) =>
 			await ShareFile(info.FullName ?? throw new ArgumentNullException(nameof(info)), shareTitle).ConfigureAwait(true);
 
 		public static async Task ShareFile( string filePath, string shareTitle ) => await ShareFile(new ShareFile(filePath), shareTitle).ConfigureAwait(true);
 
-		public static async Task ShareFile( Uri uri, string shareTitle, string mime ) =>
+		public static async Task ShareFile( this Uri uri, string shareTitle, string mime ) =>
 			await ShareFile(uri.ToString() ?? throw new ArgumentNullException(nameof(uri)), shareTitle, mime).ConfigureAwait(true);
 
-		public static async Task ShareFile( FileInfo info, string shareTitle, string mime ) =>
+		public static async Task ShareFile( this FileInfo info, string shareTitle, string mime ) =>
 			await ShareFile(info.FullName ?? throw new ArgumentNullException(nameof(info)), shareTitle, mime).ConfigureAwait(true);
 
-		public static async Task ShareFile( string filePath, string shareTitle, string mime ) => await new ShareFile(filePath, mime).ShareFile(shareTitle).ConfigureAwait(true);
+		public static async Task ShareFile( this string filePath, string shareTitle, string mime ) => await new ShareFile(filePath, mime).ShareFile(shareTitle).ConfigureAwait(true);
 
 		public static async Task ShareFile( this ShareFile shareFile, string shareTitle )
 		{
@@ -57,9 +58,12 @@ namespace Jakar.Api
 		}
 
 
-		public static async Task<LocalFile?> OpenOfficeDoc( Uri link, MimeType mime )
+		public static async Task<LocalFile?> OpenOfficeDoc( this Uri link, MimeType mime, IAppSettings settings ) =>
+			await link.OpenOfficeDoc(mime, settings.AppName ?? throw new NullReferenceException(nameof(IAppSettings.AppName))).ConfigureAwait(true);
+
+		public static async Task<LocalFile?> OpenOfficeDoc( this Uri link, MimeType mime, string name )
 		{
-			LocalFile info = await _FileService.DownloadFile(link, mime.ToFileName() ?? throw new NullReferenceException(nameof(mime))).ConfigureAwait(true);
+			LocalFile info = await _FileService.DownloadFile(link, mime.ToFileName(name)).ConfigureAwait(true);
 
 			var url = info.ToUri(mime);
 
@@ -69,19 +73,19 @@ namespace Jakar.Api
 			return info;
 		}
 
-		public static async Task<bool> Open( string url ) => await Open(new Uri(url)).ConfigureAwait(true);
+		public static async Task<bool> Open( this string url ) => await Open(new Uri(url)).ConfigureAwait(true);
 
-		public static async Task<bool> Open( Uri url )
+		public static async Task<bool> Open( this Uri url )
 		{
 			if ( await Launcher.CanOpenAsync(url).ConfigureAwait(true) ) { return await Launcher.TryOpenAsync(url).ConfigureAwait(true); }
 
 			return false;
 		}
 
-		public static async Task OpenBrowser( Uri uri, BrowserLaunchMode launchMode = BrowserLaunchMode.SystemPreferred ) { await Browser.OpenAsync(uri, launchMode).ConfigureAwait(true); }
+		public static async Task OpenBrowser( this Uri uri, BrowserLaunchMode launchMode = BrowserLaunchMode.SystemPreferred ) { await Browser.OpenAsync(uri, launchMode).ConfigureAwait(true); }
 
 
-		public static void SetupCrossMedia( Page page, string title, string message, string ok )
+		public static void SetupCrossMedia( this Page page, string title, string message, string ok )
 		{
 			if ( page is null )
 				throw new ArgumentNullException(nameof(page));
@@ -194,12 +198,12 @@ namespace Jakar.Api
 		// }
 
 
-		public static ImageSource GetImageSource( MediaFile file ) => ImageSource.FromStream(file.GetStream);
-		public static UriImageSource GetImageSource( string url ) => GetImageSource(new Uri(url), 5);
-		public static UriImageSource GetImageSource( string url, int days ) => GetImageSource(new Uri(url), days);
-		public static UriImageSource GetImageSource( Uri url, int days ) => GetImageSource(url, new TimeSpan(days, 0, 0, 0));
+		public static ImageSource GetImageSource( this MediaFile file ) => ImageSource.FromStream(file.GetStream);
+		public static UriImageSource GetImageSource( this string url ) => GetImageSource(new Uri(url), 5);
+		public static UriImageSource GetImageSource( this string url, int days ) => GetImageSource(new Uri(url), days);
+		public static UriImageSource GetImageSource( this Uri url, int days ) => GetImageSource(url, new TimeSpan(days, 0, 0, 0));
 
-		public static UriImageSource GetImageSource( Uri url, TimeSpan time ) =>
+		public static UriImageSource GetImageSource( this Uri url, TimeSpan time ) =>
 			new()
 			{
 				Uri = url,

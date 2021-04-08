@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>1.4.0</version>
+		<version>1.5.0</version>
 		<title>Base library for all others</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,10 +18,9 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Updated ApiServices constructor.
-			Fix Jakar.Api.Extensions.Converters visibility.
-			Added Json Converter parsing methods.
-			Updated iOS layout extensions.
+			Updated ApiServices constructor to fix bug CastException bug.
+			Reworked requests again, and added lots of new Header extensions; some changes are breaking, but more useful over all.
+			Reworked UserPreferences.GetName key methods.
 		</releaseNotes>
 		<tags>Xamarin.Forms Api Extensions</tags>
 		<language>en-US</language>

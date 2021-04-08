@@ -18,9 +18,9 @@ namespace Jakar.Api
 	{
 		protected IUserDialogs _Prompts { get; } = UserDialogs.Instance;
 
-		private ApiServices? _services;
+		private IAppSettings? _services;
 
-		protected ApiServices _Services
+		protected IAppSettings _Services
 		{
 			get => _services ?? throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_services)));
 			private set => _services = value;
@@ -33,7 +33,7 @@ namespace Jakar.Api
 			private set => _debug = value;
 		}
 
-		public void Init( ApiServices services ) => _Services = services;
+		public void Init( IAppSettings services ) => _Services = services;
 		public void Init( Debug services ) => _Debug = services;
 
 
