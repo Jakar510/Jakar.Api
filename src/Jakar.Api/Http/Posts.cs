@@ -11,7 +11,7 @@ using Jakar.Api.Extensions;
 #pragma warning disable 1591
 
 #nullable enable
-namespace Jakar.Api
+namespace Jakar.Api.Http
 {
 	public static class Posts
 	{
@@ -25,9 +25,9 @@ namespace Jakar.Api
 			return await PostJson(url, payload, Requests.DEFAULT_TIMEOUT, token).ConfigureAwait(true);
 		}
 
-		public static async Task<string> PostJson( this Uri url, string payload, int timeout, CancellationToken token ) => await url.TryPost(WebRequestExtensions.AsString,
+		public static async Task<string> PostJson( this Uri url, string payload, int timeout, CancellationToken token ) => await url.TryPost(WebResponseExtensions.AsString,
 																																			 payload,
-																																			 MediaTypeNames.Application.JSON,
+																																			 ContentTypeNames.Application.JSON,
 																																			 timeout,
 																																			 token).ConfigureAwait(true);
 
@@ -90,7 +90,7 @@ namespace Jakar.Api
 												  CancellationToken token
 		)
 		{
-			return await url.TryPost(WebRequestExtensions.AsString,
+			return await url.TryPost(WebResponseExtensions.AsString,
 									 payload,
 									 contentType,
 									 Requests.DEFAULT_TIMEOUT,

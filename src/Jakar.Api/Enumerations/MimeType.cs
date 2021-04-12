@@ -9,49 +9,85 @@ namespace Jakar.Api.Enumerations
 	{
 		NotSet,
 		Unknown,
-
+		
 		// Text
-		Html,
 		Text,
+		PlainText,
+		Html,
 		Xml,
+		RichText,
+		Css,
+		Csv,
+		Calendar,
 
-		// Office
+		// application
+		UrlEncodedContent,
+		Soap,
+		Binary,
+		Stream,
+		Rtf,
+		Pdf,
+		Json,
+		XmlApp,
+		Xul,
+		JavaScript,
+		Vbs,
+
+		// application.archive
+		Zip,
+		SevenZip,
+		Bzip,
+		Bzip2,
+		Gzip,
+		Tar,
+
+		// application.office
 		Doc,
 		Docx,
 		Xls,
 		Xlsx,
+		Ppt,
+		Pptx,
 
-		// Image
+		// audio
+		ThreeGppAudio,
+		ThreeGpp2Audio,
+		Aac,
+		MpegAudio,
+		Mp3,
+		Weba,
+		Wav,
+
+		// video
+		ThreeGppVideo,
+		ThreeGpp2Video,
+		Mp4,
+		MpegVideo,
+		Mpeg4,
+		Webm,
+		H264,
+		Avi,
+		Mov,
+		Mpg,
+		Ogg,
+		Mkv,
+
+		// images
 		Gif,
-		Icon,
+		Tiff,
+		Png,
 		Jpeg,
 		Jpg,
-		Png,
 		Bmp,
+		Webp,
+		Icon,
+		Svg,
 
-		// Video
-		Mov,
-		Mp4,
-		Avi,
-		Mkv,
-		Ogg,
-		Wav,
-		ThreeGp, // 3GP
-		Mpeg,
-		Mpg,
+		// font
+		TrueType,
+		OpenType,
 
-		// Doc
-		Pdf,
-		Rtf,
-		Tif,
-
-		// Script
-		Vbs,
-		Css,
-		JavaScript,
-
-		// Misc
-		Zip,
-		Stream,
+		// multipart
+		FormData,
 	}
 }

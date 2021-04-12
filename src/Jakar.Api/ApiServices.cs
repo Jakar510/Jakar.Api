@@ -18,7 +18,7 @@ namespace Jakar.Api
 		public TDebug Debug { get; } = new();
 
 		public TAccounts Accounts { get; } = new();
-
+		
 		public TPrompts Prompts { get; } = new();
 
 		public TAppSettings Settings { get; } = new();
@@ -28,7 +28,8 @@ namespace Jakar.Api
 		public BarometerReader Barometer { get; } = new();
 
 		public LanguageApi Language { get; } = LanguageApi.Current;
-
+		
+		public Commands Loading { get; } 
 
 		/// <summary>
 		/// appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
@@ -40,6 +41,8 @@ namespace Jakar.Api
 			Prompts.Init(Debug);
 			Prompts.Init(Settings);
 			Debug.Init(Settings, app_center_id, appCenterServices);
+
+			Loading = new Commands(Prompts);
 		}
 	}
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Jakar.Api.Extensions;
+using Jakar.Api.Http;
 using Newtonsoft.Json;
 
 
@@ -215,11 +216,11 @@ namespace Jakar.Api.Models
 
 			var req = WebRequest.Create(uri);
 			req.Method = "GET";
-			req.ContentType = MediaTypeNames.Application.URL_ENCODED_CONTENT;
+			req.ContentType = ContentTypeNames.Application.URL_ENCODED_CONTENT;
 
 			using WebResponse resp = await req.GetResponseAsync(token).ConfigureAwait(true);
 
-			await using var stream = resp.GetResponseStream();
+			await using Stream? stream = resp.GetResponseStream();
 			return await SaveFileAsync(path, stream ?? throw new NullReferenceException(nameof(stream))).ConfigureAwait(true);
 		}
 

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using Jakar.Api.Exceptions.Networking;
 using Jakar.Api.Extensions;
 using Jakar.Api.Interfaces;
@@ -11,7 +9,7 @@ using Xamarin.Forms;
 #pragma warning disable 1591
 
 #nullable enable
-namespace Jakar.Api
+namespace Jakar.Api.Http
 {
 	public static class Requests
 	{

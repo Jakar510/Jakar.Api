@@ -32,7 +32,7 @@ namespace Jakar.Api
 			Location = null;
 		}
 
-		protected async Task<State> GetLocationAsync( GeolocationAccuracy accuracy = GeolocationAccuracy.Best )
+		protected async Task<State> GetLocationAsync( GeolocationAccuracy accuracy = GeolocationAccuracy.Default )
 		{
 			Reset();
 			var request = new GeolocationRequest(accuracy);

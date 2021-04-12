@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 #pragma warning disable 1591
 
 #nullable enable
-namespace Jakar.Api
+namespace Jakar.Api.Http
 {
 	public static class Pings
 	{

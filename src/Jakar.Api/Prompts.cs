@@ -16,7 +16,12 @@ namespace Jakar.Api
 {
 	public abstract class Prompts
 	{
-		protected IUserDialogs _Prompts { get; } = UserDialogs.Instance;
+		protected internal abstract string Cancel { get; }
+		protected internal abstract string Ok { get; }
+		protected internal abstract string Yes { get; }
+		protected internal abstract string No { get; }
+
+		protected internal IUserDialogs Dialogs { get; } = UserDialogs.Instance;
 
 		private IAppSettings? _services;
 
@@ -25,6 +30,7 @@ namespace Jakar.Api
 			get => _services ?? throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_services)));
 			private set => _services = value;
 		}
+
 		private Debug? _debug;
 
 		protected Debug _Debug
@@ -38,196 +44,30 @@ namespace Jakar.Api
 
 
 		public void ShowLoading( string title ) => ShowLoading(title, MaskType.Black);
-		public void ShowLoading( string title, MaskType mask ) => _Prompts.ShowLoading(title, mask);
-		public void HideLoading() => _Prompts.HideLoading();
-
-
-		public ICommand LoadingCommand( Func<CancellationToken, Task> func, Page page, string cancel ) => LoadingCommand(func, MaskType.Black, cancel, page);
-
-		public ICommand LoadingCommand( Func<CancellationToken, Task> func, MaskType mask, string cancel, Page page ) => LoadingCommand(func,
-																																		null,
-																																		cancel,
-																																		mask,
-																																		page);
-
-		public ICommand LoadingCommand( Func<CancellationToken, Task> func,
-										string? title,
-										string cancel,
-										MaskType mask,
-										Page page
-		) => new Command(async () => await LoadingAsyncTask(func,
-															title,
-															cancel,
-															mask,
-															page).ConfigureAwait(true));
-
-		public async Task LoadingAsyncTask( Func<CancellationToken, Task> func, Page page, string cancel ) => await LoadingAsyncTask(func, page, cancel, MaskType.Black).ConfigureAwait(true);
-
-		public async Task LoadingAsyncTask( Func<CancellationToken, Task> func, Page page, string cancel, MaskType mask ) => await LoadingAsyncTask(func,
-																																					null,
-																																					cancel,
-																																					mask,
-																																					page).ConfigureAwait(true);
-
-		public async Task LoadingAsyncTask( Func<CancellationToken, Task> func,
-											string? title,
-											string cancel,
-											MaskType mask,
-											Page page
-		)
-		{
-			if ( func is null ) throw new ArgumentNullException(nameof(func));
-
-			using var cancelSrc = new CancellationTokenSource();
-			ProgressDialogConfig config = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
-
-			using ( _Prompts.Progress(config) )
-			{
-				try { await func(cancelSrc.Token).ConfigureAwait(true); }
-				catch ( OperationCanceledException ) { }
-				catch ( Exception e ) { await HandleExceptionAsync(e, page, cancelSrc.Token).ConfigureAwait(true); }
-			}
-		}
-
-
-		public ICommand LoadingCommand( Func<Task> func, Page page, string cancel ) => LoadingCommand(func, MaskType.Black, cancel, page);
-
-		public ICommand LoadingCommand( Func<Task> func, MaskType mask, string cancel, Page page ) => LoadingCommand(func,
-																													 null,
-																													 cancel,
-																													 mask,
-																													 page);
-
-		public ICommand LoadingCommand( Func<Task> func,
-										string? title,
-										string cancel,
-										MaskType mask,
-										Page page
-		) => new Command(async () => await LoadingAsyncTask(func,
-															title,
-															cancel,
-															mask,
-															page).ConfigureAwait(true));
-
-		public async Task LoadingAsyncTask( Func<Task> func, Page page, string cancel ) => await LoadingAsyncTask(func, page, cancel, MaskType.Black).ConfigureAwait(true);
-
-		public async Task LoadingAsyncTask( Func<Task> func, Page page, string cancel, MaskType mask ) => await LoadingAsyncTask(func,
-																																 null,
-																																 cancel,
-																																 mask,
-																																 page).ConfigureAwait(true);
-
-		public async Task LoadingAsyncTask( Func<Task> func,
-											string? title,
-											string cancel,
-											MaskType mask,
-											Page page
-		)
-		{
-			if ( func is null ) throw new ArgumentNullException(nameof(func));
-
-			using var cancelSrc = new CancellationTokenSource();
-			ProgressDialogConfig config = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
-
-			using ( _Prompts.Progress(config) )
-			{
-				try { await func().ConfigureAwait(true); }
-				catch ( OperationCanceledException ) { }
-				catch ( Exception e ) { await HandleExceptionAsync(e, page, cancelSrc.Token).ConfigureAwait(true); }
-			}
-		}
-
-
-		public ICommand LoadingCommand( Action func, Page page, string cancel ) => LoadingCommand(func, page, cancel, MaskType.Black);
-
-		public ICommand LoadingCommand( Action func, Page page, string cancel, MaskType mask ) => LoadingCommand(func,
-																												 page,
-																												 null,
-																												 cancel,
-																												 mask);
-
-		public ICommand LoadingCommand( Action func,
-										Page page,
-										string? title,
-										string cancel,
-										MaskType mask
-		) => new Command(async () => await LoadingAction(func,
-														 title,
-														 cancel,
-														 mask,
-														 page).ConfigureAwait(true));
-
-		public async Task LoadingAction( Action func,
-										 string? title,
-										 string cancel,
-										 MaskType mask,
-										 Page page
-		)
-		{
-			if ( func is null ) throw new ArgumentNullException(nameof(func));
-
-			using var cancelSrc = new CancellationTokenSource();
-			ProgressDialogConfig config = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
-
-			using ( _Prompts.Progress(config) )
-			{
-				try { func(); }
-				catch ( OperationCanceledException ) { }
-				catch ( Exception e ) { await HandleExceptionAsync(e, page, cancelSrc.Token).ConfigureAwait(true); }
-			}
-		}
-
+		public void ShowLoading( string title, MaskType mask ) => Dialogs.ShowLoading(title, mask);
+		public void HideLoading() => Dialogs.HideLoading();
 
 		public abstract Task HandleExceptionAsync( Exception e, Page page, CancellationToken token );
-		public abstract Task HandleExceptionAsync<TFeedBackPage>( Exception e, Page page, CancellationToken token );
+		public abstract Task HandleExceptionAsync<TFeedBackPage>( Exception e, Page page, CancellationToken token ) where TFeedBackPage : Page, new();
 
-		public async Task<bool> HandleExceptionAsync( Exception e, CancellationToken token )
+		public async Task SendFeedBack<TFeedBackPage>( string title,
+													   string message,
+													   Page page,
+													   Exception e
+		) where TFeedBackPage : Page, new()
 		{
-			if ( token.IsCancellationRequested ) return false;
-			return await HandleExceptionAsync(e).ConfigureAwait(true);
+			await SendFeedBack<TFeedBackPage>(title,
+											  message,
+											  Yes,
+											  No,
+											  page,
+											  e).ConfigureAwait(true);
 		}
-
-		public async Task<bool> HandleExceptionAsync( Exception e )
-		{
-			if ( e is null ) throw new ArgumentNullException(nameof(e));
-
-			switch ( e )
-			{
-				case OperationCanceledException:
-				case NameResolutionException:
-				case RequestAbortedException:
-					break;
-
-				case TimeoutException: break;
-
-				default:
-					await _Debug.HandleExceptionAsync(e).ConfigureAwait(true);
-					break;
-			}
-
-			return !InternalHandleException(e);
-		}
-
-		public bool HandleException( Exception e )
-		{
-			if ( e is not OperationCanceledException && e is not NameResolutionException && e is not RequestAbortedException && e is not TimeoutException ) { _Debug.HandleException(e); }
-
-			return InternalHandleException(e);
-		}
-
-		/// <summary>
-		/// switch the type of exception to show what ever prompt you want
-		/// </summary>
-		/// <param name="e"></param>
-		/// <returns></returns>
-		protected abstract bool InternalHandleException( Exception e );
-
 
 		public async Task SendFeedBack<TFeedBackPage>( string title,
 													   string message,
 													   string yes,
 													   string no,
-													   string sendFeedBackPrompt,
 													   Page page,
 													   Exception e
 		) where TFeedBackPage : Page, new()
@@ -237,7 +77,7 @@ namespace Jakar.Api
 
 			await _Debug.HandleExceptionAsync(e).ConfigureAwait(true);
 
-			if ( await Check(title, $"{message}\n\n{sendFeedBackPrompt}", yes, no).ConfigureAwait(true) )
+			if ( await Check(title, message, yes, no).ConfigureAwait(true) )
 			{
 				_Services.ScreenShotAddress = await Share.GetScreenShot().ConfigureAwait(true);
 
@@ -247,11 +87,66 @@ namespace Jakar.Api
 		}
 
 
-		public async Task<bool> Check( string title, string message, string yes, string no ) => await _Prompts.ConfirmAsync(message, title, yes, no).ConfigureAwait(true);
-		protected void Alert( string title, string message, string ok ) => _Prompts.Alert(message, title, ok);
+		public async Task<bool> HandleExceptionAsync( Exception e, CancellationToken token )
+		{
+			if ( token.IsCancellationRequested ) { return false; }
+
+			return await HandleExceptionAsync(e).ConfigureAwait(true);
+		}
+
+		public async Task<bool> HandleExceptionAsync( Exception e )
+		{
+			await InternalHandleExceptionAsync(e).ConfigureAwait(true);
+
+			return InternalHandleException(e);
+		}
+
+		public bool HandleException( Exception e )
+		{
+			Task.Run(async () => await InternalHandleExceptionAsync(e).ConfigureAwait(true));
+
+			return InternalHandleException(e);
+		}
 
 
-		public void DebugMessage( Exception e, string ok, [CallerMemberName] string caller = "" )
+		protected virtual async Task InternalHandleExceptionAsync( Exception e )
+		{
+			switch ( e )
+			{
+				case null: throw new ArgumentNullException(nameof(e));
+
+				case OperationCanceledException:
+				case NameResolutionException:
+				case RequestAbortedException:
+				case TimeoutException:
+					return;
+
+
+				default:
+					await _Debug.HandleExceptionAsync(e).ConfigureAwait(true);
+					return;
+			}
+		}
+
+
+		/// <summary>
+		/// switch the type of exception to show what ever prompt you want
+		/// </summary>
+		/// <param name="e"></param>
+		/// <returns></returns>
+		protected abstract bool InternalHandleException( Exception e );
+
+
+		protected void Alert( string title, string message ) => Dialogs.Alert(message, title, Ok);
+		protected void Alert( string title, string message, string ok ) => Dialogs.Alert(message, title, ok);
+		protected async Task AlertAsync( string title, string message, string ok ) => await Dialogs.AlertAsync(message, title, ok);
+
+
+		public async Task<bool> Check( string title, string message ) => await Dialogs.ConfirmAsync(message, title, Yes, No).ConfigureAwait(true);
+		public async Task<bool> Check( string title, string message, string yes, string no ) => await Dialogs.ConfirmAsync(message, title, yes, no).ConfigureAwait(true);
+
+
+		public void DebugMessage( Exception e, [CallerMemberName] string caller = "" )
 		{
 			if ( !_Debug.CanDebug ) return;
 
@@ -263,7 +158,7 @@ namespace Jakar.Api
 			//	return;
 			//}
 
-			Alert(caller, e.ToString(), ok);
+			Alert(caller, e.ToString());
 		}
 	}
 }
