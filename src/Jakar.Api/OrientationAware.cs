@@ -11,7 +11,10 @@ namespace Jakar.Api
 	public class OrientationService
 	{
 		// https://www.wintellect.com/responding-to-orientation-changes-in-xamarin-forms/
+
 		public const double SIZE_NOT_ALLOCATED = -1;
+
+
 		protected double _Width { get; set; }
 		protected double _Height { get; set; }
 
@@ -27,6 +30,7 @@ namespace Jakar.Api
 		//Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Width
 		//Xamarin.Essentials.DeviceDisplay.MainDisplayInfo.Height
 		//public static bool IsPhone { get; } = DeviceInfo.Idiom == DeviceIdiom.Phone;
+
 		public OrientationService() : this(SIZE_NOT_ALLOCATED, SIZE_NOT_ALLOCATED) { }
 
 		public OrientationService( in double width, in double height )
@@ -34,12 +38,10 @@ namespace Jakar.Api
 			_Width = width;
 			_Height = height;
 		}
+		
 
-		public void OnSizeAllocated( ContentPage page )
-		{
-			if ( page is null ) throw new ArgumentNullException(nameof(page));
-			OnSizeAllocated(page.Width, page.Height);
-		}
+
+		public void OnSizeAllocated( in Page page ) => OnSizeAllocated(page.Width, page.Height);
 
 		public void OnSizeAllocated( in double width, in double height )
 		{
@@ -88,7 +90,10 @@ namespace Jakar.Api
 	public class OrientationContentPage : ContentPage
 	{
 		public OrientationService Orientation { get; set; }
+
+
 		protected OrientationContentPage() : base() => Orientation = new OrientationService(Width, Height);
+
 
 		protected override void OnSizeAllocated( double width, double height )
 		{

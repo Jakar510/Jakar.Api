@@ -7,6 +7,7 @@ using Jakar.Api.Extensions;
 using Jakar.Api.Interfaces;
 using Jakar.Api.Models;
 using Jakar.Api.Models.Users;
+using Jakar.Api.Statics;
 
 
 #pragma warning disable 1591

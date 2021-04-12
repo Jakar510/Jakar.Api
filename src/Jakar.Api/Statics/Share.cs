@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +16,7 @@ using Xamarin.Forms;
 #pragma warning disable 1591
 
 #nullable enable
-namespace Jakar.Api
+namespace Jakar.Api.Statics
 {
 	public static class Share
 	{

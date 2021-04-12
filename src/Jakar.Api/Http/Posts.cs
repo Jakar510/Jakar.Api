@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Jakar.Api.Extensions;
+using Jakar.Api.Statics;
 
 
 #pragma warning disable 1591

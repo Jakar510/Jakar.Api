@@ -6,6 +6,8 @@ using System.Windows.Input;
 using Acr.UserDialogs;
 using Jakar.Api.Exceptions.General;
 using Jakar.Api.Exceptions.Networking;
+using Jakar.Api.Interfaces;
+using Jakar.Api.Statics;
 using Xamarin.Forms;
 
 

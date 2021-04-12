@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Content.PM;
 using Jakar.Api.Droid.Services;
 using Jakar.Api.Interfaces;
+using Jakar.Api.Statics;
 using AUri = Android.Net.Uri;
 
 

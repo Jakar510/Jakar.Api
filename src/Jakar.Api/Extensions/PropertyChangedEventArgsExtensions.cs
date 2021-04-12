@@ -9,7 +9,6 @@ using Xamarin.Forms;
 #nullable enable
 namespace Jakar.Api.Extensions
 {
-	[Xamarin.Forms.Internals.Preserve(true, false)]
 	public static class PropertyChangedEventArgsExtensions
 	{
 		public static bool IsOneOf( this PropertyChangedEventArgs e, params BindableProperty[] properties ) => e.IsOneOf(properties.Select(property => property.PropertyName));

@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xamarin.Forms.Internals;
 
 
@@ -8,7 +10,6 @@ using Xamarin.Forms.Internals;
 #nullable enable
 namespace Jakar.Api.Extensions
 {
-	[Xamarin.Forms.Internals.Preserve(true, false)]
 	public static class CollectionExtensions
 	{
 		public static bool IsEmpty( this ICollection collection ) => collection.Count == 0;
@@ -18,7 +19,14 @@ namespace Jakar.Api.Extensions
 		public static void Add<TItem>( this IList<TItem> list, IEnumerable<TItem> items ) => items.ForEach(list.Add);
 		public static void Add<TItem>( this IList<TItem> list, params TItem[] items ) => items.ForEach(list.Add);
 
+
 		public static void Remove<TItem>( this IList<TItem> list, IEnumerable<TItem> items ) => items.ForEach(item => list.Remove(item));
 		public static void Remove<TItem>( this IList<TItem> list, params TItem[] items ) => items.ForEach(item => list.Remove(item));
+
+
+		public static async Task ForEach<TItem>( this IEnumerable<TItem> list, Func<TItem, Task> action )
+		{
+			foreach ( TItem item in list ) { await action(item).ConfigureAwait(true); }
+		}
 	}
 }

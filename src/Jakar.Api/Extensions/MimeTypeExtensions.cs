@@ -1,6 +1,7 @@
 ﻿using System;
 using Jakar.Api.Enumerations;
 using Jakar.Api.Http;
+using Jakar.Api.Interfaces;
 
 
 #pragma warning disable 1591

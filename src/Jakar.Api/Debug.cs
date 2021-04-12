@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Jakar.Api.Exceptions.General;
 using Jakar.Api.Extensions;
+using Jakar.Api.Interfaces;
 using Jakar.Api.Models;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
@@ -14,6 +15,9 @@ using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
+using DeviceInfo = Jakar.Api.Statics.DeviceInfo;
+using FileSystem = Jakar.Api.Statics.FileSystem;
+using Share = Jakar.Api.Statics.Share;
 
 
 #pragma warning disable 1591

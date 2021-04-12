@@ -9,7 +9,6 @@ using System.Reflection;
 #nullable enable
 namespace Jakar.Api.Extensions
 {
-	[Xamarin.Forms.Internals.Preserve(true, false)]
 	public static class InstanceCreator
 	{
 		public static TItem Create<TItem>( params object[] args ) => (TItem) Activator.CreateInstance(typeof(TItem), args);

@@ -9,7 +9,6 @@ using Xamarin.Forms.Internals;
 #nullable enable
 namespace Jakar.Api.Extensions
 {
-	[Preserve(true, false)]
 	public static class NumberExtensions
 	{
 		public static float ToFloat( this double value ) => (float) value;

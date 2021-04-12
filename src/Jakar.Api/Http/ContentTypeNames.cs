@@ -1,9 +1,5 @@
 ﻿// unset
 
-using System;
-using Jakar.Api.Enumerations;
-
-
 #pragma warning disable 1591
 
 #nullable enable
@@ -13,9 +9,7 @@ namespace Jakar.Api.Http
 	{
 		// https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 		// https://www.freeformatter.com/mime-types-list.html
-
-
-
+		
 		public static class Text
 		{
 			public const string PLAIN = "text/plain";

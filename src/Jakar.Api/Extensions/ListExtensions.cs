@@ -7,7 +7,6 @@ using System.Linq;
 #nullable enable
 namespace Jakar.Api.Extensions
 {
-	[Xamarin.Forms.Internals.Preserve(true, false)]
 	public static class ListExtensions
 	{
 		public static bool IsEqual<TValue>( this TValue value, TValue other ) => Equals(value, other);

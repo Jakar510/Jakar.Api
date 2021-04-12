@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
+using Permissions = Jakar.Api.Statics.Permissions;
 
 
 #pragma warning disable 1591
