@@ -26,7 +26,7 @@ namespace Jakar.Api.Extensions
 					   MimeType.Xls  => "ms-excel",
 					   MimeType.Xlsx => "ms-excel",
 
-					   MimeType.Ppt => "ms-powerpoint",
+					   MimeType.Ppt  => "ms-powerpoint",
 					   MimeType.Pptx => "ms-powerpoint",
 
 					   _ => "file",
@@ -42,85 +42,165 @@ namespace Jakar.Api.Extensions
 		{
 			if ( string.IsNullOrWhiteSpace(fileName) ) { throw new NullReferenceException(nameof(mime)); }
 
-			string extension = mime switch
-							   {
-								   MimeType.Text      => "text",
-								   MimeType.PlainText => "text",
-								   MimeType.Html      => "HTML",
-								   MimeType.Xml       => "XML",
-								   MimeType.RichText  => "rtf",
-								   MimeType.Css       => "css",
-								   MimeType.Csv       => "csv",
-								   MimeType.Calendar  => "ics",
+			return $"{fileName}.{mime.ToExtension().ToLower()}";
+		}
 
-								   MimeType.UrlEncodedContent => "text",
-								   MimeType.Soap              => "soap",
-								   MimeType.Stream            => "stream",
-								   MimeType.Binary            => "bin",
-								   MimeType.Rtf               => "rtf",
-								   MimeType.Pdf               => "pdf",
-								   MimeType.Json              => "json",
-								   MimeType.XmlApp            => "XML",
-								   MimeType.Xul               => "XUL",
-								   MimeType.JavaScript        => "js",
-								   MimeType.Vbs               => "VBS",
+		public static string ToExtension( this MimeType mime )
+		{
+			return mime switch
+				   {
+					   MimeType.Text      => "text",
+					   MimeType.PlainText => "text",
+					   MimeType.Html      => "html",
+					   MimeType.Xml       => "xml",
+					   MimeType.RichText  => "rtf",
+					   MimeType.Css       => "css",
+					   MimeType.Csv       => "csv",
+					   MimeType.Calendar  => "ics",
 
-								   MimeType.Zip      => "ZIP",
-								   MimeType.SevenZip => "7z",
-								   MimeType.Bzip     => "bz",
-								   MimeType.Bzip2    => "bz2",
-								   MimeType.Gzip     => "gz",
-								   MimeType.Tar      => "tar.gz",
+					   MimeType.UrlEncodedContent => "url",
+					   MimeType.Soap              => "soap",
+					   MimeType.Stream            => "stream",
+					   MimeType.Binary            => "bin",
+					   MimeType.Rtf               => "rtf",
+					   MimeType.Pdf               => "pdf",
+					   MimeType.Json              => "json",
+					   MimeType.XmlApp            => "xml",
+					   MimeType.Xul               => "xul",
+					   MimeType.JavaScript        => "js",
+					   MimeType.Vbs               => "vbs",
 
-								   MimeType.Doc  => "DOC",
-								   MimeType.Docx => "DOCX",
-								   MimeType.Xls  => "XLS",
-								   MimeType.Xlsx => "XLSX",
-								   MimeType.Ppt  => "PPT",
-								   MimeType.Pptx => "PPTX",
+					   MimeType.Zip      => "zip",
+					   MimeType.SevenZip => "7z",
+					   MimeType.Bzip     => "bz",
+					   MimeType.Bzip2    => "bz2",
+					   MimeType.Gzip     => "gz",
+					   MimeType.Tar      => "tar.gz",
 
-								   MimeType.ThreeGppAudio  => "3gpp",
-								   MimeType.ThreeGpp2Audio => "3gpp2",
-								   MimeType.Aac            => "AAC",
-								   MimeType.MpegAudio      => "MPEG",
-								   MimeType.Mp3            => "MP3",
-								   MimeType.Weba           => "WEBA",
-								   MimeType.Wav            => "WAVE",
+					   MimeType.Doc  => "doc",
+					   MimeType.Docx => "docx",
+					   MimeType.Xls  => "xls",
+					   MimeType.Xlsx => "xlsx",
+					   MimeType.Ppt  => "ppt",
+					   MimeType.Pptx => "pptx",
 
-								   MimeType.ThreeGppVideo  => "3gpp",
-								   MimeType.ThreeGpp2Video => "3gpp2",
-								   MimeType.Mp4            => "MP4",
-								   MimeType.MpegVideo      => "MPEG",
-								   MimeType.Mpeg4          => "MPEG4",
-								   MimeType.Webm           => "WEBM",
-								   MimeType.H264           => "H264",
-								   MimeType.Avi            => "AVI",
-								   MimeType.Mov            => "MOV",
-								   MimeType.Mpg            => "MPG",
-								   MimeType.Ogg            => "OGG",
-								   MimeType.Mkv            => "MKV",
+					   MimeType.ThreeGppAudio  => "3gpp",
+					   MimeType.ThreeGpp2Audio => "3gpp2",
+					   MimeType.Aac            => "aac",
+					   MimeType.MpegAudio      => "mpeg",
+					   MimeType.Mp3            => "mp3",
+					   MimeType.Weba           => "weba",
+					   MimeType.Wav            => "wav",
 
-								   MimeType.Gif  => "GIF",
-								   MimeType.Tiff => "TIFF",
-								   MimeType.Png  => "PNG",
-								   MimeType.Jpeg => "JPEG",
-								   MimeType.Jpg  => "JPG",
-								   MimeType.Bmp  => "BMP",
-								   MimeType.Webp => "WEBP",
-								   MimeType.Icon => "ICON",
-								   MimeType.Svg  => "svg",
+					   MimeType.ThreeGppVideo  => "3gpp",
+					   MimeType.ThreeGpp2Video => "3gpp2",
+					   MimeType.Mp4            => "mp4",
+					   MimeType.MpegVideo      => "mpeg",
+					   MimeType.Mpeg4          => "mpeg4",
+					   MimeType.Webm           => "webm",
+					   MimeType.H264           => "h264",
+					   MimeType.Avi            => "avi",
+					   MimeType.Mov            => "mov",
+					   MimeType.Mpg            => "mpg",
+					   MimeType.Ogg            => "ogg",
+					   MimeType.Mkv            => "mkv",
 
-								   MimeType.TrueType => "ttf",
-								   MimeType.OpenType => "otf",
-								   MimeType.FormData => "fd",
+					   MimeType.Gif  => "gif",
+					   MimeType.Tiff => "tif",
+					   MimeType.Png  => "png",
+					   MimeType.Jpeg => "jpeg",
+					   MimeType.Jpg  => "jpg",
+					   MimeType.Bmp  => "bmp",
+					   MimeType.Webp => "webp",
+					   MimeType.Icon => "ico",
+					   MimeType.Svg  => "svg",
+
+					   MimeType.TrueType => "ttf",
+					   MimeType.OpenType => "otf",
+					   MimeType.FormData => "fd",
 
 
-								   MimeType.Unknown => throw new ArgumentOutOfRangeException(nameof(mime)),
-								   MimeType.NotSet  => throw new ArgumentOutOfRangeException(nameof(mime)),
-								   _                => throw new ArgumentOutOfRangeException(nameof(mime)),
-							   };
+					   MimeType.Unknown => throw new ArgumentOutOfRangeException(nameof(mime)),
+					   MimeType.NotSet  => throw new ArgumentOutOfRangeException(nameof(mime)),
+					   _                => throw new ArgumentOutOfRangeException(nameof(mime)),
+				   };
+		}
 
-			return $"{fileName}.{extension.ToLower()}";
+		public static MimeType FromExtension( this string mime )
+		{
+			return mime.ToLower() switch
+				   {
+					   "text" => MimeType.Text,
+					   "html" => MimeType.Html,
+					   "htm"  => MimeType.Html,
+					   "xml"  => MimeType.Xml,
+					   "rtf"  => MimeType.RichText,
+					   "css"  => MimeType.Css,
+					   "csv"  => MimeType.Csv,
+					   "ics"  => MimeType.Calendar,
+
+					   "url"    => MimeType.Text,
+					   "soap"   => MimeType.Soap,
+					   "stream" => MimeType.Stream,
+					   "bin"    => MimeType.Binary,
+					   "pdf"    => MimeType.Pdf,
+					   "json"   => MimeType.Json,
+					   "xul"    => MimeType.Xul,
+					   "js"     => MimeType.JavaScript,
+					   "vbs"    => MimeType.Vbs,
+
+					   "zip"    => MimeType.Zip,
+					   "7z"     => MimeType.SevenZip,
+					   "bz"     => MimeType.Bzip,
+					   "bz2"    => MimeType.Bzip2,
+					   "gz"     => MimeType.Gzip,
+					   "tar.gz" => MimeType.Tar,
+
+					   "doc"  => MimeType.Doc,
+					   "docx" => MimeType.Docx,
+					   "xls"  => MimeType.Xls,
+					   "xlsx" => MimeType.Xlsx,
+					   "ppt"  => MimeType.Ppt,
+					   "pptx" => MimeType.Pptx,
+
+					   // "3gpp"  => MimeType.ThreeGppAudio,
+					   // "3gpp2" => MimeType.ThreeGpp2Audio,
+					   "aac" => MimeType.Aac,
+
+					   // "mpeg"  => MimeType.MpegAudio,
+					   "mp3"  => MimeType.Mp3,
+					   "weba" => MimeType.Weba,
+					   "wav"  => MimeType.Wav,
+
+					   "3gpp"  => MimeType.ThreeGppVideo,
+					   "3gpp2" => MimeType.ThreeGpp2Video,
+					   "mp4"   => MimeType.Mp4,
+					   "mpeg"  => MimeType.MpegVideo,
+					   "mpeg4" => MimeType.Mpeg4,
+					   "webm"  => MimeType.Webm,
+					   "h264"  => MimeType.H264,
+					   "avi"   => MimeType.Avi,
+					   "mov"   => MimeType.Mov,
+					   "mpg"   => MimeType.Mpg,
+					   "ogg"   => MimeType.Ogg,
+					   "mkv"   => MimeType.Mkv,
+
+					   "gif"  => MimeType.Gif,
+					   "tif"  => MimeType.Tiff,
+					   "png"  => MimeType.Png,
+					   "jpeg" => MimeType.Jpeg,
+					   "jpg"  => MimeType.Jpg,
+					   "bmp"  => MimeType.Bmp,
+					   "webp" => MimeType.Webp,
+					   "ico"  => MimeType.Icon,
+					   "svg"  => MimeType.Svg,
+
+					   "ttf" => MimeType.TrueType,
+					   "otf" => MimeType.OpenType,
+					   "fd"  => MimeType.FormData,
+
+					   _ => MimeType.Unknown,
+				   };
 		}
 
 
@@ -134,9 +214,9 @@ namespace Jakar.Api.Extensions
 					   MimeTypeNames.Text.HTML                   => MimeType.Html,
 					   MimeTypeNames.Text.XML                    => MimeType.Xml,
 					   MimeTypeNames.Text.RICH_TEXT              => MimeType.RichText,
+					   MimeTypeNames.Text.CALENDAR               => MimeType.Calendar,
 					   MimeTypeNames.Text.CASCADING_STYLE_SHEETS => MimeType.Css,
 					   MimeTypeNames.Text.COMMA_SEPARATED_VALUES => MimeType.Csv,
-					   MimeTypeNames.Text.CALENDAR               => MimeType.Calendar,
 
 					   MimeTypeNames.Application.URL_ENCODED_CONTENT => MimeType.UrlEncodedContent,
 					   MimeTypeNames.Application.SOAP                => MimeType.Soap,
@@ -194,8 +274,9 @@ namespace Jakar.Api.Extensions
 					   MimeTypeNames.Image.ICON => MimeType.Icon,
 					   MimeTypeNames.Image.SVG  => MimeType.Svg,
 
-					   MimeTypeNames.Font.TRUE_TYPE      => MimeType.TrueType,
-					   MimeTypeNames.Font.OPEN_TYPE      => MimeType.OpenType,
+					   MimeTypeNames.Font.TRUE_TYPE => MimeType.TrueType,
+					   MimeTypeNames.Font.OPEN_TYPE => MimeType.OpenType,
+
 					   MimeTypeNames.MultiPart.FORM_DATA => MimeType.FormData,
 
 					   _ => MimeType.Unknown

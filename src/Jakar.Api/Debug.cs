@@ -100,18 +100,17 @@ namespace Jakar.Api
 			await TrackError(e, screenShot).ConfigureAwait(true);
 		}
 
-		protected async Task SaveAppState( Dictionary<string, object?> payload )
+		protected static async Task<bool> SaveAppState( string path, Dictionary<string, object?> payload )
 		{
-			await using var file = new FileData(FileSystem.AppStateFileName);
-			await file.WriteToFileAsync(payload).ConfigureAwait(true);
+			await using var file = new FileData(path);
+			return await file.WriteToFileAsync(payload).ConfigureAwait(true);
 		}
 
-		public async Task SaveFeedBackAppState( Dictionary<string, string?> feedback, string key = "feedback" )
+		public async Task<bool> SaveFeedBackAppState( Dictionary<string, string?> feedback, string key = "feedback" )
 		{
-			var result = new Dictionary<string, object> { [nameof(AppState)] = AppState(), [key] = feedback };
-
-			await using var file = new FileData(FileSystem.AccountsFileName);
-			await file.WriteToFileAsync(result).ConfigureAwait(true);
+			var result = new Dictionary<string, object?> { [nameof(AppState)] = AppState(), [key] = feedback };
+			
+			return await SaveAppState(FileSystem.FeedBackFileName, result).ConfigureAwait(true);
 		}
 
 
@@ -238,7 +237,7 @@ namespace Jakar.Api
 		{
 			if ( !_Services.SendCrashes ) { return; }
 
-			if ( appState is not null ) await SaveAppState(appState).ConfigureAwait(true);
+			if ( appState is not null ) await SaveAppState(FileSystem.AppStateFileName, appState).ConfigureAwait(true);
 
 			ErrorAttachmentLog? state = appState is null
 											? null

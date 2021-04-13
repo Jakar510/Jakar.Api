@@ -14,6 +14,9 @@ namespace Jakar.Api.Extensions
 {
 	public static class Validate
 	{
+		public static TItem NotNull<TItem>( TItem? item ) => item ?? throw new NullReferenceException(nameof(item));
+
+
 		public static string Demo { get; set; } = "DEMO";
 
 		private static readonly Regex _emailRegex = new(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");

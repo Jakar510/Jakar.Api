@@ -61,7 +61,7 @@ namespace Jakar.Api.Statics
 
 			foreach ( FileData file in args )
 			{
-				ZipArchiveEntry entry = archive.CreateEntry(file.Path.FileName);
+				ZipArchiveEntry entry = archive.CreateEntry(file.LocalFile.FileName);
 				await using var writer = new StreamWriter(entry.Open());
 
 				if ( await file.ReadFromFileAsync().ConfigureAwait(true) ) { await writer.WriteAsync(file.Data).ConfigureAwait(true); }
@@ -92,11 +92,11 @@ namespace Jakar.Api.Statics
 		// }
 
 
-		public static async Task<FileData> SaveFileAsync( string filename, Uri uri, CancellationToken token ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), uri, token).ConfigureAwait(true);
+		public static async Task<FileData?> SaveFileAsync( string filename, Uri uri, CancellationToken token ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), uri, token).ConfigureAwait(true);
 
-		public static async Task<FileData> SaveFileAsync( string filename, Stream stream ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), stream).ConfigureAwait(true);
+		public static async Task<FileData?> SaveFileAsync( string filename, Stream stream ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), stream).ConfigureAwait(true);
 
-		public static async Task<FileData> SaveFileAsync( string filename, byte[] payload ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), payload).ConfigureAwait(true);
+		public static async Task<FileData?> SaveFileAsync( string filename, byte[] payload ) => await FileData.SaveFileAsync(GetCacheDataPath(filename), payload).ConfigureAwait(true);
 
 		public static FileData SaveFile( string filename, string link ) => FileData.SaveFile(filename, new Uri(link));
 

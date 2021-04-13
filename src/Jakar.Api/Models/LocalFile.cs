@@ -1,10 +1,13 @@
 ﻿// unset
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Jakar.Api.Enumerations;
 using Jakar.Api.Extensions;
+using Xamarin.Essentials;
 
 
 #pragma warning disable 1591
@@ -16,53 +19,69 @@ namespace Jakar.Api.Models
 	public class LocalFile : IDisposable, IAsyncDisposable
 	{
 		public bool IsTemporary { get; init; }
-		public FileInfo Info { get; }
-		public string FileName { get; }
-		public MimeType Mime { get; private set; }
-		public string Path => Info.FullName;
-		public bool Exists => File.Exists(Path);
+		public FileBase Result { get; }
 
-		protected static string FromUri( Uri uri )
+		public FileInfo Info => new(FullPath);
+		public bool Exists => File.Exists(FullPath);
+
+		public string FullPath => Result.FullPath;
+		public string FileName => Result.FileName;
+		public string Extension => Path.GetExtension(Result.FileName);
+		public MimeType Mime => Extension.FromExtension();
+		public string ContentType => Result.ContentType;
+
+
+		protected static FileInfo FromUri( Uri uri )
 		{
 			if ( !uri.IsFile ) throw new ArgumentException("Uri is not a file.", nameof(uri));
 
-			return uri.AbsolutePath;
+			return new FileInfo(uri.AbsolutePath);
 		}
 
 		public LocalFile( Uri path, bool temporary = false ) : this(FromUri(path), temporary) { }
-		public LocalFile( string path, bool temporary = false ) : this(path, System.IO.Path.GetFileName(path), temporary) { }
-		public LocalFile( string path, string name, bool temporary = false ) : this(new FileInfo(path), name, temporary) { }
-		public LocalFile( FileInfo path, bool temporary = false ) : this(path ?? throw new ArgumentNullException(nameof(path)), System.IO.Path.GetFileName(path.FullName), temporary) { }
+		public LocalFile( string path, bool temporary = false ) : this(new FileInfo(path), temporary) { }
+		public LocalFile( FileSystemInfo file, bool temporary = false ) : this(new FileResult(file.FullName), temporary) { }
 
-		public LocalFile( FileInfo info, string name, bool temporary = false )
+		public LocalFile( FileBase info, bool temporary = false )
 		{
 			IsTemporary = temporary;
-			Info = info;
-			FileName = name;
+			Result = info;
+		}
+
+		public static async Task<LocalFile?> Pick( PickOptions? options = null )
+		{
+			FileResult? result = await FilePicker.PickAsync(options);
+
+			return new LocalFile(result);
+		}
+
+		public static async Task<IEnumerable<LocalFile>?> PickMultiple( PickOptions? options = null )
+		{
+			IEnumerable<FileResult>? items = await FilePicker.PickMultipleAsync(options);
+
+			return items?.Select(item => new LocalFile(item));
 		}
 
 		public static implicit operator LocalFile( string info ) => new(info);
 		public static implicit operator LocalFile( FileInfo info ) => new(info);
+		public static implicit operator LocalFile( FileBase info ) => new(info);
 		public static implicit operator LocalFile( Uri info ) => new(info);
 
 
-		public void Encrypt() => File.Encrypt(Path);
-		public void Decrypt() => File.Decrypt(Path);
+		public void Encrypt() => File.Encrypt(FullPath);
+		public void Decrypt() => File.Decrypt(FullPath);
 
-		public Uri ToUri() => ToUri(MimeType.Unknown);
 
-		public Uri ToUri( MimeType mime )
+		public Uri ToUri( MimeType? mime = null )
 		{
-			if ( string.IsNullOrWhiteSpace(Path) )
-				throw new NullReferenceException(nameof(Path));
+			if ( string.IsNullOrWhiteSpace(FullPath) ) { throw new NullReferenceException(nameof(FullPath)); }
 
-			Mime = mime;
+			MimeType type = mime ?? Mime;
 
-			if ( !Path.StartsWith("/", StringComparison.InvariantCultureIgnoreCase) )
-				return new Uri($"{Mime.ToUriScheme()}://{Path}", UriKind.Absolute);
+			if ( !FullPath.StartsWith("/", StringComparison.InvariantCultureIgnoreCase) ) { return new Uri($"{type.ToUriScheme()}://{FullPath}", UriKind.Absolute); }
 
-			string path = Path.Remove(0, 1);
-			return new Uri($"{Mime.ToUriScheme()}://{path}", UriKind.Absolute);
+			string path = FullPath.Remove(0, 1);
+			return new Uri($"{type.ToUriScheme()}://{path}", UriKind.Absolute);
 		}
 
 
@@ -74,10 +93,9 @@ namespace Jakar.Api.Models
 
 		protected virtual void Dispose( bool remove )
 		{
-			if ( string.IsNullOrWhiteSpace(Path) ) return;
+			if ( string.IsNullOrWhiteSpace(FullPath) ) return;
 
-			if ( remove && File.Exists(Path) )
-				File.Delete(Path);
+			if ( remove && Exists ) { File.Delete(FullPath); }
 		}
 
 		public ValueTask DisposeAsync()

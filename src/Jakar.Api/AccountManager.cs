@@ -30,17 +30,17 @@ namespace Jakar.Api
 			_Accounts = items ?? new Accounts<TUser, TActiveUser>();
 		}
 
-		protected virtual async Task Save()
+		protected virtual async Task<bool> Save()
 		{
 			await using var file = new FileData(FileSystem.AccountsFileName);
 			string json = _Accounts.ToJson();
-			await file.WriteToFileAsync(json).ConfigureAwait(true);
+			return await file.WriteToFileAsync(json).ConfigureAwait(true);
 		}
 
-		public async Task Logout()
+		public async Task<bool> Logout()
 		{
 			_Accounts.Active.User = default;
-			await Save().ConfigureAwait(true);
+			return await Save().ConfigureAwait(true);
 		}
 
 

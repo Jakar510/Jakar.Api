@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 
@@ -11,9 +14,9 @@ namespace Jakar.Api.Exceptions.Networking
 	{
 		public HttpRequestHeader Key { get; }
 		public Type Actual { get; }
-		public Type Expected { get; }
+		public IList<Type> Expected { get; }
 
-		public HeaderException( HttpRequestHeader key, Type actual, Type expected ) : base(GetMessage(key, actual, expected))
+		public HeaderException( HttpRequestHeader key, Type actual, params Type[] expected ) : base(GetMessage(key, actual, expected))
 		{
 			Key = key;
 			Actual = actual;
@@ -21,12 +24,14 @@ namespace Jakar.Api.Exceptions.Networking
 
 			Data[nameof(Key)] = Key.ToString();
 			Data[nameof(Actual)] = Actual.FullName;
-			Data[nameof(Expected)] = Expected.FullName;
+			Data[nameof(Expected)] = GetTypes(expected);
 		}
 
-		protected static string GetMessage( HttpRequestHeader key, Type actual, Type expected )
+		protected static string GetTypes( params Type[] expected ) => expected.Aggregate("", ( current, item ) => current + @$"""{item.FullName}"", ");
+
+		protected static string GetMessage( HttpRequestHeader key, Type actual, params Type[] expected )
 		{
-			return @$"For the HttpRequestHeader ""{key}"", the value passed needs to be of type ""{expected.FullName}"" but got ""{actual.FullName}"" ";
+			return @$"For the HttpRequestHeader ""{key}"", the value passed needs to be of following types: [ {GetTypes(expected)} ] but got ""{actual.FullName}"" ";
 		}
 	}
 }

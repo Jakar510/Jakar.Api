@@ -6,8 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jakar.Api.Extensions;
 using Jakar.Api.Http;
-using Jakar.Api.Statics;
 using Newtonsoft.Json;
+using Xamarin.Essentials;
+using FileSystem = Jakar.Api.Statics.FileSystem;
 
 
 #pragma warning disable 1591
@@ -17,8 +18,8 @@ namespace Jakar.Api.Models
 {
 	public class FileData : IDisposable, IAsyncDisposable
 	{
-		public LocalFile Path { get; }
-		protected string? _Path => Path.Path;
+		public LocalFile LocalFile { get; }
+		protected string _Path => LocalFile.FullPath;
 
 
 		protected string? _data;
@@ -39,9 +40,15 @@ namespace Jakar.Api.Models
 
 
 		public FileData( string path, bool temporary = false ) : this(new LocalFile(path, temporary)) { }
-		public FileData( string path, string name, bool temporary = false ) : this(new LocalFile(path, name, temporary)) { }
-		public FileData( FileInfo path, bool temporary = false ) : this(new LocalFile(path, temporary)) { }
-		public FileData( LocalFile path ) => Path = path;
+		public FileData( FileSystemInfo path, bool temporary = false ) : this(new LocalFile(path, temporary)) { }
+		public FileData( FileBase path ) : this(new LocalFile(path)) { }
+		public FileData( LocalFile path ) => LocalFile = path;
+
+
+		public static implicit operator FileData( string info ) => new(info);
+		public static implicit operator FileData( FileInfo info ) => new(info);
+		public static implicit operator FileData( FileBase info ) => new(info);
+		public static implicit operator FileData( Uri info ) => new(info);
 
 
 	#region Read
@@ -60,9 +67,9 @@ namespace Jakar.Api.Models
 
 		public async Task<bool> ReadFromFileAsync()
 		{
-			string? path = _Path;
+			string path = _Path;
 
-			if ( string.IsNullOrWhiteSpace(path) || !Path.Exists ) { return false; }
+			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return false; }
 
 			using var stream = new StreamReader(path, Encoding.UTF8);
 			_data = await stream.ReadToEndAsync().ConfigureAwait(true);
@@ -72,9 +79,9 @@ namespace Jakar.Api.Models
 
 		public bool ReadFromFile()
 		{
-			string? path = _Path;
+			string path = _Path;
 
-			if ( string.IsNullOrWhiteSpace(path) || !Path.Exists ) { return false; }
+			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return false; }
 
 			using var stream = new StreamReader(path, Encoding.UTF8);
 			_data = stream.ReadToEnd();
@@ -82,13 +89,16 @@ namespace Jakar.Api.Models
 		}
 
 
+		public async Task<Stream> OpenReadAsync() => await LocalFile.Result.OpenReadAsync().ConfigureAwait(true);
+
+
 		public async Task<bool> RawReadFromFileAsync()
 		{
-			string? path = _Path;
+			string path = _Path;
 
-			if ( string.IsNullOrWhiteSpace(path) || !Path.Exists ) { return false; }
+			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return false; }
 
-			await using var file = File.OpenRead(path);
+			await using FileStream file = File.OpenRead(path);
 			await using var stream = new MemoryStream();
 			await file.CopyToAsync(stream).ConfigureAwait(true);
 			_payload = stream.ToArray();
@@ -98,11 +108,11 @@ namespace Jakar.Api.Models
 
 		public bool RawReadFromFile()
 		{
-			string? path = _Path;
+			string path = _Path;
 
-			if ( string.IsNullOrWhiteSpace(path) || !Path.Exists ) { return false; }
+			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return false; }
 
-			using var file = File.OpenRead(path);
+			using FileStream file = File.OpenRead(path);
 			using var stream = new MemoryStream();
 			file.CopyTo(stream);
 			_payload = stream.ToArray();
@@ -119,29 +129,22 @@ namespace Jakar.Api.Models
 		{
 			if ( string.IsNullOrWhiteSpace(_data) ) { return false; }
 
-			if ( _payload is not null )
-			{
-				await WriteToFileAsync(_payload.Value.ToArray()).ConfigureAwait(true);
+			if ( _payload is not null ) { return await WriteToFileAsync(_payload.Value.ToArray()).ConfigureAwait(true); }
 
-				return true;
-			}
-
-			await WriteToFileAsync(_data).ConfigureAwait(true);
-
-			return true;
+			return await WriteToFileAsync(_data).ConfigureAwait(true);
 		}
 
-		public async Task WriteToFileAsync( object jsonSerializablePayload )
+		public async Task<bool> WriteToFileAsync( object jsonSerializablePayload )
 		{
 			string json = jsonSerializablePayload.ToPrettyJson();
-			await WriteToFileAsync(json).ConfigureAwait(true);
+			return await WriteToFileAsync(json).ConfigureAwait(true);
 		}
 
 		public async Task<bool> WriteToFileAsync( string prettyJson )
 		{
-			string? path = _Path;
+			string path = _Path;
 
-			if ( string.IsNullOrWhiteSpace(path) || !Path.Exists ) { return false; }
+			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return false; }
 
 			if ( string.IsNullOrWhiteSpace(prettyJson) ) throw new ArgumentNullException(nameof(prettyJson));
 
@@ -154,9 +157,9 @@ namespace Jakar.Api.Models
 
 		public async Task<bool> WriteToFileAsync( byte[] payload )
 		{
-			string? path = _Path;
+			string path = _Path;
 
-			if ( string.IsNullOrWhiteSpace(path) || !Path.Exists ) { return false; }
+			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return false; }
 
 			if ( payload is null ) throw new ArgumentNullException(nameof(payload));
 
@@ -171,18 +174,16 @@ namespace Jakar.Api.Models
 
 		public async Task<bool> WriteToFileAsync( Stream stream )
 		{
-			string? path = _Path;
+			string path = _Path;
 
-			if ( string.IsNullOrWhiteSpace(path) || !Path.Exists ) { return false; }
+			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return false; }
 
 			if ( stream is null ) throw new ArgumentNullException(nameof(stream));
 
 			await using var memory = new MemoryStream();
 			await stream.CopyToAsync(memory).ConfigureAwait(true);
 			byte[] payload = memory.GetBuffer();
-			await WriteToFileAsync(payload).ConfigureAwait(true);
-
-			return true;
+			return await WriteToFileAsync(payload).ConfigureAwait(true);
 		}
 
 	#endregion
@@ -192,9 +193,9 @@ namespace Jakar.Api.Models
 
 		public FileStream? GetStream( in FileAccess access )
 		{
-			string? path = _Path;
+			string path = _Path;
 
-			if ( string.IsNullOrWhiteSpace(path) || !Path.Exists ) { return null; }
+			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return null; }
 
 			return File.Open(path, FileMode.OpenOrCreate, access);
 		}
@@ -204,14 +205,14 @@ namespace Jakar.Api.Models
 	#endregion
 
 
-		public void Dispose() { Path.Dispose(); }
+		public void Dispose() { LocalFile.Dispose(); }
 
-		public async ValueTask DisposeAsync() { await Path.DisposeAsync(); }
+		public async ValueTask DisposeAsync() { await LocalFile.DisposeAsync(); }
 
 
 	#region Static
 
-		public static async Task<FileData> SaveFileAsync( string path, Uri uri, CancellationToken token )
+		public static async Task<FileData?> SaveFileAsync( string path, Uri uri, CancellationToken token )
 		{
 			if ( uri.IsFile ) { return new FileData(uri); }
 
@@ -225,18 +226,20 @@ namespace Jakar.Api.Models
 			return await SaveFileAsync(path, stream ?? throw new NullReferenceException(nameof(stream))).ConfigureAwait(true);
 		}
 
-		public static async Task<FileData> SaveFileAsync( string path, Stream stream )
+		public static async Task<FileData?> SaveFileAsync( string path, Stream stream )
 		{
 			var file = new FileData(FileSystem.GetAppDataPath(path));
-			await file.WriteToFileAsync(stream).ConfigureAwait(true);
-			return file;
+			if ( await file.WriteToFileAsync(stream).ConfigureAwait(true) ) { return file; }
+
+			return default;
 		}
 
-		public static async Task<FileData> SaveFileAsync( string path, byte[] payload )
+		public static async Task<FileData?> SaveFileAsync( string path, byte[] payload )
 		{
 			var file = new FileData(path);
-			await file.WriteToFileAsync(payload).ConfigureAwait(true);
-			return file;
+			if ( await file.WriteToFileAsync(payload).ConfigureAwait(true) ) { return file; }
+
+			return default;
 		}
 
 		public static FileData SaveFile( string path, string uri ) => SaveFile(path, new Uri(uri));

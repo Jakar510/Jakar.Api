@@ -49,7 +49,7 @@ namespace Jakar.Api.Http
 			}
 		}
 
-		public static Exception? Handle( this WebException we, CancellationToken token )
+		public static Exception? ConvertException( this WebException we, CancellationToken token )
 		{
 			return we.Status switch
 				   {
@@ -173,8 +173,14 @@ namespace Jakar.Api.Http
 		}
 
 
-		public static void SetHeaders( this HttpWebRequest request, IDictionary<HttpRequestHeader, object> headers ) { headers.ForEach(request.SetHeader); }
-		public static void SetHeaders( this HttpWebRequest request, IDictionary<string, object> headers ) { headers.ForEach(request.SetHeader); }
+		public static void SetHeaders( this HttpWebRequest request, HeaderCollection headers )
+		{
+			foreach ( ( string key, object value ) in headers )
+			{
+				if ( Enum.TryParse(key, true, out HttpRequestHeader header) ) { request.SetHeader(header, value); }
+				else { request.SetHeader(key, value); }
+			}
+		}
 
 		public static void SetHeader( this HttpWebRequest request, HttpRequestHeader key, object value )
 		{
@@ -214,8 +220,20 @@ namespace Jakar.Api.Http
 					break;
 
 				case HttpRequestHeader.Cookie:
-					if ( value is Cookie cookie ) { request.CookieContainer.Add(cookie); }
-					else { throw new HeaderException(key, value.GetType(), typeof(Cookie)); }
+					switch ( value )
+					{
+						case Cookie cookie:
+							request.CookieContainer.Add(cookie);
+							break;
+
+						case IEnumerable<Cookie> cookies:
+							foreach ( Cookie item in cookies ) { request.CookieContainer.Add(item); }
+
+							break;
+
+						default:
+							throw new HeaderException(key, value.GetType(), typeof(Cookie), typeof(IEnumerable<Cookie>));
+					}
 
 					break;
 
