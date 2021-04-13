@@ -27,7 +27,7 @@ namespace Jakar.Api.Http
 
 		public static async Task<string> PostJson( this Uri url, string payload, int timeout, CancellationToken token ) => await url.TryPost(WebResponseExtensions.AsString,
 																																			 payload,
-																																			 ContentTypeNames.Application.JSON,
+																																			 MimeTypeNames.Application.JSON,
 																																			 timeout,
 																																			 token).ConfigureAwait(true);
 

@@ -19,7 +19,7 @@ namespace Jakar.Api.Http
 			var req = WebRequest.Create(url);
 			req.Timeout = timeout;
 			req.Method = "GET";
-			req.ContentType = ContentTypeNames.Application.URL_ENCODED_CONTENT;
+			req.ContentType = MimeTypeNames.Application.URL_ENCODED_CONTENT;
 			req.Headers[HttpRequestHeader.ContentEncoding] = Encoding.UTF8.ToString();
 
 			return await req.GetResponseAsync(token).ConfigureAwait(true);
