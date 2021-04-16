@@ -6,9 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jakar.Api.Extensions;
 using Jakar.Api.Http;
+using Jakar.Api.Statics;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
-using FileSystem = Jakar.Api.Statics.FileSystem;
 
 
 #pragma warning disable 1591
@@ -39,16 +39,17 @@ namespace Jakar.Api.Models
 		}
 
 
-		public FileData( string path, bool temporary = false ) : this(new LocalFile(path, temporary)) { }
-		public FileData( FileSystemInfo path, bool temporary = false ) : this(new LocalFile(path, temporary)) { }
+		public FileData( string path ) : this(new LocalFile(path)) { }
+		public FileData( FileInfo path ) : this(new LocalFile(path)) { }
 		public FileData( FileBase path ) : this(new LocalFile(path)) { }
 		public FileData( LocalFile path ) => LocalFile = path;
 
 
 		public static implicit operator FileData( string info ) => new(info);
 		public static implicit operator FileData( FileInfo info ) => new(info);
+		public static implicit operator FileData( LocalFile info ) => new(info);
 		public static implicit operator FileData( FileBase info ) => new(info);
-		public static implicit operator FileData( Uri info ) => new(info);
+		public static implicit operator FileData( Uri info ) => new(new LocalFile(info));
 
 
 	#region Read
@@ -229,7 +230,7 @@ namespace Jakar.Api.Models
 
 		public static async Task<FileData> SaveFileAsync( string path, Stream stream )
 		{
-			var file = new FileData(FileSystem.GetAppDataPath(path));
+			var file = new FileData(FileSystemApi.GetAppDataPath(path));
 			await file.WriteToFileAsync(stream).ConfigureAwait(true);
 			return file;
 		}

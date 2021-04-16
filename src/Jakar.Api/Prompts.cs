@@ -16,15 +16,8 @@ using Xamarin.Forms;
 #nullable enable
 namespace Jakar.Api
 {
-	public abstract class Prompts
+	public abstract class Prompts : IUserDialogs
 	{
-		protected internal abstract string Cancel { get; }
-		protected internal abstract string Ok { get; }
-		protected internal abstract string Yes { get; }
-		protected internal abstract string No { get; }
-
-		protected internal IUserDialogs Dialogs { get; } = UserDialogs.Instance;
-
 		private IAppSettings? _services;
 
 		protected IAppSettings _Services
@@ -41,21 +34,27 @@ namespace Jakar.Api
 			private set => _debug = value;
 		}
 
+		protected internal abstract string Cancel { get; }
+		protected internal abstract string Ok { get; }
+		protected internal abstract string Yes { get; }
+		protected internal abstract string No { get; }
+
+
+		private IUserDialogs _Dialogs { get; } = UserDialogs.Instance;
+
 		public void Init( IAppSettings services ) => _Services = services;
 		public void Init( Debug services ) => _Debug = services;
 
 
-		public void ShowLoading( string title ) => ShowLoading(title, MaskType.Black);
-		public void ShowLoading( string title, MaskType mask ) => Dialogs.ShowLoading(title, mask);
-		public void HideLoading() => Dialogs.HideLoading();
+		public abstract Task HandleExceptionAsync( Exception? e, Page? page, CancellationToken? token );
+		public abstract Task HandleExceptionAsync<TFeedBackPage>( Exception? e, Page? page, CancellationToken? token ) where TFeedBackPage : Page, new();
 
-		public abstract Task HandleExceptionAsync( Exception e, Page page, CancellationToken token );
-		public abstract Task HandleExceptionAsync<TFeedBackPage>( Exception e, Page page, CancellationToken token ) where TFeedBackPage : Page, new();
 
-		public async Task SendFeedBack<TFeedBackPage>( string title,
-													   string message,
+		public async Task SendFeedBack<TFeedBackPage>( string? title,
+													   string? message,
 													   Page page,
-													   Exception e
+													   Exception e,
+													   CancellationToken token = default
 		) where TFeedBackPage : Page, new()
 		{
 			await SendFeedBack<TFeedBackPage>(title,
@@ -63,15 +62,17 @@ namespace Jakar.Api
 											  Yes,
 											  No,
 											  page,
-											  e).ConfigureAwait(true);
+											  e,
+											  token).ConfigureAwait(true);
 		}
 
-		public async Task SendFeedBack<TFeedBackPage>( string title,
-													   string message,
-													   string yes,
-													   string no,
-													   Page page,
-													   Exception e
+		public async Task SendFeedBack<TFeedBackPage>( string? title,
+													   string? message,
+													   string? yes,
+													   string? no,
+													   Page? page,
+													   Exception? e,
+													   CancellationToken token = default
 		) where TFeedBackPage : Page, new()
 		{
 			if ( page is null ) throw new ArgumentNullException(nameof(page));
@@ -79,7 +80,11 @@ namespace Jakar.Api
 
 			await _Debug.HandleExceptionAsync(e).ConfigureAwait(true);
 
-			if ( await Check(title, message, yes, no).ConfigureAwait(true) )
+			if ( await ConfirmAsync(title,
+									message,
+									yes,
+									no,
+									token).ConfigureAwait(true) )
 			{
 				_Services.ScreenShotAddress = await Share.GetScreenShot().ConfigureAwait(true);
 
@@ -111,7 +116,7 @@ namespace Jakar.Api
 		}
 
 
-		protected virtual async Task InternalHandleExceptionAsync( Exception e )
+		protected virtual async Task InternalHandleExceptionAsync( Exception? e )
 		{
 			switch ( e )
 			{
@@ -136,16 +141,7 @@ namespace Jakar.Api
 		/// </summary>
 		/// <param name="e"></param>
 		/// <returns></returns>
-		protected abstract bool InternalHandleException( Exception e );
-
-
-		protected void Alert( string title, string message ) => Dialogs.Alert(message, title, Ok);
-		protected void Alert( string title, string message, string ok ) => Dialogs.Alert(message, title, ok);
-		protected async Task AlertAsync( string title, string message, string ok ) => await Dialogs.AlertAsync(message, title, ok);
-
-
-		public async Task<bool> Check( string title, string message ) => await Dialogs.ConfirmAsync(message, title, Yes, No).ConfigureAwait(true);
-		public async Task<bool> Check( string title, string message, string yes, string no ) => await Dialogs.ConfirmAsync(message, title, yes, no).ConfigureAwait(true);
+		protected abstract bool InternalHandleException( Exception? e );
 
 
 		public void DebugMessage( Exception e, [CallerMemberName] string caller = "" )
@@ -162,5 +158,162 @@ namespace Jakar.Api
 
 			Alert(caller, e.ToString());
 		}
+
+
+	#region IUserDialogs
+
+	#region Toasts
+
+		public IDisposable Toast( string? title, TimeSpan? dismissTimer = null ) => _Dialogs.Toast(title, dismissTimer);
+		public IDisposable Toast( ToastConfig? cfg ) => _Dialogs.Toast(cfg);
+
+	#endregion
+
+
+	#region Alerts
+
+		protected void Alert( string? title, string? message ) => _Dialogs.Alert(message, title, Ok);
+		public IDisposable Alert( string? title, string? message, string? ok ) => _Dialogs.Alert(message, title, ok);
+		public IDisposable Alert( AlertConfig? config ) => _Dialogs.Alert(config);
+
+
+		public Task AlertAsync( string? title, string? message, string? okText = null, CancellationToken? cancelToken = default ) => _Dialogs.AlertAsync(message, title, okText ?? Ok, cancelToken);
+
+		public Task AlertAsync( AlertConfig? config, CancellationToken? cancelToken = default ) => _Dialogs.AlertAsync(config, cancelToken);
+
+	#endregion
+
+
+	#region ActionSheets
+
+		public IDisposable ActionSheet( ActionSheetConfig? config ) => _Dialogs.ActionSheet(config);
+
+		public Task<string> ActionSheetAsync( string? title,
+											  string? cancel,
+											  string? destructive,
+											  CancellationToken? cancelToken = null,
+											  params string[] buttons
+		) => _Dialogs.ActionSheetAsync(title,
+									  cancel,
+									  destructive,
+									  cancelToken,
+									  buttons);
+
+	#endregion
+
+
+	#region Confirm
+
+		public IDisposable Confirm( ConfirmConfig? config ) => _Dialogs.Confirm(config);
+		public Task<bool> ConfirmAsync( ConfirmConfig? config, CancellationToken? cancelToken = null ) => _Dialogs.ConfirmAsync(config, cancelToken);
+
+		public async Task<bool> ConfirmAsync( string? title, string? message, CancellationToken? cancelToken ) => await ConfirmAsync(message,
+																																	 title,
+																																	 Yes,
+																																	 No,
+																																	 cancelToken).ConfigureAwait(true);
+
+		public Task<bool> ConfirmAsync( string? title,
+										string? message,
+										string? yes,
+										string? no,
+										CancellationToken? cancelToken
+		) => _Dialogs.ConfirmAsync(message,
+								  title,
+								  yes,
+								  no,
+								  cancelToken);
+
+	#endregion
+
+
+	#region Dates
+
+		public IDisposable DatePrompt( DatePromptConfig? config ) => _Dialogs.DatePrompt(config);
+		public Task<DatePromptResult> DatePromptAsync( DatePromptConfig? config, CancellationToken? cancelToken = null ) => _Dialogs.DatePromptAsync(config, cancelToken);
+
+		public Task<DatePromptResult> DatePromptAsync( string? title = null, DateTime? selectedDate = null, CancellationToken? cancelToken = null ) =>
+			_Dialogs.DatePromptAsync(title, selectedDate, cancelToken);
+
+	#endregion
+
+
+	#region Times
+
+		public IDisposable TimePrompt( TimePromptConfig? config ) => _Dialogs.TimePrompt(config);
+		public Task<TimePromptResult> TimePromptAsync( TimePromptConfig? config, CancellationToken? cancelToken = null ) => _Dialogs.TimePromptAsync(config, cancelToken);
+
+		public Task<TimePromptResult> TimePromptAsync( string? title = null, TimeSpan? selectedTime = null, CancellationToken? cancelToken = null ) =>
+			_Dialogs.TimePromptAsync(title, selectedTime, cancelToken);
+
+	#endregion
+
+
+	#region GenericPrompts
+
+		public IDisposable Prompt( PromptConfig? config ) => _Dialogs.Prompt(config);
+
+		public Task<PromptResult> PromptAsync( string? message,
+											   string? title = null,
+											   string? okText = null,
+											   string? cancelText = null,
+											   string? placeholder = "",
+											   InputType inputType = InputType.Default,
+											   CancellationToken? cancelToken = null
+		) => _Dialogs.PromptAsync(message,
+								 title,
+								 okText,
+								 cancelText,
+								 placeholder,
+								 inputType,
+								 cancelToken);
+
+		public Task<PromptResult> PromptAsync( PromptConfig? config, CancellationToken? cancelToken = null ) => _Dialogs.PromptAsync(config, cancelToken);
+
+	#endregion
+
+
+	#region Login
+
+		public IDisposable Login( LoginConfig? config ) => _Dialogs.Login(config);
+		public Task<LoginResult> LoginAsync( string? title = null, string? message = null, CancellationToken? cancelToken = null ) => _Dialogs.LoginAsync(title, message, cancelToken);
+		public Task<LoginResult> LoginAsync( LoginConfig? config, CancellationToken? cancelToken = null ) => _Dialogs.LoginAsync(config, cancelToken);
+
+	#endregion
+
+
+	#region Loading
+
+		public void ShowLoading( string? title = null, MaskType? maskType = null ) { _Dialogs.ShowLoading(title, maskType); }
+		public void HideLoading() => _Dialogs.HideLoading();
+
+
+		public IProgressDialog Progress( ProgressDialogConfig? config ) => _Dialogs.Progress(config);
+
+		public IProgressDialog Loading( string? title = null,
+										Action? onCancel = null,
+										string? cancelText = null,
+										bool show = true,
+										MaskType? maskType = null
+		) => _Dialogs.Loading(title,
+							 onCancel,
+							 cancelText,
+							 show,
+							 maskType);
+
+		public IProgressDialog Progress( string? title = null,
+										 Action? onCancel = null,
+										 string? cancelText = null,
+										 bool show = true,
+										 MaskType? maskType = null
+		) => _Dialogs.Progress(title,
+							  onCancel,
+							  cancelText,
+							  show,
+							  maskType);
+
+	#endregion
+
+	#endregion
 	}
 }

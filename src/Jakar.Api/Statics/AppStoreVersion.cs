@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Plugin.LatestVersion;
 
 
@@ -16,13 +17,42 @@ namespace Jakar.Api.Statics
 		public static string InstalledVersionNumber => CrossLatestVersion.Current.InstalledVersionNumber;
 		public static async Task OpenAppInStore() => await CrossLatestVersion.Current.OpenAppInStore().ConfigureAwait(true);
 
-		public static async Task<bool> VerifyAsync( Prompts prompts, string newVersionAvailable, string newVersionUpdateNowOrLater, string yes, string no )
+		public static async Task<bool> VerifyAsync( Prompts prompts,
+													string newVersionAvailable,
+													string newVersionUpdateNowOrLater,
+													CancellationToken token = default
+		)
 		{
 			bool isLatest = await IsLatest().ConfigureAwait(true);
 
 			if ( isLatest ) { return false; }
 
-			bool update = await prompts.Check(newVersionAvailable, newVersionUpdateNowOrLater, yes, no).ConfigureAwait(true);
+			bool update = await prompts.ConfirmAsync(newVersionAvailable,
+													 newVersionUpdateNowOrLater,
+													 token).ConfigureAwait(true);
+
+			if ( !update ) { return false; }
+
+			await OpenAppInStore().ConfigureAwait(true);
+			return true;
+		}
+		public static async Task<bool> VerifyAsync( Prompts prompts,
+													string newVersionAvailable,
+													string newVersionUpdateNowOrLater,
+													string yes,
+													string no,
+													CancellationToken token = default
+		)
+		{
+			bool isLatest = await IsLatest().ConfigureAwait(true);
+
+			if ( isLatest ) { return false; }
+
+			bool update = await prompts.ConfirmAsync(newVersionAvailable,
+													 newVersionUpdateNowOrLater,
+													 yes,
+													 no,
+													 token).ConfigureAwait(true);
 
 			if ( !update ) { return false; }
 

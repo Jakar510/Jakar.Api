@@ -15,10 +15,36 @@ using Xamarin.Essentials;
 #nullable enable
 namespace Jakar.Api.Models
 {
-	[Serializable]
-	public class LocalFile : IDisposable, IAsyncDisposable
+	public interface ITempFile
 	{
-		public bool IsTemporary { get; init; }
+		internal bool IsTemporary { get; set; }
+	}
+
+
+
+	public static class TempFileExtensions
+	{
+		public static TItem SetTemporary<TItem>( this TItem file ) where TItem : ITempFile
+		{
+			file.IsTemporary = true;
+			return file;
+		}
+
+		public static TItem SetNormal<TItem>( this TItem file ) where TItem : ITempFile
+		{
+			file.IsTemporary = false;
+			return file;
+		}
+
+		public static bool IsTempFile( this ITempFile file ) => file.IsTemporary;
+	}
+
+
+
+	[Serializable]
+	public class LocalFile : IDisposable, IAsyncDisposable, ITempFile
+	{
+		bool ITempFile.IsTemporary { get; set; }
 		public FileBase Result { get; }
 
 		public FileInfo Info => new(FullPath);
@@ -38,15 +64,18 @@ namespace Jakar.Api.Models
 			return new FileInfo(uri.AbsolutePath);
 		}
 
-		public LocalFile( Uri path, bool temporary = false ) : this(FromUri(path), temporary) { }
-		public LocalFile( string path, bool temporary = false ) : this(new FileInfo(path), temporary) { }
-		public LocalFile( FileSystemInfo file, bool temporary = false ) : this(new FileResult(file.FullName), temporary) { }
+		public LocalFile( Uri path ) : this(FromUri(path)) { }
+		public LocalFile( string path ) : this(new FileInfo(path)) { }
 
-		public LocalFile( FileBase info, bool temporary = false )
+		// ReSharper disable once SuggestBaseTypeForParameter
+		public LocalFile( FileInfo file ) : this(new FileResult(file.FullName)) { }
+
+		public LocalFile( FileBase info )
 		{
-			IsTemporary = temporary;
+			this.SetNormal();
 			Result = info;
 		}
+
 
 		public static async Task<LocalFile?> Pick( PickOptions? options = null )
 		{
@@ -87,7 +116,7 @@ namespace Jakar.Api.Models
 
 		public void Dispose()
 		{
-			Dispose(IsTemporary);
+			Dispose(this.IsTempFile());
 			GC.SuppressFinalize(this);
 		}
 

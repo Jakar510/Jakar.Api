@@ -7,13 +7,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Jakar.Api.Models;
+using Xamarin.Essentials;
 
 
 #pragma warning disable 1591
 
+
 namespace Jakar.Api.Statics
 {
-	public static class FileSystem
+	public static class FileSystemApi
 	{
 		public static string AppStateFileName { get; } = GetCacheDataPath("AppState.json");
 		public static string DebugFileName { get; } = GetCacheDataPath("debug.txt");
@@ -26,8 +28,8 @@ namespace Jakar.Api.Statics
 		public static string ScreenShot { get; } = GetCacheDataPath("ScreenShot.png");
 
 
-		public static string GetAppDataPath( string fileName ) => Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, fileName);
-		public static string GetCacheDataPath( string fileName ) => Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, fileName);
+		public static string GetAppDataPath( string fileName ) => Path.Combine(FileSystem.AppDataDirectory, fileName);
+		public static string GetCacheDataPath( string fileName ) => Path.Combine(FileSystem.CacheDirectory, fileName);
 
 
 		public static void CreateZipCache()
@@ -38,7 +40,7 @@ namespace Jakar.Api.Statics
 			ZipCache();
 		}
 
-		public static void ZipCache() => ZipCache(Xamarin.Essentials.FileSystem.CacheDirectory);
+		public static void ZipCache() => ZipCache(FileSystem.CacheDirectory);
 
 		public static void ZipCache( string path ) => ZipFile.CreateFromDirectory(path,
 																				  ZipFileName,

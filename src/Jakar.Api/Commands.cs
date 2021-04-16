@@ -67,7 +67,7 @@ namespace Jakar.Api
 			using var cancelSrc = new CancellationTokenSource();
 			ProgressDialogConfig config = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
 
-			using ( _Prompts.Dialogs.Progress(config) )
+			using ( _Prompts.Progress(config) )
 			{
 				try { await func(cancelSrc.Token).ConfigureAwait(true); }
 				catch ( OperationCanceledException ) { }
@@ -118,7 +118,7 @@ namespace Jakar.Api
 			using var cancelSrc = new CancellationTokenSource();
 			ProgressDialogConfig config = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
 
-			using ( _Prompts.Dialogs.Progress(config) )
+			using ( _Prompts.Progress(config) )
 			{
 				try { await func().ConfigureAwait(true); }
 				catch ( OperationCanceledException ) { }
@@ -160,7 +160,7 @@ namespace Jakar.Api
 			using var cancelSrc = new CancellationTokenSource();
 			ProgressDialogConfig config = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
 
-			using ( _Prompts.Dialogs.Progress(config) )
+			using ( _Prompts.Progress(config) )
 			{
 				try { func(); }
 				catch ( OperationCanceledException ) { }

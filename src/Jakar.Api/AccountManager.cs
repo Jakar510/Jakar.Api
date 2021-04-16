@@ -25,14 +25,14 @@ namespace Jakar.Api
 
 		protected virtual async Task Load()
 		{
-			await using var file = new FileData(FileSystem.AccountsFileName);
+			await using var file = new FileData(FileSystemApi.AccountsFileName);
 			Accounts<TUser, TActiveUser>? items = await file.ReadFromFileAsync<Accounts<TUser, TActiveUser>>().ConfigureAwait(true);
 			_Accounts = items ?? new Accounts<TUser, TActiveUser>();
 		}
 
 		protected virtual async Task Save()
 		{
-			await using var file = new FileData(FileSystem.AccountsFileName);
+			await using var file = new FileData(FileSystemApi.AccountsFileName);
 			string json = _Accounts.ToJson();
 			await file.WriteToFileAsync(json).ConfigureAwait(true);
 		}

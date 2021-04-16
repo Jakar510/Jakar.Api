@@ -18,9 +18,11 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-Added ObservableDictionary.
-Added Extension IEnumerable.Enumerate (Python style)
-Bug fixes for Jakar.Api.Models.FileData.
+			Added ObservableDictionary.
+			Added Extension IEnumerable.Enumerate (Python style)
+			Bug fixes for Jakar.Api.Models.FileData.
+			Rename Jakar.Api.Statics.FileSystem to Jakar.Api.Statics.FileSystemApi to avoid conflict with Xamarin.Essentials.FileSystem.
+			Jakar.Api.Prompts bug fixes and improvements.
 		</releaseNotes>
 		<tags>Xamarin.Forms Api Extensions</tags>
 		<language>en-US</language>

@@ -9,6 +9,7 @@ using Jakar.Api.Exceptions.General;
 using Jakar.Api.Extensions;
 using Jakar.Api.Interfaces;
 using Jakar.Api.Models;
+using Jakar.Api.Statics;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
@@ -16,7 +17,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xamarin.Essentials;
 using DeviceInfo = Jakar.Api.Statics.DeviceInfo;
-using FileSystem = Jakar.Api.Statics.FileSystem;
 using Share = Jakar.Api.Statics.Share;
 
 
@@ -110,7 +110,7 @@ namespace Jakar.Api
 		{
 			var result = new Dictionary<string, object?> { [nameof(AppState)] = AppState(), [key] = feedback };
 			
-			await SaveAppState(FileSystem.FeedBackFileName, result).ConfigureAwait(true);
+			await SaveAppState(FileSystemApi.FeedBackFileName, result).ConfigureAwait(true);
 		}
 
 
@@ -237,15 +237,15 @@ namespace Jakar.Api
 		{
 			if ( !_Services.SendCrashes ) { return; }
 
-			if ( appState is not null ) await SaveAppState(FileSystem.AppStateFileName, appState).ConfigureAwait(true);
+			if ( appState is not null ) await SaveAppState(FileSystemApi.AppStateFileName, appState).ConfigureAwait(true);
 
 			ErrorAttachmentLog? state = appState is null
 											? null
-											: ErrorAttachmentLog.AttachmentWithText(appState.ToPrettyJson(), FileSystem.AppStateFileName);
+											: ErrorAttachmentLog.AttachmentWithText(appState.ToPrettyJson(), FileSystemApi.AppStateFileName);
 
 			ErrorAttachmentLog? debug = eventDetails is null
 											? null
-											: ErrorAttachmentLog.AttachmentWithText(eventDetails.ToPrettyJson(), FileSystem.DebugFileName);
+											: ErrorAttachmentLog.AttachmentWithText(eventDetails.ToPrettyJson(), FileSystemApi.DebugFileName);
 
 			ErrorAttachmentLog? screenShotAttachment = screenShot is null
 														   ? null
@@ -261,13 +261,13 @@ namespace Jakar.Api
 
 			if ( !string.IsNullOrWhiteSpace(incomingText) )
 			{
-				ErrorAttachmentLog incoming = ErrorAttachmentLog.AttachmentWithText(incomingText.ToPrettyJson(), FileSystem.IncomingFileName);
+				ErrorAttachmentLog incoming = ErrorAttachmentLog.AttachmentWithText(incomingText.ToPrettyJson(), FileSystemApi.IncomingFileName);
 				attachments.Add(incoming);
 			}
 
 			if ( !string.IsNullOrWhiteSpace(outgoingText) )
 			{
-				ErrorAttachmentLog outgoing = ErrorAttachmentLog.AttachmentWithText(outgoingText.ToPrettyJson(), FileSystem.OutgoingFileName);
+				ErrorAttachmentLog outgoing = ErrorAttachmentLog.AttachmentWithText(outgoingText.ToPrettyJson(), FileSystemApi.OutgoingFileName);
 				attachments.Add(outgoing);
 			}
 
