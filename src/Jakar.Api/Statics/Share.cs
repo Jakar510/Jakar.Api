@@ -175,10 +175,11 @@ namespace Jakar.Api.Statics
 
 		public static async Task<string> WriteScreenShot( byte[] screenShot )
 		{
-			await using var file = new FileData(FileSystemApi.ScreenShot);
+			string path = FileSystemApi.ScreenShot;
+			await using var file = new FileData(path);
 			await file.WriteToFileAsync(screenShot).ConfigureAwait(true);
 
-			return FileSystemApi.ScreenShot;
+			return path;
 		}
 
 

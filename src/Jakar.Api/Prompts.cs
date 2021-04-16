@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Acr.UserDialogs;
 using Jakar.Api.Exceptions.General;
 using Jakar.Api.Exceptions.Networking;
@@ -46,8 +45,8 @@ namespace Jakar.Api
 		public void Init( Debug services ) => _Debug = services;
 
 
-		public abstract Task HandleExceptionAsync( Exception? e, Page? page, CancellationToken? token );
-		public abstract Task HandleExceptionAsync<TFeedBackPage>( Exception? e, Page? page, CancellationToken? token ) where TFeedBackPage : Page, new();
+		public abstract Task HandleExceptionAsync( Exception e, Page page, CancellationToken token );
+		public abstract Task HandleExceptionAsync<TFeedBackPage>( Exception e, Page page, CancellationToken token ) where TFeedBackPage : Page, new();
 
 
 		public async Task SendFeedBack<TFeedBackPage>( string? title,
@@ -70,8 +69,8 @@ namespace Jakar.Api
 													   string? message,
 													   string? yes,
 													   string? no,
-													   Page? page,
-													   Exception? e,
+													   Page page,
+													   Exception e,
 													   CancellationToken token = default
 		) where TFeedBackPage : Page, new()
 		{
@@ -116,7 +115,7 @@ namespace Jakar.Api
 		}
 
 
-		protected virtual async Task InternalHandleExceptionAsync( Exception? e )
+		protected virtual async Task InternalHandleExceptionAsync( Exception e )
 		{
 			switch ( e )
 			{
@@ -141,7 +140,7 @@ namespace Jakar.Api
 		/// </summary>
 		/// <param name="e"></param>
 		/// <returns></returns>
-		protected abstract bool InternalHandleException( Exception? e );
+		protected abstract bool InternalHandleException( Exception e );
 
 
 		public void DebugMessage( Exception e, [CallerMemberName] string caller = "" )
