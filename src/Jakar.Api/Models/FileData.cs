@@ -127,39 +127,42 @@ namespace Jakar.Api.Models
 
 		public async Task<bool> WriteToFileAsync()
 		{
+			if ( _payload is not null )
+			{
+				await WriteToFileAsync(_payload.Value.ToArray()).ConfigureAwait(true);
+				return true;
+			}
+
 			if ( string.IsNullOrWhiteSpace(_data) ) { return false; }
 
-			if ( _payload is not null ) { return await WriteToFileAsync(_payload.Value.ToArray()).ConfigureAwait(true); }
-
-			return await WriteToFileAsync(_data).ConfigureAwait(true);
-		}
-
-		public async Task<bool> WriteToFileAsync( object jsonSerializablePayload )
-		{
-			string json = jsonSerializablePayload.ToPrettyJson();
-			return await WriteToFileAsync(json).ConfigureAwait(true);
-		}
-
-		public async Task<bool> WriteToFileAsync( string prettyJson )
-		{
-			string path = _Path;
-
-			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return false; }
-
-			if ( string.IsNullOrWhiteSpace(prettyJson) ) throw new ArgumentNullException(nameof(prettyJson));
-
-			await using FileStream file = File.Create(path); //https://stackoverflow.com/a/11541330/9530917
-			await using var writer = new StreamWriter(file, Encoding.UTF8);
-			await writer.WriteAsync(prettyJson).ConfigureAwait(true);
-
+			await WriteToFileAsync(_data).ConfigureAwait(true);
 			return true;
 		}
 
-		public async Task<bool> WriteToFileAsync( byte[] payload )
+		public async Task WriteToFileAsync( object jsonSerializablePayload )
+		{
+			string json = jsonSerializablePayload.ToPrettyJson();
+			await WriteToFileAsync(json).ConfigureAwait(true);
+		}
+
+		public async Task WriteToFileAsync( string data )
 		{
 			string path = _Path;
 
-			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return false; }
+			if ( string.IsNullOrWhiteSpace(path) ) { throw new NullReferenceException(nameof(path)); }
+
+			if ( string.IsNullOrWhiteSpace(data) ) throw new ArgumentNullException(nameof(data));
+
+			await using FileStream file = File.Create(path); //https://stackoverflow.com/a/11541330/9530917
+			await using var writer = new StreamWriter(file, Encoding.UTF8);
+			await writer.WriteAsync(data).ConfigureAwait(true);
+		}
+
+		public async Task WriteToFileAsync( byte[] payload )
+		{
+			string path = _Path;
+
+			if ( string.IsNullOrWhiteSpace(path) ) { throw new NullReferenceException(nameof(path)); }
 
 			if ( payload is null ) throw new ArgumentNullException(nameof(payload));
 
@@ -168,22 +171,20 @@ namespace Jakar.Api.Models
 
 			await using FileStream file = File.Create(path);
 			await file.WriteAsync(payload, 0, payload.Length).ConfigureAwait(true);
-
-			return true;
 		}
 
-		public async Task<bool> WriteToFileAsync( Stream stream )
+		public async Task WriteToFileAsync( Stream stream )
 		{
 			string path = _Path;
 
-			if ( string.IsNullOrWhiteSpace(path) || !LocalFile.Exists ) { return false; }
+			if ( string.IsNullOrWhiteSpace(path) ) { throw new NullReferenceException(nameof(path)); }
 
 			if ( stream is null ) throw new ArgumentNullException(nameof(stream));
 
 			await using var memory = new MemoryStream();
 			await stream.CopyToAsync(memory).ConfigureAwait(true);
 			byte[] payload = memory.GetBuffer();
-			return await WriteToFileAsync(payload).ConfigureAwait(true);
+			await WriteToFileAsync(payload).ConfigureAwait(true);
 		}
 
 	#endregion
@@ -212,7 +213,7 @@ namespace Jakar.Api.Models
 
 	#region Static
 
-		public static async Task<FileData?> SaveFileAsync( string path, Uri uri, CancellationToken token )
+		public static async Task<FileData> SaveFileAsync( string path, Uri uri, CancellationToken token )
 		{
 			if ( uri.IsFile ) { return new FileData(uri); }
 
@@ -226,20 +227,18 @@ namespace Jakar.Api.Models
 			return await SaveFileAsync(path, stream ?? throw new NullReferenceException(nameof(stream))).ConfigureAwait(true);
 		}
 
-		public static async Task<FileData?> SaveFileAsync( string path, Stream stream )
+		public static async Task<FileData> SaveFileAsync( string path, Stream stream )
 		{
 			var file = new FileData(FileSystem.GetAppDataPath(path));
-			if ( await file.WriteToFileAsync(stream).ConfigureAwait(true) ) { return file; }
-
-			return default;
+			await file.WriteToFileAsync(stream).ConfigureAwait(true);
+			return file;
 		}
 
-		public static async Task<FileData?> SaveFileAsync( string path, byte[] payload )
+		public static async Task<FileData> SaveFileAsync( string path, byte[] payload )
 		{
 			var file = new FileData(path);
-			if ( await file.WriteToFileAsync(payload).ConfigureAwait(true) ) { return file; }
-
-			return default;
+			await file.WriteToFileAsync(payload).ConfigureAwait(true);
+			return file;
 		}
 
 		public static FileData SaveFile( string path, string uri ) => SaveFile(path, new Uri(uri));

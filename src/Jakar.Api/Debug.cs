@@ -100,17 +100,17 @@ namespace Jakar.Api
 			await TrackError(e, screenShot).ConfigureAwait(true);
 		}
 
-		protected static async Task<bool> SaveAppState( string path, Dictionary<string, object?> payload )
+		protected static async Task SaveAppState( string path, Dictionary<string, object?> payload )
 		{
 			await using var file = new FileData(path);
-			return await file.WriteToFileAsync(payload).ConfigureAwait(true);
+			await file.WriteToFileAsync(payload).ConfigureAwait(true);
 		}
 
-		public async Task<bool> SaveFeedBackAppState( Dictionary<string, string?> feedback, string key = "feedback" )
+		public async Task SaveFeedBackAppState( Dictionary<string, string?> feedback, string key = "feedback" )
 		{
 			var result = new Dictionary<string, object?> { [nameof(AppState)] = AppState(), [key] = feedback };
 			
-			return await SaveAppState(FileSystem.FeedBackFileName, result).ConfigureAwait(true);
+			await SaveAppState(FileSystem.FeedBackFileName, result).ConfigureAwait(true);
 		}
 
 

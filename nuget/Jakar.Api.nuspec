@@ -20,6 +20,7 @@
 		<releaseNotes>
 Added ObservableDictionary.
 Added Extension IEnumerable.Enumerate (Python style)
+Bug fixes for Jakar.Api.Models.FileData.
 		</releaseNotes>
 		<tags>Xamarin.Forms Api Extensions</tags>
 		<language>en-US</language>
