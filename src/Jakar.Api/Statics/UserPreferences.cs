@@ -12,18 +12,25 @@ namespace Jakar.Api.Statics
 {
 	public static class UserPreferences
 	{
-		public static string GetName( this IAppSettings settings, object value, string name, [CallerMemberName] string caller = "" ) => settings.GetName(value.GetType(), name, caller);
-		public static string GetName( this IAppSettings settings, Type type, string name, [CallerMemberName] string caller = "" ) => $"{settings.AppName}.{type.FullName}.{caller}.{name}";
+		// 
+		public static string GetKey( this IAppSettings settings, object value, string caller, string propertyName ) =>
+			settings.AppName?.GetKey(value, caller, propertyName) ?? throw new NullReferenceException(nameof(IAppSettings.AppName));
+
+		public static string GetKey( this IAppSettings settings, Type type, string caller, string propertyName ) =>
+			settings.AppName?.GetKey(type, caller, propertyName) ?? throw new NullReferenceException(nameof(IAppSettings.AppName));
+
+		public static string GetKey( this string appName, object item, string caller, string propertyName ) => appName.GetKey(item.GetType(), caller, propertyName);
+		public static string GetKey( this string appName, Type type, string caller, string propertyName ) => $"{appName}.{type.GetKey(caller, propertyName)}";
+		public static string GetKey( this object item, string caller, string propertyName ) => item.GetType().GetKey(caller, propertyName);
+		public static string GetKey( this Type type, string caller, string propertyName ) => $"{type.FullName}.{caller}.{propertyName}";
+
+		public static string GetKey( this object item, [CallerMemberName] string propertyName = "" ) => item.GetType().GetKey(propertyName);
+		public static string GetKey( this Type type, [CallerMemberName] string propertyName = "" ) => $"{type.FullName}.{propertyName}";
 
 
-		//public static string GetPreferenceName(object type, string name, [CallerMemberName] string caller = "") => GetName(type?.GetType(), name, caller);
-		//public static string GetPreferenceName(string name, [CallerMemberName] string caller = "") => GetName(name, caller);
-		//public static string GetName(string name, string caller) => $"{App.AppName}.{caller}.{name}";
+		public static string GetPassword( this string key ) => GetPasswordAsync(key).Result;
 
-
-		public static string GetPassword( string key ) => GetPasswordAsync(key).Result;
-
-		public static async Task<string> GetPasswordAsync( string key )
+		public static async Task<string> GetPasswordAsync( this string key )
 		{
 			try { return await SecureStorage.GetAsync(key).ConfigureAwait(true); }
 			catch
@@ -33,8 +40,8 @@ namespace Jakar.Api.Statics
 			}
 		}
 
-		public static void SetPassword( string key, string value ) => MainThread.InvokeOnMainThreadAsync(async () => await SetPasswordAsync(key, value).ConfigureAwait(true)).Wait();
+		public static void SetPassword( this string key, string value ) => MainThread.InvokeOnMainThreadAsync(async () => await SetPasswordAsync(key, value).ConfigureAwait(true)).Wait();
 
-		public static async Task SetPasswordAsync( string key, string value ) { await SecureStorage.SetAsync(key, value).ConfigureAwait(true); }
+		public static async Task SetPasswordAsync( this string key, string value ) { await SecureStorage.SetAsync(key, value).ConfigureAwait(true); }
 	}
 }
