@@ -10,7 +10,7 @@ using Xamarin.Forms.Internals;
 #nullable enable
 namespace Jakar.Api.Extensions
 {
-	public static class CollectionExtensions
+	public static class EnumerableExtensions
 	{
 		public static bool IsEmpty( this ICollection collection ) => collection.Count == 0;
 		public static bool IsEmpty<TItem>( this ICollection<TItem> collection ) => collection.Count == 0;
@@ -27,6 +27,18 @@ namespace Jakar.Api.Extensions
 		public static async Task ForEach<TItem>( this IEnumerable<TItem> list, Func<TItem, Task> action )
 		{
 			foreach ( TItem item in list ) { await action(item).ConfigureAwait(true); }
+		}
+
+		
+		public static IEnumerable<(int index, TItem item)> Enumerate<TItem>( this IEnumerable<TItem> enumerable )
+		{
+			var index = 0;
+
+			foreach ( TItem item in enumerable )
+			{
+				yield return ( index, item );
+				index++;
+			}
 		}
 	}
 }

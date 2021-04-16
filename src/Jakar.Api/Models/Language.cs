@@ -1,13 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using Jakar.Api.Enumerations;
 using Newtonsoft.Json;
 
 
 #pragma warning disable 1591
 
 #nullable enable
-namespace Jakar.Api
+namespace Jakar.Api.Models
 {
+	[SuppressMessage("ReSharper", "StringLiteralTypo")]
 	public class Language
 	{
 		public string DisplayName { get; init; }

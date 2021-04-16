@@ -1,7 +1,7 @@
 ﻿#pragma warning disable 1591
 
 #nullable enable
-namespace Jakar.Api
+namespace Jakar.Api.Enumerations
 {
 	public enum SupportedLanguage
 	{

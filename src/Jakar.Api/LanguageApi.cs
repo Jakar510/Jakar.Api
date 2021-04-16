@@ -4,6 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using Jakar.Api.Enumerations;
+using Jakar.Api.Models;
 using Xamarin.Essentials;
 
 
@@ -14,6 +16,7 @@ namespace Jakar.Api
 {
 	public class LanguageApi
 	{
+		// ReSharper disable once ReturnTypeCanBeEnumerable.Global
 		public static ObservableCollection<Language> Languages { get; } = new(Language.All);
 
 
