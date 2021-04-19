@@ -13,19 +13,18 @@ namespace Jakar.Api.Extensions
 {
 	public static class ShellExtensions
 	{
-		public static async Task GoToAsync( this Shell shell, bool root, params Type[] types ) => await shell.GoToAsync(GetPath(root, types)).ConfigureAwait(true);
+		public static async Task GoToAsync( this Shell shell, bool root, params Type[] types ) =>
+			await shell.GoToAsync(GetPath(root, types)).ConfigureAwait(true);
 
-		public static async Task GoToAsync( this Shell shell, Type type, bool root, IDictionary<string, object> parameters ) =>
-			await shell.GoToAsync(type.Name, root, parameters).ConfigureAwait(true);
+		public static async Task GoToAsync( this Shell shell, bool root, IDictionary<string, object> parameters, params Type[] types ) =>
+			await shell.GoToAsync(types.GetPath(root, parameters)).ConfigureAwait(true);
 
-		public static async Task GoToAsync( this Shell shell, string type, bool root, IDictionary<string, object> parameters ) =>
-			await shell.GoToAsync(type.GetPath(parameters, root)).ConfigureAwait(true);
 
-		public static string GetPath( bool root = false, params Type[] types ) => types.Parameterize(root);
+		public static string GetPath( bool root, params Type[] types ) => types.Parameterize(root);
+		public static string GetPath( this object type, bool root, IDictionary<string, object>? parameters = null ) => type.GetType().GetPath(root, parameters);
+		public static string GetPath( this Type type, bool root, IDictionary<string, object>? parameters = null ) => type.Name.GetPath(root, parameters);
 
-		public static string GetPath( this Type type, IDictionary<string, object>? parameters = null, bool root = false ) => type.Name.GetPath(parameters, root);
-
-		public static string GetPath( this string type, IDictionary<string, object>? parameters = null, bool root = false )
+		public static string GetPath( this string type, bool root, IDictionary<string, object>? parameters = null )
 		{
 			if ( parameters is null ) return type;
 
@@ -36,13 +35,20 @@ namespace Jakar.Api.Extensions
 					   : result;
 		}
 
-		public static string Parameterize( this Type[] types, bool root ) => types.Aggregate(root
-																								 ? $"//"
-																								 : "",
-																							 Parameterize);
+		public static string GetPath( this IEnumerable<Type> types, bool root, IDictionary<string, object> parameters ) =>
+			types.Aggregate(root
+								? $"//"
+								: "",
+							Parameterize) + parameters.Parameterize();
 
-		private static string Parameterize( string previous, Type type ) { return previous + $"/{type.Name}"; }
+		public static string Parameterize( this IEnumerable<Type> types, bool root ) =>
+			types.Aggregate(root
+								? $"//"
+								: "",
+							Parameterize);
 
+
+		private static string Parameterize( string previous, Type type ) => previous + $"/{type.Name}";
 
 		public static string Parameterize( this IDictionary<string, object> parameters ) => parameters.Aggregate("?", Parameterize);
 

@@ -38,15 +38,30 @@ namespace Jakar.Api.BasePages
 
 		public event PropertyChangedEventHandler? PropertyChanged;
 
-		protected bool SetProperty<T>( ref T backingStore, T value, Action? onChanged = null, [CallerMemberName] string propertyName = "" )
+		protected void SetProperty<T>( ref T backingStore, T value, [CallerMemberName] string propertyName = "" )
 		{
-			if ( EqualityComparer<T>.Default.Equals(backingStore, value) )
-				return false;
+			if ( EqualityComparer<T>.Default.Equals(backingStore, value) ) { return; }
 
 			backingStore = value;
-			onChanged?.Invoke();
 			OnPropertyChanged(propertyName);
-			return true;
+		}
+
+		protected void SetProperty<T>( ref T backingStore, T value, Action onChanged, [CallerMemberName] string propertyName = "" )
+		{
+			if ( EqualityComparer<T>.Default.Equals(backingStore, value) ) { return; }
+
+			backingStore = value;
+			onChanged();
+			OnPropertyChanged(propertyName);
+		}
+
+		protected void SetProperty<T>( ref T backingStore, T value, Action<T> onChanged, [CallerMemberName] string propertyName = "" )
+		{
+			if ( EqualityComparer<T>.Default.Equals(backingStore, value) ) { return; }
+
+			backingStore = value;
+			onChanged(value);
+			OnPropertyChanged(propertyName);
 		}
 
 		protected void OnPropertyChanged( string propertyName )

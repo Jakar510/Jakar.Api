@@ -15,8 +15,8 @@ namespace Jakar.Api.Converters.Json
 		{
 			string result = value switch
 							{
-								int number => number.ToString(),
 								TEnum n    => Enum.ToObject(typeof(TEnum), n).ToString(),
+								int number => number.ToString(),
 								_          => throw new JsonReaderException(nameof(value))
 							};
 
@@ -27,12 +27,14 @@ namespace Jakar.Api.Converters.Json
 		{
 			return existingValue switch
 				   {
-					   int value     => Enum.ToObject(typeof(TEnum), value),
 					   TEnum screens => screens,
+					   int value     => Enum.ToObject(typeof(TEnum), value),
 					   _             => throw new JsonReaderException(nameof(existingValue))
 				   };
 		}
 
-		public override bool CanConvert( Type objectType ) => objectType == typeof(int) || objectType == typeof(TEnum);
+		public override bool CanConvert( Type objectType ) =>
+			objectType == typeof(byte) || objectType == typeof(sbyte) || objectType == typeof(short) || objectType == typeof(ushort) || objectType == typeof(int) || objectType == typeof(uint) ||
+			objectType == typeof(long) || objectType == typeof(ulong) || objectType == typeof(TEnum);
 	}
 }

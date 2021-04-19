@@ -16,9 +16,9 @@ namespace Jakar.Api.Extensions
 			foreach ( ( TKey key, TValue value ) in dict ) { action(key, value); }
 		}
 
-		public static async Task ForEach<TKey, TValue>( this IDictionary<TKey, TValue> dict, Func<TKey, TValue, Task> action )
+		public static async Task ForEachAsync<TKey, TValue>( this IDictionary<TKey, TValue> dict, Func<TKey, TValue, Task> action, bool continueOnCapturedContext = true )
 		{
-			foreach ( ( TKey key, TValue value ) in dict ) { await action(key, value).ConfigureAwait(true); }
+			foreach ( ( TKey key, TValue value ) in dict ) { await action(key, value).ConfigureAwait(continueOnCapturedContext); }
 		}
 
 

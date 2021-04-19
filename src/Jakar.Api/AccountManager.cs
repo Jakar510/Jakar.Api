@@ -78,7 +78,7 @@ namespace Jakar.Api
 
 
 		public IEnumerator<TUser> GetEnumerator() => _Accounts.All.GetEnumerator();
-		IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 		// public int IndexOf( TUser item ) { return _Accounts.All.IndexOf(item); }
 		// public void Insert( int index, TUser item ) { _Accounts.All.Insert(index, item); }

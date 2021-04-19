@@ -127,6 +127,6 @@ namespace Jakar.Api.Models
 
 
 		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() => _Dictionary.GetEnumerator();
-		IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 	}
 }

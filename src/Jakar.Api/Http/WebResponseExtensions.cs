@@ -12,7 +12,7 @@ namespace Jakar.Api.Http
 {
 	public static class WebResponseExtensions
 	{
-		public static async Task<Stream?> AsStream( this WebResponse resp ) { return await Task.FromResult(resp.GetResponseStream()); }
+		public static async Task<Stream?> AsStream( this WebResponse resp ) => await Task.FromResult(resp.GetResponseStream());
 
 		public static async Task<TResult> AsJson<TResult>( this WebResponse resp )
 		{

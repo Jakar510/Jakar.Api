@@ -15,7 +15,7 @@ namespace Jakar.Api.Exceptions.General
 		public FeedBackTrackerException( string message ) : base(message) { }
 		public FeedBackTrackerException( string message, Exception inner ) : base(message, inner) { }
 
-		public FeedBackTrackerException( Dictionary<string, string> dict ) : this(dict.ToPrettyJson()) { }
-		public FeedBackTrackerException( Dictionary<string, string> dict, Exception inner ) : this(dict.ToPrettyJson(), inner) { }
+		public FeedBackTrackerException( object dict ) : this(dict.ToPrettyJson()) { }
+		public FeedBackTrackerException( object dict, Exception inner ) : this(dict.ToPrettyJson(), inner) { }
 	}
 }

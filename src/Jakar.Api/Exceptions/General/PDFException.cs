@@ -10,23 +10,26 @@ namespace Jakar.Api.Exceptions.General
 	[Serializable]
 	public class ScreenShotException : Exception
 	{
-		public ScreenShotErrorArgs? Args { get; set; }
+		private string? _screenShotFilePath;
+
+		public string? FilePath
+		{
+			get => _screenShotFilePath;
+			set
+			{
+				_screenShotFilePath = value;
+
+				Data[nameof(FilePath)] = value;
+			}
+		}
 
 		public ScreenShotException() { }
-		public ScreenShotException( ScreenShotErrorArgs e ) => Args = e;
-		public ScreenShotException( string message, ScreenShotErrorArgs e ) : base(message) => Args = e;
-		public ScreenShotException( string message, Exception innerException, ScreenShotErrorArgs e ) : base(message, innerException) => Args = e;
-		protected ScreenShotException( SerializationInfo info, StreamingContext context, ScreenShotErrorArgs e ) : base(info, context) => Args = e;
-
-		public ScreenShotException( string message ) : base(message) { }
+		public ScreenShotException( string? message ) : base(message) { }
 		public ScreenShotException( string message, Exception innerException ) : base(message, innerException) { }
-	}
 
 
-
-	public class ScreenShotErrorArgs : EventArgs
-	{
-		public string ScreenShotFilePath { get; }
-		public ScreenShotErrorArgs( string path ) => ScreenShotFilePath = path;
+		public ScreenShotException( string message, string? path = null ) : base(message) => FilePath = path;
+		public ScreenShotException( string message, Exception innerException, string? path = null ) : base(message, innerException) => FilePath = path;
+		protected ScreenShotException( SerializationInfo info, StreamingContext context, string? path = null ) : base(info, context) => FilePath = path;
 	}
 }

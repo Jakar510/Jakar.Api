@@ -54,11 +54,9 @@ namespace Jakar.Api.Http
 			return result;
 		}
 
-		private static string CondenseParameters( string current, string element )
-		{
-			return current + ( string.IsNullOrWhiteSpace(element)
-								   ? ""
-								   : $"{element}&" );
-		}
+		private static string CondenseParameters( string current, string element ) =>
+			current + ( string.IsNullOrWhiteSpace(element)
+							? ""
+							: $"{element}&" );
 	}
 }

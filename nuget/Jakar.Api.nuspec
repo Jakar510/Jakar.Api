@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>1.8.2</version>
+		<version>1.9.0</version>
 		<title>Base library for all others</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,7 +18,8 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Bug fixes for Jakar.Api.Statics.UserPreferences.
+			bug fixes
+			Added BaseResourceDictionary
 		</releaseNotes>
 		<tags>Xamarin.Forms Api Extensions</tags>
 		<language>en-US</language>

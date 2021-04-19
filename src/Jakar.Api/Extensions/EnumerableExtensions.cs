@@ -24,9 +24,9 @@ namespace Jakar.Api.Extensions
 		public static void Remove<TItem>( this IList<TItem> list, params TItem[] items ) => items.ForEach(item => list.Remove(item));
 
 
-		public static async Task ForEach<TItem>( this IEnumerable<TItem> list, Func<TItem, Task> action )
+		public static async Task ForEachAsync<TItem>( this IEnumerable<TItem> list, Func<TItem, Task> action, bool continueOnCapturedContext = true )
 		{
-			foreach ( TItem item in list ) { await action(item).ConfigureAwait(true); }
+			foreach ( TItem item in list ) { await action(item).ConfigureAwait(continueOnCapturedContext); }
 		}
 
 		

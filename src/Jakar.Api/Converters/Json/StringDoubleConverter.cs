@@ -15,15 +15,15 @@ namespace Jakar.Api.Converters.Json
 		public override void WriteJson( JsonWriter writer, object? value, JsonSerializer serializer ) => throw new NotSupportedException();
 
 		public override object? ReadJson( JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer ) => Convert(reader.Value?.ToString());
-
-		public double? Convert( string? value ) =>
+		
+		public static double? Convert( string? value ) =>
 			string.IsNullOrWhiteSpace(value)
 				? null
 				: double.TryParse(value, out double d)
 					? d
 					: double.NaN;
 
-		public override bool CanConvert( Type objectType ) => objectType == typeof(string) || objectType == null;
+		public override bool CanConvert( Type objectType ) => objectType == typeof(string);
 
 
 		public object? Convert( object? value, Type targetType, object? parameter, CultureInfo culture ) => Convert(value?.ToString());

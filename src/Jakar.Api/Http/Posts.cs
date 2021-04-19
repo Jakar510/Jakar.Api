@@ -21,16 +21,14 @@ namespace Jakar.Api.Http
 		// https://www.hanselman.com/blog/HTTPPOSTsAndHTTPGETsWithWebClientAndCAndFakingAPostBack.aspx
 		// https://docs.microsoft.com/en-us/dotnet/standard/threading/cancellation-in-managed-threads
 
-		public static async Task<string> PostJson( this Uri url, string payload, CancellationToken token, HeaderCollection? headers = null )
-		{
-			// Activity.Current.Settings.OutgoingActivityText = payload;
+		public static async Task<string> PostJson( this Uri url, string payload, CancellationToken token, HeaderCollection? headers = null ) =>
 
-			return await PostJson(url,
-								  payload,
-								  Requests.DEFAULT_TIMEOUT,
-								  token,
-								  headers).ConfigureAwait(true);
-		}
+			// Activity.Current.Settings.OutgoingActivityText = payload;
+			await PostJson(url,
+						   payload,
+						   Requests.DEFAULT_TIMEOUT,
+						   token,
+						   headers).ConfigureAwait(true);
 
 		public static async Task<string> PostJson( this Uri url,
 												   string payload,
@@ -98,26 +96,22 @@ namespace Jakar.Api.Http
 												  string payload,
 												  MimeType contentType,
 												  CancellationToken token
-		)
-		{
-			return await url.TryPost(payload,
-									 contentType.ToContentType(),
-									 token).ConfigureAwait(true);
-		}
+		) =>
+			await url.TryPost(payload,
+							  contentType.ToContentType(),
+							  token).ConfigureAwait(true);
 
 
 		public static async Task<string> TryPost( this Uri url,
 												  string payload,
 												  string contentType,
 												  CancellationToken token
-		)
-		{
-			return await url.TryPost(WebResponseExtensions.AsString,
-									 payload,
-									 contentType,
-									 Requests.DEFAULT_TIMEOUT,
-									 token).ConfigureAwait(true);
-		}
+		) =>
+			await url.TryPost(WebResponseExtensions.AsString,
+							  payload,
+							  contentType,
+							  Requests.DEFAULT_TIMEOUT,
+							  token).ConfigureAwait(true);
 
 
 		public static async Task<TResult> TryPost<TResult>( this Uri url,
@@ -125,13 +119,11 @@ namespace Jakar.Api.Http
 															string payload,
 															MimeType contentType,
 															CancellationToken token
-		)
-		{
-			return await url.TryPost(handler,
-									 payload,
-									 contentType.ToContentType(),
-									 token).ConfigureAwait(true);
-		}
+		) =>
+			await url.TryPost(handler,
+							  payload,
+							  contentType.ToContentType(),
+							  token).ConfigureAwait(true);
 
 
 		public static async Task<TResult> TryPost<TResult>( this Uri url,
@@ -139,14 +131,12 @@ namespace Jakar.Api.Http
 															string payload,
 															string contentType,
 															CancellationToken token
-		)
-		{
-			return await url.TryPost(handler,
-									 payload,
-									 contentType,
-									 Requests.DEFAULT_TIMEOUT,
-									 token).ConfigureAwait(true);
-		}
+		) =>
+			await url.TryPost(handler,
+							  payload,
+							  contentType,
+							  Requests.DEFAULT_TIMEOUT,
+							  token).ConfigureAwait(true);
 
 
 		public static async Task<TResult> TryPost<TResult>( this Uri url,
@@ -174,14 +164,12 @@ namespace Jakar.Api.Http
 																	  HeaderCollection headers,
 																	  int timeout,
 																	  CancellationToken token
-		)
-		{
-			return await url.TryPost(handler,
-									 serializer(payload),
-									 headers,
-									 timeout,
-									 token).ConfigureAwait(true);
-		}
+		) =>
+			await url.TryPost(handler,
+							  serializer(payload),
+							  headers,
+							  timeout,
+							  token).ConfigureAwait(true);
 
 
 		public static async Task<TResult> TryPost<TResult>( this Uri url,
@@ -189,14 +177,12 @@ namespace Jakar.Api.Http
 															ReadOnlyMemory<byte> payload,
 															HeaderCollection headers,
 															CancellationToken token
-		)
-		{
-			return await url.TryPost(handler,
-									 payload,
-									 headers,
-									 Requests.DEFAULT_TIMEOUT,
-									 token).ConfigureAwait(true);
-		}
+		) =>
+			await url.TryPost(handler,
+							  payload,
+							  headers,
+							  Requests.DEFAULT_TIMEOUT,
+							  token).ConfigureAwait(true);
 
 
 		public static async Task<TResult> TryPost<TResult>( this Uri url,
@@ -230,13 +216,11 @@ namespace Jakar.Api.Http
 															Func<WebResponse, Task<TResult>> handler,
 															MultipartFormDataContent payload,
 															CancellationToken token
-		)
-		{
-			return await url.TryPost(handler,
-									 payload,
-									 Requests.DEFAULT_TIMEOUT,
-									 token).ConfigureAwait(true);
-		}
+		) =>
+			await url.TryPost(handler,
+							  payload,
+							  Requests.DEFAULT_TIMEOUT,
+							  token).ConfigureAwait(true);
 
 
 		public static async Task<TResult> TryPost<TResult>( this Uri url,

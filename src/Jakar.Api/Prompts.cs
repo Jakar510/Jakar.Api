@@ -176,7 +176,8 @@ namespace Jakar.Api
 		public IDisposable Alert( AlertConfig? config ) => _Dialogs.Alert(config);
 
 
-		public Task AlertAsync( string? title, string? message, string? okText = null, CancellationToken? cancelToken = default ) => _Dialogs.AlertAsync(message, title, okText ?? Ok, cancelToken);
+		public Task AlertAsync( string? title, string? message, CancellationToken? cancelToken = default ) => AlertAsync(message, title, Ok, cancelToken);
+		public Task AlertAsync( string? title, string? message, string? okText, CancellationToken? cancelToken = default ) => _Dialogs.AlertAsync(message, title, okText, cancelToken);
 
 		public Task AlertAsync( AlertConfig? config, CancellationToken? cancelToken = default ) => _Dialogs.AlertAsync(config, cancelToken);
 
@@ -193,10 +194,10 @@ namespace Jakar.Api
 											  CancellationToken? cancelToken = null,
 											  params string[] buttons
 		) => _Dialogs.ActionSheetAsync(title,
-									  cancel,
-									  destructive,
-									  cancelToken,
-									  buttons);
+									   cancel,
+									   destructive,
+									   cancelToken,
+									   buttons);
 
 	#endregion
 
@@ -218,10 +219,10 @@ namespace Jakar.Api
 										string? no,
 										CancellationToken? cancelToken
 		) => _Dialogs.ConfirmAsync(message,
-								  title,
-								  yes,
-								  no,
-								  cancelToken);
+								   title,
+								   yes,
+								   no,
+								   cancelToken);
 
 	#endregion
 
@@ -260,12 +261,12 @@ namespace Jakar.Api
 											   InputType inputType = InputType.Default,
 											   CancellationToken? cancelToken = null
 		) => _Dialogs.PromptAsync(message,
-								 title,
-								 okText,
-								 cancelText,
-								 placeholder,
-								 inputType,
-								 cancelToken);
+								  title,
+								  okText,
+								  cancelText,
+								  placeholder,
+								  inputType,
+								  cancelToken);
 
 		public Task<PromptResult> PromptAsync( PromptConfig? config, CancellationToken? cancelToken = null ) => _Dialogs.PromptAsync(config, cancelToken);
 
@@ -295,10 +296,10 @@ namespace Jakar.Api
 										bool show = true,
 										MaskType? maskType = null
 		) => _Dialogs.Loading(title,
-							 onCancel,
-							 cancelText,
-							 show,
-							 maskType);
+							  onCancel,
+							  cancelText,
+							  show,
+							  maskType);
 
 		public IProgressDialog Progress( string? title = null,
 										 Action? onCancel = null,
@@ -306,10 +307,10 @@ namespace Jakar.Api
 										 bool show = true,
 										 MaskType? maskType = null
 		) => _Dialogs.Progress(title,
-							  onCancel,
-							  cancelText,
-							  show,
-							  maskType);
+							   onCancel,
+							   cancelText,
+							   show,
+							   maskType);
 
 	#endregion
 
