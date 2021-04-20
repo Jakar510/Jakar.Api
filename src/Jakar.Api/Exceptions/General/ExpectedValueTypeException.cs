@@ -14,7 +14,7 @@ namespace Jakar.Api.Exceptions.General
 		public Type Actual { get; }
 		public IList<Type> Expected { get; }
 
-		public ExpectedValueTypeException( TKey name, object value, Type type ) : this(name, value.GetType(), type) { }
+		public ExpectedValueTypeException( TKey name, object value, params Type[] expected ) : this(name, value.GetType(), expected) { }
 
 		public ExpectedValueTypeException( TKey key, Type value, params Type[] expected ) : base(GetMessage(key, value, expected))
 		{
@@ -39,7 +39,7 @@ namespace Jakar.Api.Exceptions.General
 
 	public class ExpectedValueTypeException : ExpectedValueTypeException<string> // Jakar.Api.Exceptions.Networking.HeaderException
 	{
-		public ExpectedValueTypeException( string key, object value, Type type ) : this(key, value.GetType(), type) { }
+		public ExpectedValueTypeException( string key, object value, params Type[] expected ) : this(key, value.GetType(), expected) { }
 
 		public ExpectedValueTypeException( string key, Type value, params Type[] expected ) : base(key, value, expected) { }
 	}

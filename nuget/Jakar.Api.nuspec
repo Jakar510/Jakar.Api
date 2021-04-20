@@ -19,7 +19,7 @@
 		</description>
 		<releaseNotes>
 			bug fixes
-			Added BaseResourceDictionary
+			Added ResourceDictionaryManager and it's implementation to ApiServices
 		</releaseNotes>
 		<tags>Xamarin.Forms Api Extensions</tags>
 		<language>en-US</language>

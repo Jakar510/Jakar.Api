@@ -1,35 +1,37 @@
-﻿// unset
-
-using System;
+﻿using System;
 using Jakar.Api.Interfaces;
+using Jakar.Api.ResourceManager;
 
 
 #pragma warning disable 1591
 #nullable enable
 namespace Jakar.Api
 {
-	public abstract class ApiServices<TDebug, TPrompts, TAccounts, TUser, TActiveUser, TAppSettings> where TAccounts : AccountManager<TUser, TActiveUser>, new()
-																									 where TUser : class, IUser
-																									 where TActiveUser : class, ICurrentUser<TUser>, new()
-																									 where TAppSettings : IAppSettings, new()
-																									 where TPrompts : Prompts, new()
-																									 where TDebug : Debug, new()
+	public abstract class ApiServices<TDebug, TPrompts, TAccounts, TUser, TActiveUser, TAppSettings, TResourceManager> where TAccounts : AccountManager<TUser, TActiveUser>, new()
+																													   where TUser : class, IUser
+																													   where TActiveUser : class, ICurrentUser<TUser>, new()
+																													   where TAppSettings : IAppSettings, new()
+																													   where TPrompts : Prompts, new()
+																													   where TDebug : Debug, new()
+																													   where TResourceManager : ResourceDictionaryManager, new()
 	{
 		public TDebug Debug { get; } = new();
 
 		public TAccounts Accounts { get; } = new();
-		
+
 		public TPrompts Prompts { get; } = new();
 
 		public TAppSettings Settings { get; } = new();
+
+		public TResourceManager Resources { get; } = new();
 
 		public LocationManager Location { get; } = new();
 
 		public BarometerReader Barometer { get; } = new();
 
 		public LanguageApi Language { get; } = LanguageApi.Current;
-		
-		public Commands Loading { get; } 
+
+		public Commands Loading { get; }
 
 		/// <summary>
 		/// appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
