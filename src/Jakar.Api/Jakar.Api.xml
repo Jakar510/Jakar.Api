@@ -4,7 +4,7 @@
         <name>Jakar.Api</name>
     </assembly>
     <members>
-        <member name="M:Jakar.Api.ApiServices`6.#ctor(System.String@,System.Type[])">
+        <member name="M:Jakar.Api.ApiServices`7.#ctor(System.String@,System.Type[])">
             <summary>
             appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
             </summary>
@@ -56,6 +56,22 @@
             switch the type of exception to show what ever prompt you want
             </summary>
             <param name="e"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Jakar.Api.ResourceManager.ResourceDictionaryManager">
+            <summary>
+            Recommended class to use for the default implementation: <see cref="T:Jakar.Api.ResourceManager.KeyNames"/>
+            If you want to modify the implementation, override <see cref="M:Jakar.Api.ResourceManager.ResourceDictionaryManager.GetKey``1(Xamarin.Forms.OSAppTheme@,``0@)"/>
+            </summary>
+        </member>
+        <member name="M:Jakar.Api.ResourceManager.ResourceDictionaryManager.GetKey``1(Xamarin.Forms.OSAppTheme@,``0@)">
+            <summary>
+            Default implementation uses <see cref="M:Jakar.Api.ResourceManager.ResourceDictionaryManager.GetFullKey``1(Xamarin.Forms.OSAppTheme@,``0@)"/>.
+            You may override this to use <see cref="M:Jakar.Api.ResourceManager.ResourceDictionaryManager.GetShortKey``1(Xamarin.Forms.OSAppTheme@,``0@)"/> or which ever pattern you wish.
+            </summary>
+            <typeparam name="TThemedKey"></typeparam>
+            <param name="theme"></param>
+            <param name="key"></param>
             <returns></returns>
         </member>
     </members>

@@ -20,6 +20,8 @@ namespace Jakar.Api.Http
 	{
 		// https://www.hanselman.com/blog/HTTPPOSTsAndHTTPGETsWithWebClientAndCAndFakingAPostBack.aspx
 		// https://docs.microsoft.com/en-us/dotnet/standard/threading/cancellation-in-managed-threads
+		// https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
+
 
 		public static async Task<string> PostJson( this Uri url, string payload, CancellationToken token, HeaderCollection? headers = null ) =>
 

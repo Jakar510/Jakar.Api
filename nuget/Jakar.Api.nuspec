@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>1.9.0</version>
+		<version>1.10.0</version>
 		<title>Base library for all others</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,8 +18,10 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			bug fixes
-			Added ResourceDictionaryManager and it's implementation to ApiServices
+			Added some more json extensions
+			Added Jakar.Api.Http.JsonContent
+			Modified Jakar.Api.Http.Posts and Jakar.Api.HttpExtensions.
+
 		</releaseNotes>
 		<tags>Xamarin.Forms Api Extensions</tags>
 		<language>en-US</language>
@@ -51,7 +53,7 @@
 				            version="7.1.0.483" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
-				            version="2.0.0" />
+				            version="2.1.0" />
 				<dependency id="Xam.Plugin.Media"
 				            version="5.0.1" />
 			</group>
@@ -81,7 +83,7 @@
 				            version="7.1.0.483" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
-				            version="2.0.0" />
+				            version="2.1.0" />
 				<dependency id="Xam.Plugin.Media"
 				            version="5.0.1" />
 			</group>
@@ -113,7 +115,7 @@
 				            version="7.1.0.483" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
-				            version="2.0.0" />
+				            version="2.1.0" />
 				<dependency id="Xam.Plugin.Media"
 				            version="5.0.1" />
 			</group>
@@ -149,7 +151,7 @@
 				            version="7.1.0.483" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
-				            version="2.0.0" />
+				            version="2.1.0" />
 				<dependency id="Xam.Plugin.Media"
 				            version="5.0.1" />
 			</group>

@@ -15,14 +15,6 @@ using Jakar.Api.Extensions;
 #nullable enable
 namespace Jakar.Api.Http
 {
-	// public interface IHeaderCollection
-	// {
-	// 	public IDictionary<HttpRequestHeader, object>? Headers { get; }
-	// 	public IDictionary<string, object>? StringHeaders { get; }
-	// }
-
-
-
 	public static class WebRequestExtensions
 	{
 		public static async Task<WebResponse> GetResponseAsync( this WebRequest request, CancellationToken token, bool useSynchronizationContext = true )
@@ -274,15 +266,59 @@ namespace Jakar.Api.Http
 					break;
 
 				default:
-					request.Headers[key] = value.ToString();
+					if ( value is string s ) { request.Headers.Add(key, s); }
+					else { request.Headers.Add(key, value.ToJson()); }
+
 					return;
 			}
 		}
 
 		public static void SetHeader( this HttpWebRequest request, string key, object value )
 		{
-			if ( key == "Content-Type" ) { request.SetContentType(value); }
-			else { request.Headers.Add(key, value.ToJson()); }
+			switch ( key )
+			{
+				case "Content-Type":
+					request.SetContentType(value);
+					break;
+
+				case "Content-Length":
+					if ( value is long contentLength ) { request.ContentLength = contentLength; }
+					else { throw new HeaderException(HttpRequestHeader.ContentLength, value.GetType(), typeof(long)); }
+
+					break;
+
+				case "Keep-Alive":
+					if ( value is bool keepAlive ) { request.KeepAlive = keepAlive; }
+					else { throw new HeaderException(HttpRequestHeader.KeepAlive, value.GetType(), typeof(bool)); }
+
+					break;
+
+				case "Max-Forwards":
+					if ( value is int redirects ) { request.MaximumAutomaticRedirections = redirects; }
+					else { throw new HeaderException(HttpRequestHeader.MaxForwards, value.GetType(), typeof(int)); }
+
+					break;
+
+				case "Proxy-Authorization":
+					if ( value is IWebProxy proxy ) { request.Proxy = proxy; }
+					else { throw new HeaderException(HttpRequestHeader.ProxyAuthorization, value.GetType(), typeof(IWebProxy)); }
+
+					break;
+
+				case "User-Agent":
+					request.UserAgent = value.ToString();
+					break;
+
+				case "Transfer-Encoding":
+					request.TransferEncoding = value.ToString();
+					break;
+
+				default:
+					if ( value is string s ) { request.Headers.Add(key, s); }
+					else { request.Headers.Add(key, value.ToJson()); }
+
+					break;
+			}
 		}
 	}
 }

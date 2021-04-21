@@ -34,15 +34,6 @@ namespace Jakar.Api.ResourceManager
 
 
 
-		public enum Style
-		{
-			FontSize,
-			FontAttributes,
-			FontFamily,
-		}
-
-
-
 		public enum ShellColor
 		{
 			Foreground,
@@ -60,12 +51,18 @@ namespace Jakar.Api.ResourceManager
 			Text,
 			Background,
 			PageBackground,
-			Accent,
-			Accept,
-			Cancel,
-			Separator,
-			Placeholder,
+			Accent, // i.e. CheckBox
+			Valid,
+			Invalid,
 			InFocus,
+		}
+
+
+
+		public enum ListView
+		{
+			BackgroundColor,
+			SeparatorColor, // i.e. ListView
 		}
 
 
@@ -73,6 +70,30 @@ namespace Jakar.Api.ResourceManager
 		public enum Button
 		{
 			BorderColor,
+			TextColor,
+			BackgroundColor,
+			FontSize,
+			FontAttributes,
+			FontFamily,
+		}
+
+
+
+		public enum Entry
+		{
+			AccentColor,
+			TextColor,
+			PlaceholderColor,
+			BackgroundColor,
+			FontSize,
+			FontAttributes,
+			FontFamily,
+		}
+
+
+
+		public enum Label
+		{
 			TextColor,
 			BackgroundColor,
 			FontSize,
