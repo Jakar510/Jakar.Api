@@ -41,6 +41,8 @@ namespace Jakar.Api
 		}
 
 
+	#region Init
+
 		public void Init( IAppSettings services, string app_center_id, params Type[] appCenterServices )
 		{
 			_Services = services;
@@ -84,6 +86,8 @@ namespace Jakar.Api
 			throw new ApiDisabledException($"Must call {nameof(Init)} first.");
 		}
 
+	#endregion
+
 
 		public void HandleException( Exception e ) { Task.Run(async () => { await HandleExceptionAsync(e).ConfigureAwait(true); }); }
 
@@ -100,6 +104,9 @@ namespace Jakar.Api
 			await TrackError(e, screenShot).ConfigureAwait(true);
 		}
 
+
+	#region AppStates
+
 		protected static async Task SaveAppState( string path, Dictionary<string, object?> payload )
 		{
 			await using var file = new FileData(path);
@@ -109,7 +116,7 @@ namespace Jakar.Api
 		public async Task SaveFeedBackAppState( Dictionary<string, string?> feedback, string key = "feedback" )
 		{
 			var result = new Dictionary<string, object?> { [nameof(AppState)] = AppState(), [key] = feedback };
-			
+
 			await SaveAppState(FileSystemApi.FeedBackFileName, result).ConfigureAwait(true);
 		}
 
@@ -196,6 +203,10 @@ namespace Jakar.Api
 				[nameof(LanguageApi.SelectedLanguage)] = LanguageApi.Current.SelectedLanguage.DisplayName
 			};
 
+	#endregion
+
+
+	#region Track Exceptions
 
 		public async Task TrackError( Exception e ) => await TrackError(e, GetAppStateFromError(e), AppState(e)).ConfigureAwait(true);
 		public async Task TrackError( Exception e, byte[] screenShot ) => await TrackError(e, GetAppStateFromError(e), AppState(e), screenShot).ConfigureAwait(true);
@@ -286,6 +297,10 @@ namespace Jakar.Api
 			await Task.CompletedTask;
 		}
 
+	#endregion
+
+
+	#region Track Events
 
 		public void TrackEvent( [CallerMemberName] string source = "" )
 		{
@@ -305,20 +320,34 @@ namespace Jakar.Api
 			Analytics.TrackEvent(source, eventDetails);
 		}
 
+	#endregion
 
-		protected void PrintException( Exception e )
+
+	#region Console
+
+		protected virtual void PrintException( Exception e )
 		{
 			if ( !CanDebug ) { return; }
 
-			System.Diagnostics.Debug.WriteLine("------------------------------------------------ Exception Start -----------------------------------------------\n\n");
-			System.Diagnostics.Debug.WriteLine(e.Source);
-			System.Diagnostics.Debug.WriteLine("\n----------------------------------------------------------------------------------------------------------------\n");
-			System.Diagnostics.Debug.WriteLine(e.Data);
-			System.Diagnostics.Debug.WriteLine("\n----------------------------------------------------------------------------------------------------------------\n");
-			System.Diagnostics.Debug.WriteLine(e.ToString());
-			System.Diagnostics.Debug.WriteLine("\n----------------------------------------------------------------------------------------------------------------\n");
-			System.Diagnostics.Debug.WriteLine(e.StackTrace);
-			System.Diagnostics.Debug.WriteLine("\n\n------------------------------------------------ Exception End -------------------------------------------------");
+			System.Diagnostics.Debug.WriteLine("------------------------------------------------ Exception Start -----------------------------------------------");
+			System.Diagnostics.Debug.WriteLine("\n\n");
+			System.Diagnostics.Debug.WriteLine("-------------------------------------------------- Source ------------------------------------------------");
+			System.Diagnostics.Debug.WriteLine("\n\n");
+			System.Diagnostics.Debug.WriteLine($"{e.Source}");
+			System.Diagnostics.Debug.WriteLine("\n\n");
+			System.Diagnostics.Debug.WriteLine("--------------------------------------------------- Data -------------------------------------------------");
+			System.Diagnostics.Debug.WriteLine("\n\n");
+			System.Diagnostics.Debug.WriteLine($"{e.Data.ToPrettyJson()}");
+			System.Diagnostics.Debug.WriteLine("\n\n");
+			System.Diagnostics.Debug.WriteLine("------------------------------------------------- ToString -----------------------------------------------");
+			System.Diagnostics.Debug.WriteLine("\n\n");
+			System.Diagnostics.Debug.WriteLine($"{e}");
+			System.Diagnostics.Debug.WriteLine("\n\n");
+			System.Diagnostics.Debug.WriteLine("------------------------------------------------ StackTrace -----------------------------------------------");
+			System.Diagnostics.Debug.WriteLine("\n\n");
+			System.Diagnostics.Debug.WriteLine($"{e.StackTrace}");
+			System.Diagnostics.Debug.WriteLine("\n\n");
+			System.Diagnostics.Debug.WriteLine("------------------------------------------------ Exception End -------------------------------------------------");
 		}
 
 		public void PrintMessage( string s, string start = "--------- information ------------" )
@@ -351,5 +380,7 @@ namespace Jakar.Api
 
 			System.Diagnostics.Debug.WriteLine($"{start}   {source}.Count: => {count}");
 		}
+
+	#endregion
 	}
 }
