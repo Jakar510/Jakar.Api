@@ -26,8 +26,8 @@ namespace Jakar.Api
 {
 	public class Debug
 	{
-		public bool CanDebug => Debugger.IsAttached;
-		public bool UseDebugLogin => CanDebug;
+		public virtual bool CanDebug => Debugger.IsAttached;
+		public virtual bool UseDebugLogin => CanDebug;
 		public Guid? InstallId { get; protected set; }
 
 		protected bool _ApiEnabled { get; private set; }

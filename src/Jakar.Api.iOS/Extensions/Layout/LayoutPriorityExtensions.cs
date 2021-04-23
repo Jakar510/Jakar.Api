@@ -7,9 +7,9 @@ using UIKit;
 #pragma warning disable 1591
 
 #nullable enable
-namespace Jakar.Api.iOS.Extensions
+namespace Jakar.Api.iOS.Extensions.Layout
 {
-	public static partial class LayoutExtensions
+	public static class LayoutPriorityExtensions
 	{
 		public static void Priorities( this UIView view, in LayoutPriority hugging, in LayoutPriority compression ) => view.Priorities(hugging.ToFloat(), compression.ToFloat());
 

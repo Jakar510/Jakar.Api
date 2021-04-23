@@ -51,10 +51,8 @@
   <ItemGroup>
     <Compile Include="BaseApplication.cs" />
     <Compile Include="Extensions\CGContextExtensions.cs" />
-    <Compile Include="Extensions\LayoutExtensions.cs" />
-    <Compile Include="Extensions\LayoutExtensions.LayoutExtensions.popup.cs" />
-    <Compile Include="Extensions\LayoutExtensions.PartialSizes.cs" />
-    <Compile Include="Extensions\LayoutExtensions.Priorities.cs" />
+    <Compile Include="Extensions\Layout\LayoutExtensions.cs" />
+    <Compile Include="Extensions\Layout\LayoutPriorityExtensions.cs" />
     <Compile Include="Enumerations\LayoutPriority.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
     <Compile Include="Extensions\StackViewAlignmentExtensions.cs" />
