@@ -1,9 +1,20 @@
-# Jakar.Api
+# Jakar.Extensions
 
 **Contributions and Ideas are Welcome.**
 
-Base library for all others. 
-
 Includes many extensions and helpers to make development quicker.
 
-See [Nuget Package Page](https://www.nuget.org/packages/Jakar.Api/) for details on installation.
+# Extension to help with development.
+
+## HTTP
+
+## JSON
+
+## Misc
+
+### Numbers
+
+### Strings
+
+
+See [Nuget Package Page](https://www.nuget.org/packages/Jakar.Extensions/) for details on installation.
