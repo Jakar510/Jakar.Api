@@ -4,8 +4,8 @@ using System.Net;
 using Android.Content;
 using Android.Provider;
 using Jakar.Api.Droid.Services;
-using Jakar.Api.Exceptions.General;
 using Jakar.Api.Interfaces;
+using Jakar.Extensions.Exceptions.General;
 using Xamarin.Forms;
 
 

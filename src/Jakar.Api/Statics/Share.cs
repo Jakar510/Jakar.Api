@@ -2,10 +2,11 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Jakar.Api.Enumerations;
 using Jakar.Api.Extensions;
 using Jakar.Api.Interfaces;
 using Jakar.Api.Models;
+using Jakar.Extensions.Extensions;
+using Jakar.Extensions.Http;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Plugin.Screenshot;

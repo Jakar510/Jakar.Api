@@ -4,7 +4,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Jakar.Api.Extensions;
+using Jakar.Extensions.Extensions;
 
 
 namespace Jakar.Api.iOS.Extensions

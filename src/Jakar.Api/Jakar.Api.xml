@@ -20,37 +20,6 @@
             [Bug] https://developercommunity.visualstudio.com/t/package-androidxactivitycontextaware-does-not-exis/1376876?from=email
             </summary>
         </member>
-        <member name="T:Jakar.Api.Exceptions.Networking.ConnectFailureException">
-            <summary>
-            The remote service point could not be contacted at the transport level.
-            </summary>
-        </member>
-        <member name="T:Jakar.Api.Exceptions.Networking.ConnectionClosedException">
-            <summary>
-             The connection was prematurely closed.
-            </summary>
-        </member>
-        <member name="T:Jakar.Api.Exceptions.Networking.KeepAliveFailureException">
-            <summary>
-            The connection for a request that specifies the Keep-alive header was closed unexpectedly.
-            </summary>
-        </member>
-        <member name="T:Jakar.Api.Exceptions.Networking.NameResolutionException">
-            <summary>
-            The name resolver service could not resolve the host name.
-            </summary>
-        </member>
-        <member name="T:Jakar.Api.Exceptions.Networking.ReceiveFailureException">
-            <summary>
-                The request was canceled, the System.Net.WebRequest.Abort method was called,
-                or an unclassifiable error occurred. This is the default value for System.Net.WebException.Status.
-            </summary>
-        </member>
-        <member name="T:Jakar.Api.Exceptions.Networking.SendFailureException">
-            <summary>
-             A complete response was not received from the remote server.
-            </summary>
-        </member>
         <member name="M:Jakar.Api.Prompts.InternalHandleException(System.Exception)">
             <summary>
             switch the type of exception to show what ever prompt you want

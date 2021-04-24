@@ -1,5 +1,4 @@
-﻿using System;
-using Xamarin.Essentials;
+﻿using Xamarin.Essentials;
 
 
 #pragma warning disable 1591

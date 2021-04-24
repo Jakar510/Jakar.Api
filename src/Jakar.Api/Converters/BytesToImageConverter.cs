@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using Jakar.Api.Extensions;
+using Jakar.Extensions.Extensions;
 using Xamarin.Forms;
 
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using Jakar.Api.Exceptions.General;
+using Jakar.Extensions.Exceptions.General;
 using Xamarin.Forms;
 
 

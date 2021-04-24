@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Jakar.Api.Enumerations;
-using Jakar.Api.Extensions;
+using Jakar.Extensions.Extensions;
+using Jakar.Extensions.Http;
 using Xamarin.Essentials;
 
 

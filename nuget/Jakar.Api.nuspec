@@ -4,8 +4,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>1.10.1</version>
-		<title>Base library for all others</title>
+		<version>2.0.0</version>
+		<title>Base library for all others in Xamarin.Forms</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
 		<projectUrl>https://github.com/Jakar510/Jakar.Api</projectUrl>
@@ -18,10 +18,11 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Modified Jakar.Api.Debug
-			Updated/Modified Jakar.Api.iOS.Extensions.LayoutExtensions
+			Move from Jakar.Api (Xamarin.Forms) to Jakar.Extensions to standalone to support any .Net 2.1+
+			• HTTP
+			• Extensions not specific to Xamarin.Forms
 		</releaseNotes>
-		<tags>Xamarin.Forms Api Extensions</tags>
+		<tags>Xamarin.Forms Jakar Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>
 		<repository type="Github"
 		            url="https://github.com/Jakar510/Jakar.Api"
@@ -46,6 +47,9 @@
 
 				<dependency id="Newtonsoft.Json"
 				            version="13.0.1" />
+
+				<dependency id="Jakar.Extensions"
+				            version="1.0.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />
@@ -76,6 +80,9 @@
 
 				<dependency id="Newtonsoft.Json"
 				            version="13.0.1" />
+
+				<dependency id="Jakar.Extensions"
+				            version="1.0.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />
@@ -108,6 +115,9 @@
 
 				<dependency id="Newtonsoft.Json"
 				            version="13.0.1" />
+
+				<dependency id="Jakar.Extensions"
+				            version="1.0.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />
@@ -144,6 +154,9 @@
 
 				<dependency id="Newtonsoft.Json"
 				            version="13.0.1" />
+
+				<dependency id="Jakar.Extensions"
+				            version="1.0.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />

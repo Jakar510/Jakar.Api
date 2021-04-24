@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Jakar.Api.Extensions;
+using Jakar.Extensions.Extensions;
 using Xamarin.Forms;
 
 

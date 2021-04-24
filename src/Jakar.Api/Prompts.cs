@@ -3,10 +3,10 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
-using Jakar.Api.Exceptions.General;
-using Jakar.Api.Exceptions.Networking;
 using Jakar.Api.Interfaces;
 using Jakar.Api.Statics;
+using Jakar.Extensions.Exceptions.General;
+using Jakar.Extensions.Exceptions.Networking;
 using Xamarin.Forms;
 
 

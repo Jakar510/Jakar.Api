@@ -14,6 +14,5 @@ namespace Jakar.Api.Extensions
 	public static class FileExtensions
 	{
 		public static FileInfo ToFileInfo( this MediaFile file ) => new(file.Path ?? throw new ArgumentNullException(nameof(file)));
-		public static Uri ToUri( this FileInfo file ) => new($"file://{file.FullName}", UriKind.Absolute);
 	}
 }
