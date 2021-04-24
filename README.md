@@ -4,17 +4,17 @@
 
 Includes many extensions and helpers to make development quicker.
 
-# Extension to help with development.
+## Extensions to help with development.
 
-## HTTP
+### HTTP
 
-## JSON
+### JSON
 
-## Misc
+### Misc
 
-### Numbers
+*Numbers*
 
-### Strings
+*Strings*
 
 
 See [Nuget Package Page](https://www.nuget.org/packages/Jakar.Extensions/) for details on installation.
