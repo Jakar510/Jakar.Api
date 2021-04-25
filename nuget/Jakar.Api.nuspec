@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>2.0.0</version>
+		<version>2.1.0</version>
 		<title>Base library for all others in Xamarin.Forms</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,9 +18,8 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Move from Jakar.Api (Xamarin.Forms) to Jakar.Extensions to standalone to support any .Net 2.1+
-			• HTTP
-			• Extensions not specific to Xamarin.Forms
+			Update Jakar.Extensions 1.1.0
+			Added Jakar.Api.BasePages.BaseNotifyPropertyModel
 		</releaseNotes>
 		<tags>Xamarin.Forms Jakar Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>
@@ -49,7 +48,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="1.0.0" />
+				            version="1.1.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />
@@ -82,7 +81,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="1.0.0" />
+				            version="1.1.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />
@@ -117,7 +116,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="1.0.0" />
+				            version="1.1.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />
@@ -156,7 +155,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="1.0.0" />
+				            version="1.1.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />

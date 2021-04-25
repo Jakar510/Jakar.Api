@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Jakar.Api.Interfaces;
+using Jakar.Extensions.Http;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Share = Jakar.Api.Statics.Share;
@@ -16,7 +14,7 @@ using Share = Jakar.Api.Statics.Share;
 #nullable enable
 namespace Jakar.Api.BasePages
 {
-	public abstract class BaseViewModel : INotifyPropertyChanged
+	public abstract class BaseViewModel : BaseNotifyPropertyModel
 	{
 		private bool _isBusy;
 
@@ -33,42 +31,6 @@ namespace Jakar.Api.BasePages
 		{
 			get => _title;
 			set => SetProperty(ref _title, value);
-		}
-
-
-		public event PropertyChangedEventHandler? PropertyChanged;
-
-		protected void SetProperty<T>( ref T backingStore, T value, [CallerMemberName] string propertyName = "" )
-		{
-			if ( EqualityComparer<T>.Default.Equals(backingStore, value) ) { return; }
-
-			backingStore = value;
-			OnPropertyChanged(propertyName);
-		}
-
-		protected void SetProperty<T>( ref T backingStore, T value, Action onChanged, [CallerMemberName] string propertyName = "" )
-		{
-			if ( EqualityComparer<T>.Default.Equals(backingStore, value) ) { return; }
-
-			backingStore = value;
-			onChanged();
-			OnPropertyChanged(propertyName);
-		}
-
-		protected void SetProperty<T>( ref T backingStore, T value, Action<T> onChanged, [CallerMemberName] string propertyName = "" )
-		{
-			if ( EqualityComparer<T>.Default.Equals(backingStore, value) ) { return; }
-
-			backingStore = value;
-			onChanged(value);
-			OnPropertyChanged(propertyName);
-		}
-
-		protected void OnPropertyChanged( string propertyName )
-		{
-			PropertyChangedEventHandler? changed = PropertyChanged;
-
-			changed?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 
@@ -110,7 +72,7 @@ namespace Jakar.Api.BasePages
 		protected virtual async Task ShareScreenShot( string shareTitle )
 		{
 			_AppSettings.ScreenShotAddress = await Share.GetScreenShot().ConfigureAwait(true);
-			await Share.ShareFile(_AppSettings.ScreenShotAddress, shareTitle, System.Net.Mime.MediaTypeNames.Image.Jpeg).ConfigureAwait(false);
+			await Share.ShareFile(_AppSettings.ScreenShotAddress, shareTitle, MimeTypeNames.Image.JPEG).ConfigureAwait(false);
 		}
 	}
 
