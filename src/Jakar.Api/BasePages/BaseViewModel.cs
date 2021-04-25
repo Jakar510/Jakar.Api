@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Jakar.Api.Interfaces;
+using Jakar.Extensions;
 using Jakar.Extensions.Http;
 using Xamarin.Essentials;
 using Xamarin.Forms;

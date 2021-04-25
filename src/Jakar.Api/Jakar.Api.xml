@@ -11,68 +11,6 @@
             <param name="app_center_id"></param>
             <param name="appCenterServices"></param>
         </member>
-        <member name="M:Jakar.Api.BasePages.BaseNotifyPropertyModel.SetProperty``1(``0@,``0,System.String)">
-            <summary>
-            Calls <see cref="M:Jakar.Api.BasePages.BaseNotifyPropertyModel.OnPropertyChanging(System.String)"/>, sets the value, then calls <see cref="M:Jakar.Api.BasePages.BaseNotifyPropertyModel.OnPropertyChanged(System.String)"/>
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="backingStore"></param>
-            <param name="value"></param>
-            <param name="propertyName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Jakar.Api.BasePages.BaseNotifyPropertyModel.SetProperty``1(``0@,``0,System.Windows.Input.ICommand,System.String)">
-            <summary>
-            "onChanged" only called if the backingStore value has changed, and onChanged.CanExecute(value) is true. 
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="backingStore"></param>
-            <param name="value"></param>
-            <param name="onChanged"></param>
-            <param name="propertyName"></param>
-        </member>
-        <member name="M:Jakar.Api.BasePages.BaseNotifyPropertyModel.SetProperty``1(``0@,``0,System.Action,System.String)">
-            <summary>
-            "onChanged" only called if the backingStore value has changed.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="backingStore"></param>
-            <param name="value"></param>
-            <param name="onChanged"></param>
-            <param name="propertyName"></param>
-        </member>
-        <member name="M:Jakar.Api.BasePages.BaseNotifyPropertyModel.SetProperty``1(``0@,``0,System.Action{``0},System.String)">
-            <summary>
-            "onChanged" only called if the backingStore value has changed.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="backingStore"></param>
-            <param name="value"></param>
-            <param name="onChanged"></param>
-            <param name="propertyName"></param>
-        </member>
-        <member name="M:Jakar.Api.BasePages.BaseNotifyPropertyModel.SetProperty``1(``0@,``0,System.Func{System.Threading.Tasks.Task},System.Boolean,System.String)">
-            <summary>
-            "onChanged" only called if the backingStore value has changed.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="backingStore"></param>
-            <param name="value"></param>
-            <param name="onChanged"></param>
-            <param name="background"></param>
-            <param name="propertyName"></param>
-        </member>
-        <member name="M:Jakar.Api.BasePages.BaseNotifyPropertyModel.SetProperty``1(``0@,``0,System.Func{``0,System.Threading.Tasks.Task},System.Boolean,System.String)">
-            <summary>
-            "onChanged" only called if the backingStore value has changed.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="backingStore"></param>
-            <param name="value"></param>
-            <param name="onChanged"></param>
-            <param name="background"></param>
-            <param name="propertyName"></param>
-        </member>
         <member name="T:Jakar.Api.Commands">
             <summary>
             Will move to Xamarin.Community.Toolkit.AsyncCommand when the following issues are resolved, as Xamarin.Forms 5.x is broken on Android until then:
