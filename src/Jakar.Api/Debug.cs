@@ -6,10 +6,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Jakar.Api.Interfaces;
-using Jakar.Api.Models;
 using Jakar.Api.Statics;
+using Jakar.Extensions;
 using Jakar.Extensions.Exceptions.General;
 using Jakar.Extensions.Extensions;
+using Jakar.Extensions.Interfaces;
+using Jakar.Extensions.Models.Files;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
@@ -30,6 +32,7 @@ namespace Jakar.Api
 
 		protected bool _ApiEnabled { get; private set; }
 
+		private FileSystemApi? _fileSystemApi;
 		private IAppSettings? _services;
 
 		protected IAppSettings _Services
@@ -41,15 +44,14 @@ namespace Jakar.Api
 
 	#region Init
 
-		public void Init( IAppSettings services, string app_center_id, params Type[] appCenterServices )
+		public void Init( FileSystemApi api, IAppSettings services, string app_center_id, params Type[] appCenterServices )
 		{
-			_Services = services;
-
-			Task.Run(async () => await StartAppCenterAsync(app_center_id, appCenterServices).ConfigureAwait(true));
+			InitAsync(api, services, app_center_id, appCenterServices).GetAwaiter().GetResult();
 		}
 
-		public async Task InitAsync( IAppSettings services, string app_center_id, params Type[] appCenterServices )
+		public async Task InitAsync( FileSystemApi api, IAppSettings services, string app_center_id, params Type[] appCenterServices )
 		{
+			_fileSystemApi = api;
 			_Services = services;
 			await StartAppCenterAsync(app_center_id, appCenterServices).ConfigureAwait(true);
 		}
@@ -80,6 +82,8 @@ namespace Jakar.Api
 			if ( _ApiEnabled ) { return; }
 
 			if ( _services is null ) { throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_services))); }
+
+			if ( _fileSystemApi is null ) { throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_fileSystemApi))); }
 
 			throw new ApiDisabledException($"Must call {nameof(Init)} first.");
 		}
@@ -113,9 +117,11 @@ namespace Jakar.Api
 
 		public async Task SaveFeedBackAppState( Dictionary<string, string?> feedback, string key = "feedback" )
 		{
+			ThrowIfNotEnabled();
+
 			var result = new Dictionary<string, object?> { [nameof(AppState)] = AppState(), [key] = feedback };
 
-			await SaveAppState(FileSystemApi.FeedBackFileName, result).ConfigureAwait(true);
+			await SaveAppState(_fileSystemApi!.FeedBackFileName, result).ConfigureAwait(true);
 		}
 
 
@@ -244,17 +250,19 @@ namespace Jakar.Api
 									  byte[]? screenShot
 		)
 		{
+			ThrowIfNotEnabled();
+
 			if ( !_Services.SendCrashes ) { return; }
 
-			if ( appState is not null ) await SaveAppState(FileSystemApi.AppStateFileName, appState).ConfigureAwait(true);
+			if ( appState is not null ) await SaveAppState(_fileSystemApi!.AppStateFileName, appState).ConfigureAwait(true);
 
 			ErrorAttachmentLog? state = appState is null
 											? null
-											: ErrorAttachmentLog.AttachmentWithText(appState.ToPrettyJson(), FileSystemApi.AppStateFileName);
+											: ErrorAttachmentLog.AttachmentWithText(appState.ToPrettyJson(), _fileSystemApi!.AppStateFileName);
 
 			ErrorAttachmentLog? debug = eventDetails is null
 											? null
-											: ErrorAttachmentLog.AttachmentWithText(eventDetails.ToPrettyJson(), FileSystemApi.DebugFileName);
+											: ErrorAttachmentLog.AttachmentWithText(eventDetails.ToPrettyJson(), _fileSystemApi!.DebugFileName);
 
 			ErrorAttachmentLog? screenShotAttachment = screenShot is null
 														   ? null
@@ -270,13 +278,13 @@ namespace Jakar.Api
 
 			if ( !string.IsNullOrWhiteSpace(incomingText) )
 			{
-				ErrorAttachmentLog incoming = ErrorAttachmentLog.AttachmentWithText(incomingText.ToPrettyJson(), FileSystemApi.IncomingFileName);
+				ErrorAttachmentLog incoming = ErrorAttachmentLog.AttachmentWithText(incomingText.ToPrettyJson(), _fileSystemApi!.IncomingFileName);
 				attachments.Add(incoming);
 			}
 
 			if ( !string.IsNullOrWhiteSpace(outgoingText) )
 			{
-				ErrorAttachmentLog outgoing = ErrorAttachmentLog.AttachmentWithText(outgoingText.ToPrettyJson(), FileSystemApi.OutgoingFileName);
+				ErrorAttachmentLog outgoing = ErrorAttachmentLog.AttachmentWithText(outgoingText.ToPrettyJson(), _fileSystemApi!.OutgoingFileName);
 				attachments.Add(outgoing);
 			}
 

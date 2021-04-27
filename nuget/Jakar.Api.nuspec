@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>2.2.0</version>
+		<version>3.0.0</version>
 		<title>Base library for all others in Xamarin.Forms</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,9 +18,13 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Moved Jakar.Api.BasePages.BaseNotifyPropertyModel to Jakar.Extensions.
+			Updated Jakar.Api.Converters:
+			• ObjectToStringConverter
+			• ObjectToBoolConverter
+
+			Move anything that can be from Jakar.Api to Jakar.Extensions that is not Xamarin.Forms or Xamarin.Essentials related.
 		</releaseNotes>
-		<tags>Xamarin.Forms Jakar Jakar.Extensions Api Extensions</tags>
+		<tags>Xamarin.Forms Jakar Jakar.Api Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>
 		<repository type="Github"
 		            url="https://github.com/Jakar510/Jakar.Api"

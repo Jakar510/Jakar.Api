@@ -20,7 +20,7 @@ namespace Jakar.Api.Converters
 																											typeof(double),
 																											typeof(string));
 
-		public virtual object Convert( object? value )
+		public virtual bool Convert( object? value )
 		{
 			return value switch
 				   {
@@ -39,9 +39,9 @@ namespace Jakar.Api.Converters
 				   };
 		}
 
-		public object Convert( object? value, Type targetType, object? parameter, CultureInfo culture ) => Convert(value);
+		public virtual object Convert( object? value, Type targetType, object? parameter, CultureInfo culture ) => Convert(value);
 
-		public object? ConvertBack( object? value, Type targetType, object? parameter, CultureInfo culture ) => value?.ToString();
+		public virtual object? ConvertBack( object? value, Type targetType, object? parameter, CultureInfo culture ) => value?.ToString();
 
 
 		public object ConvertFrom( CultureInfo culture, object? value, IServiceProvider serviceProvider ) => Convert(value);

@@ -4,9 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Jakar.Api.Extensions;
 using Jakar.Api.Interfaces;
-using Jakar.Api.Models;
 using Jakar.Extensions.Extensions;
 using Jakar.Extensions.Http;
+using Jakar.Extensions.Interfaces;
+using Jakar.Extensions.Models.Files;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Plugin.Screenshot;
@@ -58,17 +59,17 @@ namespace Jakar.Api.Statics
 		}
 
 
-		public static async Task<LocalFile?> OpenOfficeDoc( this Uri link, MimeType mime, IAppSettings settings ) =>
-			await link.OpenOfficeDoc(mime, settings.AppName ?? throw new NullReferenceException(nameof(IAppSettings.AppName))).ConfigureAwait(true);
+		public static async Task<LocalFile?> OpenOfficeDoc( this Uri link, string shareTitle, MimeType mime, IAppSettings settings ) =>
+			await link.OpenOfficeDoc(shareTitle, mime, settings.AppName ?? throw new NullReferenceException(nameof(IAppSettings.AppName))).ConfigureAwait(true);
 
-		public static async Task<LocalFile?> OpenOfficeDoc( this Uri link, MimeType mime, string name )
+		public static async Task<LocalFile?> OpenOfficeDoc( this Uri link, string shareTitle, MimeType mime, string name )
 		{
 			LocalFile info = await _FileService.DownloadFile(link, mime.ToFileName(name)).ConfigureAwait(true);
 
 			var url = info.ToUri(mime);
 
 			if ( Device.RuntimePlatform == Device.Android ) { await Launcher.OpenAsync(url).ConfigureAwait(true); }
-			else { await ShareFile(info.Info, "", mime.ToString()).ConfigureAwait(true); }
+			else { await info.FileName.ShareFile(shareTitle, mime.ToString()).ConfigureAwait(true); }
 
 			return info;
 		}
@@ -154,29 +155,29 @@ namespace Jakar.Api.Statics
 		public static async Task<MediaFile> GetVideo( CancellationToken token = default ) => await CrossMedia.Current.PickVideoAsync(token).ConfigureAwait(true);
 
 
-		private static Memory<byte> _ScreenShotBuffer { get; set; }
+		private static ReadOnlyMemory<byte> _ScreenShotBuffer { get; set; }
 		public static bool ScreenShotAvailable => _ScreenShotBuffer.IsEmpty;
 
 		public static async Task BufferScreenShot()
 		{
-			byte[] bytes = await CrossScreenshot.Current.CaptureAsync().ConfigureAwait(true);
+			byte[] bytes = await TakeScreenShot().ConfigureAwait(true);
 
-			_ScreenShotBuffer = new Memory<byte>(bytes);
+			_ScreenShotBuffer = new ReadOnlyMemory<byte>(bytes);
 		}
 
-		public static async Task<string> GetScreenShot()
+		public static async Task<string> GetScreenShot( this FileSystemApi api )
 		{
 			byte[] screenShot = await TakeScreenShot().ConfigureAwait(true);
-			return await WriteScreenShot(screenShot).ConfigureAwait(true);
+			return await api.WriteScreenShot(screenShot).ConfigureAwait(true);
 		}
 
 		public static async Task<byte[]> TakeScreenShot() => await MainThread.InvokeOnMainThreadAsync(CrossScreenshot.Current.CaptureAsync).ConfigureAwait(true);
 
-		public static async Task<string> WriteScreenShot() => await WriteScreenShot(_ScreenShotBuffer.ToArray()).ConfigureAwait(true);
+		public static async Task<string> WriteScreenShot( this FileSystemApi api ) => await api.WriteScreenShot(_ScreenShotBuffer.ToArray()).ConfigureAwait(true);
 
-		public static async Task<string> WriteScreenShot( byte[] screenShot )
+		public static async Task<string> WriteScreenShot( this FileSystemApi api, byte[] screenShot )
 		{
-			string path = FileSystemApi.ScreenShot;
+			string path = api.ScreenShot;
 			await using var file = new FileData(path);
 			await file.WriteToFileAsync(screenShot).ConfigureAwait(true);
 

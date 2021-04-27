@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Android.Provider;
 using Jakar.Api.Droid.Services;
 using Jakar.Api.Interfaces;
+using Jakar.Extensions.Interfaces;
 using Xamarin.Forms;
 
 

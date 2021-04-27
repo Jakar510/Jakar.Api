@@ -1,4 +1,6 @@
-﻿using Xamarin.Essentials;
+﻿using System.Globalization;
+using Jakar.Extensions;
+using Xamarin.Essentials;
 
 
 #pragma warning disable 1591
@@ -20,7 +22,7 @@ namespace Jakar.Api
 		private void Barometer_ReadingChanged( object sender, BarometerChangedEventArgs e )
 		{
 			Data = e.Reading;
-			Text = Data.PressureInHectopascals.ToString(LanguageApi.Current.CultureInfo);
+			Text = Data.PressureInHectopascals.ToString(CultureInfo.CurrentCulture);
 			Value = Data.PressureInHectopascals;
 		}
 

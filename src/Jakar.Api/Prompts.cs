@@ -7,7 +7,10 @@ using Jakar.Api.Interfaces;
 using Jakar.Api.Statics;
 using Jakar.Extensions.Exceptions.General;
 using Jakar.Extensions.Exceptions.Networking;
+using Jakar.Extensions.Interfaces;
+using Xamarin.Essentials;
 using Xamarin.Forms;
+using Share = Jakar.Api.Statics.Share;
 
 
 #pragma warning disable 1591
@@ -53,6 +56,7 @@ namespace Jakar.Api
 													   string? message,
 													   Page page,
 													   Exception e,
+													   FileSystemApi api,
 													   CancellationToken token = default
 		) where TFeedBackPage : Page, new()
 		{
@@ -62,6 +66,7 @@ namespace Jakar.Api
 											  No,
 											  page,
 											  e,
+											  api,
 											  token).ConfigureAwait(true);
 		}
 
@@ -71,6 +76,7 @@ namespace Jakar.Api
 													   string? no,
 													   Page page,
 													   Exception e,
+													   FileSystemApi api,
 													   CancellationToken token = default
 		) where TFeedBackPage : Page, new()
 		{
@@ -85,7 +91,7 @@ namespace Jakar.Api
 									no,
 									token).ConfigureAwait(true) )
 			{
-				_Services.ScreenShotAddress = await Share.GetScreenShot().ConfigureAwait(true);
+				_Services.ScreenShotAddress = await api.GetScreenShot().ConfigureAwait(true);
 
 				await page.Navigation.PushAsync(new TFeedBackPage()).ConfigureAwait(true);
 			}

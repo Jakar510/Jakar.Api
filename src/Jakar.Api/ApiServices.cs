@@ -1,6 +1,7 @@
 ﻿using System;
-using Jakar.Api.Interfaces;
 using Jakar.Api.ResourceManager;
+using Jakar.Extensions;
+using Jakar.Extensions.Interfaces;
 
 
 #pragma warning disable 1591
@@ -33,6 +34,8 @@ namespace Jakar.Api
 
 		public Commands Loading { get; }
 
+		public FileSystemApi FileSystem { get; } = new();
+
 		/// <summary>
 		/// appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
 		/// </summary>
@@ -42,7 +45,7 @@ namespace Jakar.Api
 		{
 			Prompts.Init(Debug);
 			Prompts.Init(Settings);
-			Debug.Init(Settings, app_center_id, appCenterServices);
+			Debug.Init(FileSystem, Settings, app_center_id, appCenterServices);
 
 			Loading = new Commands(Prompts);
 		}
