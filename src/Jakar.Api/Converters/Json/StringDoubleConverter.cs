@@ -11,11 +11,11 @@ namespace Jakar.Api.Converters.Json
 {
 	public sealed class StringDoubleConverter : JsonConverter, IValueConverter, IExtendedTypeConverter
 	{
-		public override bool CanWrite => false;
+		public override bool CanWrite                                                                 => false;
 		public override void WriteJson( JsonWriter writer, object? value, JsonSerializer serializer ) => throw new NotSupportedException();
 
 		public override object? ReadJson( JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer ) => Convert(reader.Value?.ToString());
-		
+
 		public static double? Convert( string? value ) =>
 			string.IsNullOrWhiteSpace(value)
 				? null
@@ -35,7 +35,7 @@ namespace Jakar.Api.Converters.Json
 			return value?.ToString();
 		}
 
-		public object? ConvertFrom( CultureInfo culture, object? value, IServiceProvider serviceProvider ) => Convert(value?.ToString());
-		public object? ConvertFromInvariantString( string? value, IServiceProvider serviceProvider ) => Convert(value);
+		public object? ConvertFrom( CultureInfo            culture, object?          value, IServiceProvider serviceProvider ) => Convert(value?.ToString());
+		public object? ConvertFromInvariantString( string? value,   IServiceProvider serviceProvider ) => Convert(value);
 	}
 }

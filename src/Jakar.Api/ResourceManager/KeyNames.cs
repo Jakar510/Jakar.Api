@@ -13,10 +13,10 @@ namespace Jakar.Api.ResourceManager
 		internal static void Test()
 		{
 			var manager = new ResourceDictionaryManager();
-			manager.Add(OSAppTheme.Dark, ThemedColor.Accent, Color.Wheat);
+			manager.Add(OSAppTheme.Dark,  ThemedColor.Accent, Color.Wheat);
 			manager.Add(OSAppTheme.Light, ThemedColor.Accent, Color.Black);
 			manager.Add(OSAppTheme.Light, FontSize.PageTitle, 25);
-			manager.Add(OSAppTheme.Light, FontSize.Title, 20);
+			manager.Add(OSAppTheme.Light, FontSize.Title,     20);
 		}
 
 

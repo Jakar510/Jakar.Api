@@ -75,7 +75,7 @@
       <Version>7.1.0.483</Version>
     </PackageReference>
     <PackageReference Include="Jakar.Extensions">
-      <Version>2.0.1</Version>
+      <Version>2.0.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter">
       <Version>4.2.0</Version>

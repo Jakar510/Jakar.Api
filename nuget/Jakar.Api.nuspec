@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>3.0.1</version>
+		<version>3.0.2</version>
 		<title>Base library for all others in Xamarin.Forms</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,7 +18,7 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Fix Jakar.Extensions.LanguageApi which related to Jakar.Api.ApiServices.Language
+			Fix a couple Jakar.Api.ApiServices bugs causing freezes.
 		</releaseNotes>
 		<tags>Xamarin.Forms Jakar Jakar.Api Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>
@@ -47,7 +47,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="1.2.0" />
+				            version="2.0.2" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />
@@ -80,7 +80,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="1.2.0" />
+				            version="2.0.2" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />
@@ -115,7 +115,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="1.2.0" />
+				            version="2.0.2" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />
@@ -154,7 +154,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="1.2.0" />
+				            version="2.0.2" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.483" />

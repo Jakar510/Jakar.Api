@@ -107,13 +107,13 @@ namespace Jakar.Api.Statics
 		{
 			options ??= new StoreCameraMediaOptions()
 						{
-							SaveMetaData = true,
-							SaveToAlbum = true,
+							SaveMetaData  = true,
+							SaveToAlbum   = true,
 							DefaultCamera = CameraDevice.Rear,
-							PhotoSize = PhotoSize.Full,
-							RotateImage = false,
+							PhotoSize     = PhotoSize.Full,
+							RotateImage   = false,
 							AllowCropping = false,
-							Location = ( await LocationManager.GetLocation().ConfigureAwait(true) )?.ToPluginLocation(),
+							Location      = ( await LocationManager.GetLocation().ConfigureAwait(true) )?.ToPluginLocation(),
 						};
 
 			MediaFile photo = await CrossMedia.Current.TakePhotoAsync(options, token).ConfigureAwait(true);
@@ -124,9 +124,9 @@ namespace Jakar.Api.Statics
 		{
 			options ??= new PickMediaOptions()
 						{
-							PhotoSize = PhotoSize.Full,
-							SaveMetaData = true,
-							RotateImage = false,
+							PhotoSize              = PhotoSize.Full,
+							SaveMetaData           = true,
+							RotateImage            = false,
 							ModalPresentationStyle = MediaPickerModalPresentationStyle.FullScreen,
 						};
 
@@ -138,14 +138,14 @@ namespace Jakar.Api.Statics
 		{
 			options ??= new StoreVideoOptions()
 						{
-							Quality = VideoQuality.High,
-							SaveMetaData = true,
-							SaveToAlbum = true,
+							Quality       = VideoQuality.High,
+							SaveMetaData  = true,
+							SaveToAlbum   = true,
 							DefaultCamera = CameraDevice.Rear,
-							PhotoSize = PhotoSize.Full,
-							RotateImage = false,
+							PhotoSize     = PhotoSize.Full,
+							RotateImage   = false,
 							AllowCropping = false,
-							Location = ( await LocationManager.GetLocation().ConfigureAwait(true) )?.ToPluginLocation(),
+							Location      = ( await LocationManager.GetLocation().ConfigureAwait(true) )?.ToPluginLocation(),
 						};
 
 			MediaFile photo = await CrossMedia.Current.TakeVideoAsync(options, token).ConfigureAwait(true);
@@ -155,8 +155,8 @@ namespace Jakar.Api.Statics
 		public static async Task<MediaFile> GetVideo( CancellationToken token = default ) => await CrossMedia.Current.PickVideoAsync(token).ConfigureAwait(true);
 
 
-		private static ReadOnlyMemory<byte> _ScreenShotBuffer { get; set; }
-		public static bool ScreenShotAvailable => _ScreenShotBuffer.IsEmpty;
+		private static ReadOnlyMemory<byte> _ScreenShotBuffer   { get; set; }
+		public static  bool                 ScreenShotAvailable => _ScreenShotBuffer.IsEmpty;
 
 		public static async Task BufferScreenShot()
 		{
@@ -177,7 +177,7 @@ namespace Jakar.Api.Statics
 
 		public static async Task<string> WriteScreenShot( this FileSystemApi api, byte[] screenShot )
 		{
-			string path = api.ScreenShot;
+			string          path = api.ScreenShot;
 			await using var file = new FileData(path);
 			await file.WriteToFileAsync(screenShot).ConfigureAwait(true);
 
@@ -200,17 +200,17 @@ namespace Jakar.Api.Statics
 		// }
 
 
-		public static ImageSource GetImageSource( this MediaFile file ) => ImageSource.FromStream(file.GetStream);
-		public static UriImageSource GetImageSource( this string url ) => GetImageSource(new Uri(url), 5);
-		public static UriImageSource GetImageSource( this string url, int days ) => GetImageSource(new Uri(url), days);
-		public static UriImageSource GetImageSource( this Uri url, int days ) => GetImageSource(url, new TimeSpan(days, 0, 0, 0));
+		public static ImageSource    GetImageSource( this MediaFile file )          => ImageSource.FromStream(file.GetStream);
+		public static UriImageSource GetImageSource( this string    url )           => GetImageSource(new Uri(url), 5);
+		public static UriImageSource GetImageSource( this string    url, int days ) => GetImageSource(new Uri(url), days);
+		public static UriImageSource GetImageSource( this Uri       url, int days ) => GetImageSource(url,          new TimeSpan(days, 0, 0, 0));
 
 		public static UriImageSource GetImageSource( this Uri url, TimeSpan time ) =>
 			new()
 			{
-				Uri = url,
+				Uri            = url,
 				CachingEnabled = true,
-				CacheValidity = time
+				CacheValidity  = time
 			};
 	}
 }

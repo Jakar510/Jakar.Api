@@ -20,13 +20,13 @@ namespace Jakar.Api.Statics
 		public static string GetKey( this IAppSettings settings, Type type, string caller, string propertyName ) =>
 			settings.AppName?.GetKey(type, caller, propertyName) ?? throw new NullReferenceException(nameof(IAppSettings.AppName));
 
-		public static string GetKey( this string appName, object item, string caller, string propertyName ) => appName.GetKey(item.GetType(), caller, propertyName);
-		public static string GetKey( this string appName, Type type, string caller, string propertyName ) => $"{appName}.{type.GetKey(caller, propertyName)}";
-		public static string GetKey( this object item, string caller, string propertyName ) => item.GetType().GetKey(caller, propertyName);
-		public static string GetKey( this Type type, string caller, string propertyName ) => $"{type.FullName}.{caller}.{propertyName}";
+		public static string GetKey( this string appName, object item,   string caller, string propertyName ) => appName.GetKey(item.GetType(), caller, propertyName);
+		public static string GetKey( this string appName, Type   type,   string caller, string propertyName ) => $"{appName}.{type.GetKey(caller, propertyName)}";
+		public static string GetKey( this object item,    string caller, string propertyName ) => item.GetType().GetKey(caller, propertyName);
+		public static string GetKey( this Type   type,    string caller, string propertyName ) => $"{type.FullName}.{caller}.{propertyName}";
 
 		public static string GetKey( this object item, [CallerMemberName] string propertyName = "" ) => item.GetType().GetKey(propertyName);
-		public static string GetKey( this Type type, [CallerMemberName] string propertyName = "" ) => $"{type.FullName}.{propertyName}";
+		public static string GetKey( this Type   type, [CallerMemberName] string propertyName = "" ) => $"{type.FullName}.{propertyName}";
 
 
 		public static string GetPassword( this string key ) => GetPasswordAsync(key).Result;

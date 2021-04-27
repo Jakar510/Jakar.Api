@@ -2,6 +2,7 @@
 using Jakar.Api.ResourceManager;
 using Jakar.Extensions;
 using Jakar.Extensions.Interfaces;
+using Xamarin.Essentials;
 
 
 #pragma warning disable 1591
@@ -17,25 +18,17 @@ namespace Jakar.Api
 																																  where TLanguage : LanguageApi, new()
 																																  where TResourceManager : ResourceDictionaryManager, new()
 	{
-		public TDebug Debug { get; } = new();
+		public TDebug           Debug      { get; } = new();
+		public TAccounts        Accounts   { get; } = new();
+		public TPrompts         Prompts    { get; } = new();
+		public TAppSettings     Settings   { get; } = new();
+		public TResourceManager Resources  { get; } = new();
+		public LocationManager  Location   { get; } = new();
+		public BarometerReader  Barometer  { get; } = new();
+		public TLanguage        Language   { get; } = new();
+		public Commands         Loading    { get; }
+		public FileSystemApi    FileSystem { get; } = new();
 
-		public TAccounts Accounts { get; } = new();
-
-		public TPrompts Prompts { get; } = new();
-
-		public TAppSettings Settings { get; } = new();
-
-		public TResourceManager Resources { get; } = new();
-
-		public LocationManager Location { get; } = new();
-
-		public BarometerReader Barometer { get; } = new();
-
-		public TLanguage Language { get; } = new();
-
-		public Commands Loading { get; }
-
-		public FileSystemApi FileSystem { get; } = new();
 
 		/// <summary>
 		/// appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)

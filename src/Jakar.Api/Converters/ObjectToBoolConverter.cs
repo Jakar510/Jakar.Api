@@ -44,8 +44,8 @@ namespace Jakar.Api.Converters
 		public virtual object? ConvertBack( object? value, Type targetType, object? parameter, CultureInfo culture ) => value?.ToString();
 
 
-		public object ConvertFrom( CultureInfo culture, object? value, IServiceProvider serviceProvider ) => Convert(value);
-		public object ConvertFromInvariantString( string? value, IServiceProvider serviceProvider ) => Convert(value);
+		public object ConvertFrom( CultureInfo            culture, object?          value, IServiceProvider serviceProvider ) => Convert(value);
+		public object ConvertFromInvariantString( string? value,   IServiceProvider serviceProvider ) => Convert(value);
 
 
 		public override object ConvertFromInvariantString( string? value ) => Convert(value);

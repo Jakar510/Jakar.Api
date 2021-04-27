@@ -5,9 +5,9 @@ namespace Jakar.Api.iOS.Enumerations
 {
 	public enum LayoutPriority // iOS only
 	{
-		Zero = 0,           // 0
-		Minimum = 1,        // 1
-		Lowest = 50,        // UILayoutPriority.FittingSizeLevel,
+		Zero = 0,    // 0
+		Minimum = 1, // 1
+		Lowest = 50, // UILayoutPriority.FittingSizeLevel,
 		VeryLow = 100,
 		Low = 250,          // UILayoutPriority.DefaultLow,                              
 		BelowAverage = 490, // UILayoutPriority.DragThatCannotResizeScene; 

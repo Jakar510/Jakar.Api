@@ -12,14 +12,14 @@ namespace Jakar.Api.Statics
 	{
 		// https://github.com/edsnider/latestversionplugin
 
-		public static async Task<bool> IsLatest() => await CrossLatestVersion.Current.IsUsingLatestVersion().ConfigureAwait(true);
-		public static async Task<string> LatestVersionNumber() => await CrossLatestVersion.Current.GetLatestVersionNumber().ConfigureAwait(true);
-		public static string InstalledVersionNumber => CrossLatestVersion.Current.InstalledVersionNumber;
-		public static async Task OpenAppInStore() => await CrossLatestVersion.Current.OpenAppInStore().ConfigureAwait(true);
+		public static async Task<bool>   IsLatest()             => await CrossLatestVersion.Current.IsUsingLatestVersion().ConfigureAwait(true);
+		public static async Task<string> LatestVersionNumber()  => await CrossLatestVersion.Current.GetLatestVersionNumber().ConfigureAwait(true);
+		public static       string       InstalledVersionNumber => CrossLatestVersion.Current.InstalledVersionNumber;
+		public static async Task         OpenAppInStore()       => await CrossLatestVersion.Current.OpenAppInStore().ConfigureAwait(true);
 
-		public static async Task<bool> VerifyAsync( Prompts prompts,
-													string newVersionAvailable,
-													string newVersionUpdateNowOrLater,
+		public static async Task<bool> VerifyAsync( Prompts           prompts,
+													string            newVersionAvailable,
+													string            newVersionUpdateNowOrLater,
 													CancellationToken token = default
 		)
 		{
@@ -36,11 +36,12 @@ namespace Jakar.Api.Statics
 			await OpenAppInStore().ConfigureAwait(true);
 			return true;
 		}
-		public static async Task<bool> VerifyAsync( Prompts prompts,
-													string newVersionAvailable,
-													string newVersionUpdateNowOrLater,
-													string yes,
-													string no,
+
+		public static async Task<bool> VerifyAsync( Prompts           prompts,
+													string            newVersionAvailable,
+													string            newVersionUpdateNowOrLater,
+													string            yes,
+													string            no,
 													CancellationToken token = default
 		)
 		{

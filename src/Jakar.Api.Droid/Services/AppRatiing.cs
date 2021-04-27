@@ -18,7 +18,7 @@ namespace Jakar.Api.Droid.Services
 		public void RateApp()
 		{
 			Context context = BaseApplication.Instance;
-			string url = $"market://details?id={DeviceInfo.PackageName}";
+			string  url     = $"market://details?id={DeviceInfo.PackageName}";
 
 			try
 			{

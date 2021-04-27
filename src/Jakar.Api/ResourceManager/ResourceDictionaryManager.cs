@@ -19,8 +19,8 @@ namespace Jakar.Api.ResourceManager
 		public ResourceDictionaryManager() { }
 
 
-		public static string GetFullKey<TThemedKey>( in OSAppTheme theme, in TThemedKey key ) where TThemedKey : Enum  => $"{theme}.{typeof(TThemedKey).FullName}.{key}";
-		public static string GetShortKey<TThemedKey>( in OSAppTheme theme, in TThemedKey key ) where TThemedKey : Enum  => $"{theme}{key}";
+		public static string GetFullKey<TThemedKey>( in  OSAppTheme theme, in TThemedKey key ) where TThemedKey : Enum => $"{theme}.{typeof(TThemedKey).FullName}.{key}";
+		public static string GetShortKey<TThemedKey>( in OSAppTheme theme, in TThemedKey key ) where TThemedKey : Enum => $"{theme}{key}";
 
 		/// <summary>
 		/// Default implementation uses <see cref="GetFullKey{TThemedKey}"/>.
@@ -30,19 +30,19 @@ namespace Jakar.Api.ResourceManager
 		/// <param name="theme"></param>
 		/// <param name="key"></param>
 		/// <returns></returns>
-		public virtual string GetKey<TThemedKey>( in OSAppTheme theme, in TThemedKey key ) where TThemedKey : Enum  => GetFullKey(theme, key);
+		public virtual string GetKey<TThemedKey>( in OSAppTheme theme, in TThemedKey key ) where TThemedKey : Enum => GetFullKey(theme, key);
 
 
-		public void Add<TThemedKey>( in TThemedKey key, in Style light, in Style dark ) where TThemedKey : Enum 
+		public void Add<TThemedKey>( in TThemedKey key, in Style light, in Style dark ) where TThemedKey : Enum
 		{
 			Add(OSAppTheme.Light, key, light);
-			Add(OSAppTheme.Dark, key, dark);
+			Add(OSAppTheme.Dark,  key, dark);
 		}
 
-		public void Add<TThemedKey>( in TThemedKey key, in Style style ) where TThemedKey : Enum 
+		public void Add<TThemedKey>( in TThemedKey key, in Style style ) where TThemedKey : Enum
 		{
 			Add(OSAppTheme.Light, key, style);
-			Add(OSAppTheme.Dark, key, style);
+			Add(OSAppTheme.Dark,  key, style);
 		}
 
 		public void Add<TThemedKey, TValue>( in OSAppTheme theme, in TThemedKey key, TValue value ) where TThemedKey : Enum { _Current.Add(GetKey(theme, key), value); }

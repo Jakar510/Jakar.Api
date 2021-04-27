@@ -25,8 +25,8 @@ namespace Jakar.Api
 		public Commands( Prompts prompts ) => _Prompts = prompts;
 
 
-		public ICommand LoadingCommand( Func<CancellationToken, Task> func, Page page ) => LoadingCommand(func, MaskType.Black, _Prompts.Cancel, page);
-		public ICommand LoadingCommand( Func<CancellationToken, Task> func, Page page, string cancel ) => LoadingCommand(func, MaskType.Black, cancel, page);
+		public ICommand LoadingCommand( Func<CancellationToken, Task> func, Page page )                => LoadingCommand(func, MaskType.Black, _Prompts.Cancel, page);
+		public ICommand LoadingCommand( Func<CancellationToken, Task> func, Page page, string cancel ) => LoadingCommand(func, MaskType.Black, cancel,          page);
 
 		public ICommand LoadingCommand( Func<CancellationToken, Task> func, MaskType mask, string cancel, Page page ) => LoadingCommand(func,
 																																		null,
@@ -35,10 +35,10 @@ namespace Jakar.Api
 																																		page);
 
 		public ICommand LoadingCommand( Func<CancellationToken, Task> func,
-										string? title,
-										string cancel,
-										MaskType mask,
-										Page page
+										string?                       title,
+										string                        cancel,
+										MaskType                      mask,
+										Page                          page
 		) => new Command(async () => await LoadingAsyncTask(func,
 															title,
 															cancel,
@@ -46,8 +46,8 @@ namespace Jakar.Api
 															page).ConfigureAwait(true));
 
 
-		public async Task LoadingAsyncTask( Func<CancellationToken, Task> func, Page page ) => await LoadingAsyncTask(func, page, _Prompts.Cancel, MaskType.Black).ConfigureAwait(true);
-		public async Task LoadingAsyncTask( Func<CancellationToken, Task> func, Page page, string cancel ) => await LoadingAsyncTask(func, page, cancel, MaskType.Black).ConfigureAwait(true);
+		public async Task LoadingAsyncTask( Func<CancellationToken, Task> func, Page page )                => await LoadingAsyncTask(func, page, _Prompts.Cancel, MaskType.Black).ConfigureAwait(true);
+		public async Task LoadingAsyncTask( Func<CancellationToken, Task> func, Page page, string cancel ) => await LoadingAsyncTask(func, page, cancel,          MaskType.Black).ConfigureAwait(true);
 
 		public async Task LoadingAsyncTask( Func<CancellationToken, Task> func, Page page, string cancel, MaskType mask ) => await LoadingAsyncTask(func,
 																																					null,
@@ -56,16 +56,16 @@ namespace Jakar.Api
 																																					page).ConfigureAwait(true);
 
 		public async Task LoadingAsyncTask( Func<CancellationToken, Task> func,
-											string? title,
-											string cancel,
-											MaskType mask,
-											Page page
+											string?                       title,
+											string                        cancel,
+											MaskType                      mask,
+											Page                          page
 		)
 		{
 			if ( func is null ) throw new ArgumentNullException(nameof(func));
 
-			using var cancelSrc = new CancellationTokenSource();
-			ProgressDialogConfig config = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
+			using var            cancelSrc = new CancellationTokenSource();
+			ProgressDialogConfig config    = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
 
 			using ( _Prompts.Progress(config) )
 			{
@@ -76,8 +76,8 @@ namespace Jakar.Api
 		}
 
 
-		public ICommand LoadingCommand( Func<Task> func, Page page ) => LoadingCommand(func, MaskType.Black, _Prompts.Cancel, page);
-		public ICommand LoadingCommand( Func<Task> func, Page page, string cancel ) => LoadingCommand(func, MaskType.Black, cancel, page);
+		public ICommand LoadingCommand( Func<Task> func, Page page )                => LoadingCommand(func, MaskType.Black, _Prompts.Cancel, page);
+		public ICommand LoadingCommand( Func<Task> func, Page page, string cancel ) => LoadingCommand(func, MaskType.Black, cancel,          page);
 
 		public ICommand LoadingCommand( Func<Task> func, MaskType mask, string cancel, Page page ) => LoadingCommand(func,
 																													 null,
@@ -86,10 +86,10 @@ namespace Jakar.Api
 																													 page);
 
 		public ICommand LoadingCommand( Func<Task> func,
-										string? title,
-										string cancel,
-										MaskType mask,
-										Page page
+										string?    title,
+										string     cancel,
+										MaskType   mask,
+										Page       page
 		) => new Command(async () => await LoadingAsyncTask(func,
 															title,
 															cancel,
@@ -97,8 +97,8 @@ namespace Jakar.Api
 															page).ConfigureAwait(true));
 
 
-		public async Task LoadingAsyncTask( Func<Task> func, Page page ) => await LoadingAsyncTask(func, page, _Prompts.Cancel, MaskType.Black).ConfigureAwait(true);
-		public async Task LoadingAsyncTask( Func<Task> func, Page page, string cancel ) => await LoadingAsyncTask(func, page, cancel, MaskType.Black).ConfigureAwait(true);
+		public async Task LoadingAsyncTask( Func<Task> func, Page page )                => await LoadingAsyncTask(func, page, _Prompts.Cancel, MaskType.Black).ConfigureAwait(true);
+		public async Task LoadingAsyncTask( Func<Task> func, Page page, string cancel ) => await LoadingAsyncTask(func, page, cancel,          MaskType.Black).ConfigureAwait(true);
 
 		public async Task LoadingAsyncTask( Func<Task> func, Page page, string cancel, MaskType mask ) => await LoadingAsyncTask(func,
 																																 null,
@@ -107,16 +107,16 @@ namespace Jakar.Api
 																																 page).ConfigureAwait(true);
 
 		public async Task LoadingAsyncTask( Func<Task> func,
-											string? title,
-											string cancel,
-											MaskType mask,
-											Page page
+											string?    title,
+											string     cancel,
+											MaskType   mask,
+											Page       page
 		)
 		{
 			if ( func is null ) throw new ArgumentNullException(nameof(func));
 
-			using var cancelSrc = new CancellationTokenSource();
-			ProgressDialogConfig config = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
+			using var            cancelSrc = new CancellationTokenSource();
+			ProgressDialogConfig config    = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
 
 			using ( _Prompts.Progress(config) )
 			{
@@ -127,8 +127,8 @@ namespace Jakar.Api
 		}
 
 
-		public ICommand LoadingCommand( Action func, Page page ) => LoadingCommand(func, page, _Prompts.Cancel, MaskType.Black);
-		public ICommand LoadingCommand( Action func, Page page, string cancel ) => LoadingCommand(func, page, cancel, MaskType.Black);
+		public ICommand LoadingCommand( Action func, Page page )                => LoadingCommand(func, page, _Prompts.Cancel, MaskType.Black);
+		public ICommand LoadingCommand( Action func, Page page, string cancel ) => LoadingCommand(func, page, cancel,          MaskType.Black);
 
 		public ICommand LoadingCommand( Action func, Page page, string cancel, MaskType mask ) => LoadingCommand(func,
 																												 page,
@@ -136,10 +136,10 @@ namespace Jakar.Api
 																												 cancel,
 																												 mask);
 
-		public ICommand LoadingCommand( Action func,
-										Page page,
-										string? title,
-										string cancel,
+		public ICommand LoadingCommand( Action   func,
+										Page     page,
+										string?  title,
+										string   cancel,
 										MaskType mask
 		) => new Command(async () => await LoadingAction(func,
 														 title,
@@ -148,17 +148,17 @@ namespace Jakar.Api
 														 page).ConfigureAwait(true));
 
 
-		public async Task LoadingAction( Action func,
-										 string? title,
-										 string cancel,
+		public async Task LoadingAction( Action   func,
+										 string?  title,
+										 string   cancel,
 										 MaskType mask,
-										 Page page
+										 Page     page
 		)
 		{
 			if ( func is null ) throw new ArgumentNullException(nameof(func));
 
-			using var cancelSrc = new CancellationTokenSource();
-			ProgressDialogConfig config = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
+			using var            cancelSrc = new CancellationTokenSource();
+			ProgressDialogConfig config    = new ProgressDialogConfig().SetTitle(title).SetIsDeterministic(false).SetMaskType(mask).SetCancel(cancel, cancelSrc.Cancel);
 
 			using ( _Prompts.Progress(config) )
 			{

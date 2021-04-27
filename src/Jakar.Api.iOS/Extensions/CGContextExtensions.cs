@@ -16,11 +16,11 @@ namespace Jakar.Api.iOS.Extensions
 	{
 		public static CGContext Context => UIGraphics.GetCurrentContext();
 
-		public static void CenterCircle( this CGRect bounds,
-										 in nfloat factor,
-										 in bool isChecked,
-										 in CGColor? on,
-										 in CGColor? off
+		public static void CenterCircle( this CGRect   bounds,
+										 in   nfloat   factor,
+										 in   bool     isChecked,
+										 in   CGColor? on,
+										 in   CGColor? off
 		) =>
 			bounds.CenterCircle(factor,
 								isChecked,
@@ -29,18 +29,18 @@ namespace Jakar.Api.iOS.Extensions
 								1
 							   );
 
-		public static void CenterCircle( this CGRect bounds,
-										 in nfloat factor,
-										 in bool isChecked,
-										 in CGColor? on,
-										 in CGColor? off,
-										 in nfloat alpha
+		public static void CenterCircle( this CGRect   bounds,
+										 in   nfloat   factor,
+										 in   bool     isChecked,
+										 in   CGColor? on,
+										 in   CGColor? off,
+										 in   nfloat   alpha
 		)
 		{
-			nfloat width = bounds.Width * factor;
+			nfloat width  = bounds.Width * factor;
 			nfloat height = bounds.Height * factor;
-			nfloat x = bounds.X + bounds.Width - width;
-			nfloat y = bounds.Y + bounds.Height - height;
+			nfloat x      = bounds.X + bounds.Width - width;
+			nfloat y      = bounds.Y + bounds.Height - height;
 
 			Context.CenterCircle(x,
 								 y,
@@ -54,14 +54,14 @@ namespace Jakar.Api.iOS.Extensions
 		}
 
 		public static void CenterCircle( this CGContext con,
-										 in nfloat x,
-										 in nfloat y,
-										 in nfloat width,
-										 in nfloat height,
-										 in bool isChecked,
-										 in CGColor? on,
-										 in CGColor? off,
-										 in nfloat alpha
+										 in   nfloat    x,
+										 in   nfloat    y,
+										 in   nfloat    width,
+										 in   nfloat    height,
+										 in   bool      isChecked,
+										 in   CGColor?  on,
+										 in   CGColor?  off,
+										 in   nfloat    alpha
 		) =>
 			con.CenterCircle(new CGRect(x, y, width, height),
 							 isChecked,
@@ -71,11 +71,11 @@ namespace Jakar.Api.iOS.Extensions
 							);
 
 		public static void CenterCircle( this CGContext con,
-										 CGRect rect,
-										 in bool isChecked,
-										 in CGColor? on,
-										 in CGColor? off,
-										 in nfloat alpha
+										 CGRect         rect,
+										 in bool        isChecked,
+										 in CGColor?    on,
+										 in CGColor?    off,
+										 in nfloat      alpha
 		)
 		{
 			con.SetAlpha(alpha);
@@ -105,11 +105,11 @@ namespace Jakar.Api.iOS.Extensions
 						  );
 
 		public static void DrawCircle( this CGContext con,
-									   in CGColor color,
-									   in nfloat x,
-									   in nfloat y,
-									   in nfloat width,
-									   in nfloat height
+									   in   CGColor   color,
+									   in   nfloat    x,
+									   in   nfloat    y,
+									   in   nfloat    width,
+									   in   nfloat    height
 		) =>
 			con.DrawCircle(color, new CGRect(x, y, width, height));
 

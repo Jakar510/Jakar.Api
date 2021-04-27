@@ -15,9 +15,9 @@ namespace Jakar.Api.Statics
 	{
 		private static readonly INetworkManager _manager = DependencyService.Get<INetworkManager>();
 
-		public static string? GetIdentifier() => _manager.GetIdentifier();
-		public static void OpenWifiSettings() => _manager.OpenWifiSettings();
-		public static string? GetIpAddress() => _manager.GetIpAddress();
+		public static string? GetIdentifier()    => _manager.GetIdentifier();
+		public static void    OpenWifiSettings() => _manager.OpenWifiSettings();
+		public static string? GetIpAddress()     => _manager.GetIpAddress();
 
 		public static string? GetIpAddressRange()
 		{
@@ -28,7 +28,7 @@ namespace Jakar.Api.Statics
 					   : ip.Substring(0, ip.LastIndexOf(".", StringComparison.InvariantCultureIgnoreCase) + 1);
 		}
 
-		public static bool IsConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;
+		public static bool IsConnected     => Connectivity.NetworkAccess == NetworkAccess.Internet;
 		public static bool IsWiFiConnected => IsConnected && Connectivity.ConnectionProfiles.Any(p => p == ConnectionProfile.WiFi || p == ConnectionProfile.Ethernet);
 
 

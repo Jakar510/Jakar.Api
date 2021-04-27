@@ -30,6 +30,6 @@ namespace Jakar.Api.Droid.Services
 		}
 
 		public string? GetIdentifier() => Settings.Secure.GetString(global::Android.App.Application.Context.ContentResolver, Settings.Secure.AndroidId);
-		public string? GetIpAddress() => Dns.GetHostAddresses(Dns.GetHostName()).Select(address => address.ToString()).FirstOrDefault();
+		public string? GetIpAddress()  => Dns.GetHostAddresses(Dns.GetHostName()).Select(address => address.ToString()).FirstOrDefault();
 	}
 }

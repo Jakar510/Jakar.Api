@@ -15,7 +15,7 @@ namespace Jakar.Api
 		public const double SIZE_NOT_ALLOCATED = -1;
 
 
-		protected double _Width { get; set; }
+		protected double _Width  { get; set; }
 		protected double _Height { get; set; }
 
 		public event EventHandler<RotationEventArgs>? OnOrientationChanged;
@@ -35,10 +35,9 @@ namespace Jakar.Api
 
 		public OrientationService( in double width, in double height )
 		{
-			_Width = width;
+			_Width  = width;
 			_Height = height;
 		}
-		
 
 
 		public void OnSizeAllocated( in Page page ) => OnSizeAllocated(page.Width, page.Height);
@@ -48,7 +47,7 @@ namespace Jakar.Api
 			if ( Equals(_Width, width) && Equals(_Height, height) ) return;
 
 			double oldWidth = _Width;
-			_Width = width;
+			_Width  = width;
 			_Height = height;
 
 			Orientation = GetOrientation(_Width, _Height);

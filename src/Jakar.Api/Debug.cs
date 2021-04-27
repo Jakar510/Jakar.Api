@@ -27,9 +27,9 @@ namespace Jakar.Api
 {
 	public class Debug
 	{
-		public virtual bool CanDebug => Debugger.IsAttached;
-		public virtual bool UseDebugLogin => CanDebug;
-		public Guid? InstallId { get; protected set; }
+		public virtual bool  CanDebug      => Debugger.IsAttached;
+		public virtual bool  UseDebugLogin => CanDebug;
+		public         Guid? InstallId     { get; protected set; }
 
 		protected bool _ApiEnabled { get; private set; }
 
@@ -47,13 +47,13 @@ namespace Jakar.Api
 
 		public void Init( FileSystemApi api, IAppSettings services, string app_center_id, params Type[] appCenterServices )
 		{
-			InitAsync(api, services, app_center_id, appCenterServices).GetAwaiter().GetResult();
+			Task.Run(async () => await InitAsync(api, services, app_center_id, appCenterServices).ConfigureAwait(true));
 		}
 
 		public async Task InitAsync( FileSystemApi api, IAppSettings services, string app_center_id, params Type[] appCenterServices )
 		{
 			_fileSystemApi = api;
-			_Services = services;
+			_Services      = services;
 			await StartAppCenterAsync(app_center_id, appCenterServices).ConfigureAwait(true);
 		}
 
@@ -69,7 +69,7 @@ namespace Jakar.Api
 									 ? LogLevel.Verbose
 									 : LogLevel.Error; //AppCenter.LogLevel = LogLevel.Debug;
 
-			InstallId = await AppCenter.GetInstallIdAsync().ConfigureAwait(true);
+			InstallId =   await AppCenter.GetInstallIdAsync().ConfigureAwait(true);
 			InstallId ??= Guid.NewGuid();
 
 			AppCenter.SetUserId(InstallId.ToString());
@@ -138,20 +138,20 @@ namespace Jakar.Api
 
 		protected virtual void Update( ref Dictionary<string, string> dict, Exception e )
 		{
-			dict[nameof(e.Source)] = e.Source;
-			dict[nameof(e.Message)] = e.Message;
-			dict[nameof(e.Source)] = e.Source;
+			dict[nameof(e.Source)]     = e.Source;
+			dict[nameof(e.Message)]    = e.Message;
+			dict[nameof(e.Source)]     = e.Source;
 			dict[nameof(e.StackTrace)] = e.StackTrace;
-			dict[nameof(e.ToString)] = e.ToString();
+			dict[nameof(e.ToString)]   = e.ToString();
 		}
 
 		protected virtual void Update( ref Dictionary<string, object?> dict, Exception e )
 		{
-			dict[nameof(e.Source)] = e.Source;
-			dict[nameof(e.Message)] = e.Message;
-			dict[nameof(e.Source)] = e.Source;
+			dict[nameof(e.Source)]     = e.Source;
+			dict[nameof(e.Message)]    = e.Message;
+			dict[nameof(e.Source)]     = e.Source;
 			dict[nameof(e.StackTrace)] = e.StackTrace;
-			dict[nameof(e.ToString)] = e.ToString();
+			dict[nameof(e.ToString)]   = e.ToString();
 		}
 
 		protected virtual Dictionary<string, object?> AppState( Exception e )
@@ -162,9 +162,9 @@ namespace Jakar.Api
 
 			var dict = new Dictionary<string, object?>
 					   {
-						   [nameof(AppState)] = AppState(),
+						   [nameof(AppState)]         = AppState(),
 						   [nameof(e.InnerException)] = GetInnerExceptions(e, ref inner),
-						   [nameof(e.Data)] = GetData(e)
+						   [nameof(e.Data)]           = GetData(e)
 					   };
 
 			Update(ref dict, e);
@@ -201,10 +201,10 @@ namespace Jakar.Api
 			new()
 			{
 				[nameof(IAppSettings.CurrentViewPage)] = _Services.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(_Services.CurrentViewPage)),
-				[nameof(IAppSettings.AppName)] = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
-				[nameof(DateTime)] = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", CultureInfo.CurrentCulture),
-				[nameof(DeviceInfo.DeviceId)] = DeviceInfo.DeviceId,
-				[nameof(DeviceInfo.VersionNumber)] = DeviceInfo.VersionNumber,
+				[nameof(IAppSettings.AppName)]         = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
+				[nameof(DateTime)]                     = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", CultureInfo.CurrentCulture),
+				[nameof(DeviceInfo.DeviceId)]          = DeviceInfo.DeviceId,
+				[nameof(DeviceInfo.VersionNumber)]     = DeviceInfo.VersionNumber,
 				[nameof(LanguageApi.SelectedLanguage)] = CultureInfo.CurrentCulture.DisplayName
 			};
 
@@ -213,9 +213,9 @@ namespace Jakar.Api
 
 	#region Track Exceptions
 
-		public async Task TrackError( Exception e ) => await TrackError(e, GetAppStateFromError(e), AppState(e)).ConfigureAwait(true);
-		public async Task TrackError( Exception e, byte[] screenShot ) => await TrackError(e, GetAppStateFromError(e), AppState(e), screenShot).ConfigureAwait(true);
-		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails ) => await TrackError(ex, eventDetails, appState: null).ConfigureAwait(true);
+		public async Task TrackError( Exception e )                                            => await TrackError(e,  GetAppStateFromError(e), AppState(e)).ConfigureAwait(true);
+		public async Task TrackError( Exception e,  byte[]                      screenShot )   => await TrackError(e,  GetAppStateFromError(e), AppState(e), screenShot).ConfigureAwait(true);
+		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails ) => await TrackError(ex, eventDetails,            appState: null).ConfigureAwait(true);
 
 		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails, Dictionary<string, object?>? appState ) => await TrackError(ex,
 																																						  eventDetails,
@@ -231,11 +231,11 @@ namespace Jakar.Api
 							 null,
 							 screenShot).ConfigureAwait(true);
 
-		public async Task TrackError( Exception ex,
-									  Dictionary<string, string>? eventDetails,
+		public async Task TrackError( Exception                    ex,
+									  Dictionary<string, string>?  eventDetails,
 									  Dictionary<string, object?>? appState,
-									  string? incomingText,
-									  string? outgoingText
+									  string?                      incomingText,
+									  string?                      outgoingText
 		) => await TrackError(ex,
 							  eventDetails,
 							  appState,
@@ -243,12 +243,12 @@ namespace Jakar.Api
 							  outgoingText,
 							  null).ConfigureAwait(true);
 
-		public async Task TrackError( Exception ex,
-									  Dictionary<string, string>? eventDetails,
+		public async Task TrackError( Exception                    ex,
+									  Dictionary<string, string>?  eventDetails,
 									  Dictionary<string, object?>? appState,
-									  string? incomingText,
-									  string? outgoingText,
-									  byte[]? screenShot
+									  string?                      incomingText,
+									  string?                      outgoingText,
+									  byte[]?                      screenShot
 		)
 		{
 			ThrowIfNotEnabled();

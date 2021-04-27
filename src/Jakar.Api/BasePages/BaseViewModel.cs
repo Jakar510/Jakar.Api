@@ -52,7 +52,7 @@ namespace Jakar.Api.BasePages
 
 
 		protected abstract IAppSettings _AppSettings { get; }
-		protected TPage? _SourcePage { get; set; }
+		protected          TPage?       _SourcePage  { get; set; }
 
 
 		protected BaseViewModel()
@@ -101,12 +101,12 @@ namespace Jakar.Api.BasePages
 			}
 		}
 
-		protected BaseViewModel() { LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand().ConfigureAwait(true)); }
+		protected BaseViewModel() { LoadItemsCommand                              = new Command(async () => await ExecuteLoadItemsCommand().ConfigureAwait(true)); }
 		protected BaseViewModel( TPage source ) : base(source) { LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand().ConfigureAwait(true)); }
 
 
-		public void LoadItems() => LoadItemsCommand.Execute(null);
-		public async Task LoadItemsAsync() => await MainThread.InvokeOnMainThreadAsync(ExecuteLoadItemsCommand).ConfigureAwait(true);
+		public             void LoadItems()      => LoadItemsCommand.Execute(null);
+		public async       Task LoadItemsAsync() => await MainThread.InvokeOnMainThreadAsync(ExecuteLoadItemsCommand).ConfigureAwait(true);
 		protected abstract Task ExecuteLoadItemsCommand();
 	}
 

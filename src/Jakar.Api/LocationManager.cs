@@ -23,12 +23,12 @@ namespace Jakar.Api
 
 
 
-		public State Status { get; protected set; }
+		public State     Status   { get; protected set; }
 		public Location? Location { get; protected set; }
 
 		protected void Reset()
 		{
-			Status = default;
+			Status   = default;
 			Location = null;
 		}
 

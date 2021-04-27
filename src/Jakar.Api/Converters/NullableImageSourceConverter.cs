@@ -16,8 +16,8 @@ namespace Jakar.Api.Converters
 	public class NullableImageSourceConverter : TypeConverter, IValueConverter, IExtendedTypeConverter // IExtendedTypeConverter 
 	{
 		private readonly ImageSourceConverter _converter = new();
-		public override bool CanConvertFrom( Type? sourceType ) => sourceType is null || sourceType == typeof(string);
-		public override object? ConvertFromInvariantString( string? value ) => Convert(value);
+		public override bool    CanConvertFrom( Type?               sourceType ) => sourceType is null || sourceType == typeof(string);
+		public override object? ConvertFromInvariantString( string? value )      => Convert(value);
 
 		public ImageSource? Convert( string? value ) =>
 			string.IsNullOrWhiteSpace(value)
@@ -26,11 +26,11 @@ namespace Jakar.Api.Converters
 
 		public string? ConvertToInvariantString( object? _ ) => throw new NotImplementedException();
 
-		
-		public object? Convert( object? value, Type targetType, object parameter, CultureInfo culture ) => Convert(value?.ToString());
+
+		public object? Convert( object?     value, Type targetType, object parameter, CultureInfo culture ) => Convert(value?.ToString());
 		public object? ConvertBack( object? value, Type targetType, object parameter, CultureInfo culture ) => value?.ToString();
 
-		public object? ConvertFrom( CultureInfo culture, object value, IServiceProvider serviceProvider ) => Convert(value?.ToString());
-		public object? ConvertFromInvariantString( string? value, IServiceProvider serviceProvider ) => Convert(value);
+		public object? ConvertFrom( CultureInfo            culture, object           value, IServiceProvider serviceProvider ) => Convert(value?.ToString());
+		public object? ConvertFromInvariantString( string? value,   IServiceProvider serviceProvider ) => Convert(value);
 	}
 }

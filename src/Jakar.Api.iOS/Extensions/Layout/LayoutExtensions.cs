@@ -29,19 +29,19 @@ namespace Jakar.Api.iOS.Extensions.Layout
 			return result;
 		}
 
-		public static IEnumerable<NSLayoutConstraint> SetContent( this UITableViewCell cell, in UIView view ) => cell.ContentView.AddFull(view);
-		public static void SetAccessory( this UITableViewCell cell, in UIView view ) => cell.AccessoryView = view;
-		public static void SetEditAccessory( this UITableViewCell cell, in UIView view ) => cell.EditingAccessoryView = view;
+		public static IEnumerable<NSLayoutConstraint> SetContent( this       UITableViewCell cell, in UIView view ) => cell.ContentView.AddFull(view);
+		public static void                            SetAccessory( this     UITableViewCell cell, in UIView view ) => cell.AccessoryView = view;
+		public static void                            SetEditAccessory( this UITableViewCell cell, in UIView view ) => cell.EditingAccessoryView = view;
 
 
 	#region Popup
 
 		public static IEnumerable<NSLayoutConstraint> SetPopup( this UITableViewCell cell, in UIView view ) => cell.InputView.AddFull(view);
-		public static void RemovePopup( this UITableViewCell cell, UIView view ) => cell.InputView.Subviews.FirstOrDefault(item => item.Equals(view))?.RemoveFromSuperview();
-		public static bool CanShowPopup( this UITableViewCell cell ) => cell.CanBecomeFirstResponder;
-		public static bool ShowPopup( this UITableViewCell cell ) => cell.BecomeFirstResponder();
-		public static bool CanHidePopup( this UITableViewCell cell ) => cell.CanResignFirstResponder;
-		public static bool HidePopup( this UITableViewCell cell ) => cell.ResignFirstResponder();
+		public static void                            RemovePopup( this UITableViewCell cell, UIView view ) => cell.InputView.Subviews.FirstOrDefault(item => item.Equals(view))?.RemoveFromSuperview();
+		public static bool                            CanShowPopup( this UITableViewCell cell ) => cell.CanBecomeFirstResponder;
+		public static bool                            ShowPopup( this UITableViewCell cell ) => cell.BecomeFirstResponder();
+		public static bool                            CanHidePopup( this UITableViewCell cell ) => cell.CanResignFirstResponder;
+		public static bool                            HidePopup( this UITableViewCell cell ) => cell.ResignFirstResponder();
 
 	#endregion
 
@@ -67,12 +67,12 @@ namespace Jakar.Api.iOS.Extensions.Layout
 																																				   parent.RightAnchor,
 																																				   translate);
 
-		public static IEnumerable<NSLayoutConstraint> SetBounds( this UIView view,
-																 in NSLayoutYAxisAnchor top,
-																 in NSLayoutYAxisAnchor bottom,
-																 in NSLayoutXAxisAnchor left,
-																 in NSLayoutXAxisAnchor right,
-																 in bool translate = false
+		public static IEnumerable<NSLayoutConstraint> SetBounds( this UIView              view,
+																 in   NSLayoutYAxisAnchor top,
+																 in   NSLayoutYAxisAnchor bottom,
+																 in   NSLayoutXAxisAnchor left,
+																 in   NSLayoutXAxisAnchor right,
+																 in   bool                translate = false
 		)
 		{
 			view.TranslatesAutoresizingMaskIntoConstraints = translate;
