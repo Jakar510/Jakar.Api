@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>3.0.0</version>
+		<version>3.0.1</version>
 		<title>Base library for all others in Xamarin.Forms</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,11 +18,7 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Updated Jakar.Api.Converters:
-			• ObjectToStringConverter
-			• ObjectToBoolConverter
-
-			Move anything that can be from Jakar.Api to Jakar.Extensions that is not Xamarin.Forms or Xamarin.Essentials related.
+			Fix Jakar.Extensions.LanguageApi which related to Jakar.Api.ApiServices.Language
 		</releaseNotes>
 		<tags>Xamarin.Forms Jakar Jakar.Api Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>

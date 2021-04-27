@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -201,10 +202,10 @@ namespace Jakar.Api
 			{
 				[nameof(IAppSettings.CurrentViewPage)] = _Services.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(_Services.CurrentViewPage)),
 				[nameof(IAppSettings.AppName)] = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
-				[nameof(DateTime)] = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", LanguageApi.Current.CultureInfo),
+				[nameof(DateTime)] = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", CultureInfo.CurrentCulture),
 				[nameof(DeviceInfo.DeviceId)] = DeviceInfo.DeviceId,
 				[nameof(DeviceInfo.VersionNumber)] = DeviceInfo.VersionNumber,
-				[nameof(LanguageApi.SelectedLanguage)] = LanguageApi.Current.SelectedLanguage.DisplayName
+				[nameof(LanguageApi.SelectedLanguage)] = CultureInfo.CurrentCulture.DisplayName
 			};
 
 	#endregion

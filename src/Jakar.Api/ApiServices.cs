@@ -8,13 +8,14 @@ using Jakar.Extensions.Interfaces;
 #nullable enable
 namespace Jakar.Api
 {
-	public abstract class ApiServices<TDebug, TPrompts, TAccounts, TUser, TActiveUser, TAppSettings, TResourceManager> where TAccounts : AccountManager<TUser, TActiveUser>, new()
-																													   where TUser : class, IUser
-																													   where TActiveUser : class, ICurrentUser<TUser>, new()
-																													   where TAppSettings : IAppSettings, new()
-																													   where TPrompts : Prompts, new()
-																													   where TDebug : Debug, new()
-																													   where TResourceManager : ResourceDictionaryManager, new()
+	public abstract class ApiServices<TDebug, TPrompts, TAccounts, TUser, TActiveUser, TAppSettings, TResourceManager, TLanguage> where TAccounts : AccountManager<TUser, TActiveUser>, new()
+																																  where TUser : class, IUser
+																																  where TActiveUser : class, ICurrentUser<TUser>, new()
+																																  where TAppSettings : IAppSettings, new()
+																																  where TPrompts : Prompts, new()
+																																  where TDebug : Debug, new()
+																																  where TLanguage : LanguageApi, new()
+																																  where TResourceManager : ResourceDictionaryManager, new()
 	{
 		public TDebug Debug { get; } = new();
 
@@ -30,7 +31,7 @@ namespace Jakar.Api
 
 		public BarometerReader Barometer { get; } = new();
 
-		public LanguageApi Language { get; } = LanguageApi.Current;
+		public TLanguage Language { get; } = new();
 
 		public Commands Loading { get; }
 
