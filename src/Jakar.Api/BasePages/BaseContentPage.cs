@@ -1,4 +1,4 @@
-﻿using Jakar.Extensions.Extensions;
+﻿using Jakar.Extensions;
 
 
 #pragma warning disable 1591

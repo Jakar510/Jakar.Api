@@ -1,6 +1,6 @@
 ﻿using System;
 using Jakar.Api.iOS.Enumerations;
-using Jakar.Extensions.Extensions;
+using Jakar.Extensions.General;
 using UIKit;
 
 

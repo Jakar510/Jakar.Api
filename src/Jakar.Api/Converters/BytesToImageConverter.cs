@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using Jakar.Extensions.Extensions;
+using Jakar.Extensions.General;
 using Xamarin.Forms;
 
 
@@ -12,22 +12,20 @@ namespace Jakar.Api.Converters
 {
 	public class BytesToImageConverter : TypeConverter, IValueConverter, IExtendedTypeConverter
 	{
-		public ImageSource? Convert( object? value ) =>
-			value switch
-			{
-				null                                => null,
-				byte[] bytes                        => Convert(bytes),
-				Memory<byte> readOnlyMemory         => Convert(readOnlyMemory.ToArray()),
-				ReadOnlyMemory<byte> readOnlyMemory => Convert(readOnlyMemory.ToArray()),
-				_                                   => null
-			};
+		public static ImageSource? Convert( object? value ) => value switch
+															   {
+																   null                                => null,
+																   byte[] bytes                        => Convert(bytes),
+																   Memory<byte> readOnlyMemory         => Convert(readOnlyMemory.ToArray()),
+																   ReadOnlyMemory<byte> readOnlyMemory => Convert(readOnlyMemory.ToArray()),
+																   _                                   => null
+															   };
 
-		public ImageSource? Convert( byte[]? value ) =>
-			value switch
-			{
-				null => null,
-				_    => ImageSource.FromStream(() => new MemoryStream(value))
-			};
+		public static ImageSource? Convert( byte[]? value ) => value switch
+															   {
+																   null => null,
+																   _    => ImageSource.FromStream(() => new MemoryStream(value))
+															   };
 
 
 		public object? ConvertFrom( CultureInfo            culture, object?          value, IServiceProvider serviceProvider ) => Convert(value?.ToString());
@@ -43,8 +41,8 @@ namespace Jakar.Api.Converters
 		public object? ConvertBack( object? value, Type targetType, object? parameter, CultureInfo culture ) => throw new NotImplementedException();
 
 
-		public override bool CanConvertFrom( Type? value ) => value != null && CheckTypes(value);
-		protected       bool CheckTypes( Type      value ) => typeof(byte[]) == value || typeof(Memory<byte>) == value || typeof(ReadOnlyMemory<byte>) == value;
+		public override  bool CanConvertFrom( Type? value ) => value != null && CheckTypes(value);
+		protected static bool CheckTypes( Type      value ) => typeof(byte[]) == value || typeof(Memory<byte>) == value || typeof(ReadOnlyMemory<byte>) == value;
 
 		// <converters:BytesToImageConverter x:Key="BytesToImage" />
 		// <Image Source="{Binding Image, Converter={StaticResource BytesToImage}}" Aspect="AspectFill" />

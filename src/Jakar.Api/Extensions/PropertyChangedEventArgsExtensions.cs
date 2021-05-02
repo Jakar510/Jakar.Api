@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Jakar.Extensions.Extensions;
+using Jakar.Extensions.Collections;
 using Xamarin.Forms;
 
 

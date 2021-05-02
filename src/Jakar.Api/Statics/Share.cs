@@ -3,11 +3,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Jakar.Api.Extensions;
-using Jakar.Api.Interfaces;
-using Jakar.Extensions.Extensions;
 using Jakar.Extensions.Http;
 using Jakar.Extensions.Interfaces;
-using Jakar.Extensions.Models.Files;
+using Jakar.Extensions.Models;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Plugin.Screenshot;
@@ -178,7 +176,7 @@ namespace Jakar.Api.Statics
 		public static async Task<string> WriteScreenShot( this FileSystemApi api, byte[] screenShot )
 		{
 			string          path = api.ScreenShot;
-			await using var file = new FileData(path);
+			await using var file = new LocalFile(path);
 			await file.WriteToFileAsync(screenShot).ConfigureAwait(true);
 
 			return path;

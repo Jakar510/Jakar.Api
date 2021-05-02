@@ -1,8 +1,8 @@
 ﻿using System;
 using Jakar.Api.ResourceManager;
-using Jakar.Extensions;
 using Jakar.Extensions.Interfaces;
-using Xamarin.Essentials;
+using Jakar.Extensions.Languages;
+using Jakar.Extensions.Models;
 
 
 #pragma warning disable 1591

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Jakar.Extensions.Extensions;
+using Jakar.Extensions.Collections;
 using Xamarin.Forms;
 
 
@@ -20,7 +20,7 @@ namespace Jakar.Api.Converters
 																											typeof(double),
 																											typeof(string));
 
-		public virtual bool Convert( object? value )
+		public static bool Convert( object? value )
 		{
 			return value switch
 				   {
@@ -39,15 +39,17 @@ namespace Jakar.Api.Converters
 				   };
 		}
 
-		public virtual object Convert( object? value, Type targetType, object? parameter, CultureInfo culture ) => Convert(value);
+		protected virtual bool InternalConvert( object? value ) => Convert(value);
+
+		public virtual object Convert( object? value, Type targetType, object? parameter, CultureInfo culture ) => InternalConvert(value);
 
 		public virtual object? ConvertBack( object? value, Type targetType, object? parameter, CultureInfo culture ) => value?.ToString();
 
 
-		public object ConvertFrom( CultureInfo            culture, object?          value, IServiceProvider serviceProvider ) => Convert(value);
-		public object ConvertFromInvariantString( string? value,   IServiceProvider serviceProvider ) => Convert(value);
+		public object ConvertFrom( CultureInfo            culture, object?          value, IServiceProvider serviceProvider ) => InternalConvert(value);
+		public object ConvertFromInvariantString( string? value,   IServiceProvider serviceProvider ) => InternalConvert(value);
 
 
-		public override object ConvertFromInvariantString( string? value ) => Convert(value);
+		public override object ConvertFromInvariantString( string? value ) => InternalConvert(value);
 	}
 }
