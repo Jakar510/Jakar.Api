@@ -4,14 +4,14 @@
         <name>Jakar.Api</name>
     </assembly>
     <members>
-        <member name="M:Jakar.Api.ApiServices`8.#ctor(System.String@,System.Type[])">
+        <member name="M:Jakar.Api.ApiServices`10.#ctor(System.String@,System.Type[])">
             <summary>
             appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
             </summary>
             <param name="app_center_id"></param>
             <param name="appCenterServices"></param>
         </member>
-        <member name="T:Jakar.Api.Commands">
+        <member name="T:Jakar.Api.Commands`2">
             <summary>
             Will move to Xamarin.Community.Toolkit.AsyncCommand when the following issues are resolved, as Xamarin.Forms 5.x is broken on Android until then:
             [Bug] Linker issue with Xamarin.AndroidX.Core #13969: https://github.com/xamarin/Xamarin.Forms/issues/13969
@@ -20,7 +20,7 @@
             [Bug] https://developercommunity.visualstudio.com/t/package-androidxactivitycontextaware-does-not-exis/1376876?from=email
             </summary>
         </member>
-        <member name="M:Jakar.Api.Prompts.InternalHandleException(System.Exception)">
+        <member name="M:Jakar.Api.Prompts`2.InternalHandleException(System.Exception)">
             <summary>
             switch the type of exception to show what ever prompt you want
             </summary>

@@ -17,10 +17,11 @@ namespace Jakar.Api.Statics
 		public static       string       InstalledVersionNumber => CrossLatestVersion.Current.InstalledVersionNumber;
 		public static async Task         OpenAppInStore()       => await CrossLatestVersion.Current.OpenAppInStore().ConfigureAwait(true);
 
-		public static async Task<bool> VerifyAsync( Prompts           prompts,
-													string            newVersionAvailable,
-													string            newVersionUpdateNowOrLater,
-													CancellationToken token = default
+
+		public static async Task<bool> VerifyAppStoreVersion<TDeviceID, TViewPage>( this Prompts<TDeviceID, TViewPage> prompts,
+																					string                             newVersionAvailable,
+																					string                             newVersionUpdateNowOrLater,
+																					CancellationToken                  token = default
 		)
 		{
 			bool isLatest = await IsLatest().ConfigureAwait(true);
@@ -37,12 +38,12 @@ namespace Jakar.Api.Statics
 			return true;
 		}
 
-		public static async Task<bool> VerifyAsync( Prompts           prompts,
-													string            newVersionAvailable,
-													string            newVersionUpdateNowOrLater,
-													string            yes,
-													string            no,
-													CancellationToken token = default
+		public static async Task<bool> VerifyAppStoreVersion<TDeviceID, TViewPage>( this Prompts<TDeviceID, TViewPage> prompts,
+																					string                             newVersionAvailable,
+																					string                             newVersionUpdateNowOrLater,
+																					string                             yes,
+																					string                             no,
+																					CancellationToken                  token = default
 		)
 		{
 			bool isLatest = await IsLatest().ConfigureAwait(true);

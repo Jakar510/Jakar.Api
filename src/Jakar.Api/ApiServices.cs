@@ -9,25 +9,34 @@ using Jakar.Extensions.Models;
 #nullable enable
 namespace Jakar.Api
 {
-	public abstract class ApiServices<TDebug, TPrompts, TAccounts, TUser, TActiveUser, TAppSettings, TResourceManager, TLanguage> where TAccounts : AccountManager<TUser, TActiveUser>, new()
-																																  where TUser : class, IUser
-																																  where TActiveUser : class, ICurrentUser<TUser>, new()
-																																  where TAppSettings : IAppSettings, new()
-																																  where TPrompts : Prompts, new()
-																																  where TDebug : Debug, new()
-																																  where TLanguage : LanguageApi, new()
-																																  where TResourceManager : ResourceDictionaryManager, new()
+	public abstract class ApiServices<TDebug,
+									  TPrompts,
+									  TAccounts,
+									  TUser,
+									  TActiveUser,
+									  TAppSettings,
+									  TResourceManager,
+									  TDeviceID,
+									  TViewPage,
+									  TLanguage> where TAccounts : AccountManager<TUser, TActiveUser>, new()
+												 where TUser : class, IUser
+												 where TActiveUser : class, ICurrentUser<TUser>, new()
+												 where TAppSettings : IAppSettings<TDeviceID, TViewPage>, new()
+												 where TPrompts : Prompts<TDeviceID, TViewPage>, new()
+												 where TDebug : Debug<TDeviceID, TViewPage>, new()
+												 where TLanguage : LanguageApi, new()
+												 where TResourceManager : ResourceDictionaryManager, new()
 	{
-		public TDebug           Debug      { get; } = new();
-		public TAccounts        Accounts   { get; } = new();
-		public TPrompts         Prompts    { get; } = new();
-		public TAppSettings     Settings   { get; } = new();
-		public TResourceManager Resources  { get; } = new();
-		public LocationManager  Location   { get; } = new();
-		public BarometerReader  Barometer  { get; } = new();
-		public TLanguage        Language   { get; } = new();
-		public Commands         Loading    { get; }
-		public FileSystemApi    FileSystem { get; } = new();
+		public TDebug                         Debug      { get; } = new();
+		public TAccounts                      Accounts   { get; } = new();
+		public TPrompts                       Prompts    { get; } = new();
+		public TAppSettings                   Settings   { get; } = new();
+		public TResourceManager               Resources  { get; } = new();
+		public LocationManager                Location   { get; } = new();
+		public BarometerReader                Barometer  { get; } = new();
+		public TLanguage                      Language   { get; } = new();
+		public Commands<TDeviceID, TViewPage> Loading    { get; }
+		public FileSystemApi                  FileSystem { get; } = new();
 
 
 		/// <summary>
@@ -41,7 +50,7 @@ namespace Jakar.Api
 			Prompts.Init(Settings);
 			Debug.Init(FileSystem, Settings, app_center_id, appCenterServices);
 
-			Loading = new Commands(Prompts);
+			Loading = new Commands<TDeviceID, TViewPage>(Prompts);
 		}
 	}
 }

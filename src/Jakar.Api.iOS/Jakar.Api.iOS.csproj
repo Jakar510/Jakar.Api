@@ -62,10 +62,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs">
-      <Version>7.1.0.483</Version>
+      <Version>7.1.0.514</Version>
     </PackageReference>
     <PackageReference Include="Jakar.Extensions">
-      <Version>2.1.0</Version>
+      <Version>2.2.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter">
       <Version>4.2.0</Version>

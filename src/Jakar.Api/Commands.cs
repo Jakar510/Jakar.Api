@@ -18,11 +18,11 @@ namespace Jakar.Api
 	/// [Bug] android.content.res.Resources$NotFoundException: Unable to find resource ID #0xffffffff #13843: https://github.com/xamarin/Xamarin.Forms/issues/13843
 	/// [Bug] https://developercommunity.visualstudio.com/t/package-androidxactivitycontextaware-does-not-exis/1376876?from=email
 	/// </summary>
-	public class Commands
+	public class Commands<TDeviceID, TViewPage>
 	{
-		protected Prompts _Prompts { get; set; }
+		protected Prompts<TDeviceID, TViewPage> _Prompts { get; set; }
 
-		public Commands( Prompts prompts ) => _Prompts = prompts;
+		public Commands( Prompts<TDeviceID, TViewPage> prompts ) => _Prompts = prompts;
 
 
 		public ICommand LoadingCommand( Func<CancellationToken, Task> func, Page page )                => LoadingCommand(func, MaskType.Black, _Prompts.Cancel, page);

@@ -18,7 +18,6 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Xamarin.Essentials;
-using DeviceInfo = Jakar.Api.Statics.DeviceInfo;
 using Share = Jakar.Api.Statics.Share;
 
 
@@ -26,7 +25,7 @@ using Share = Jakar.Api.Statics.Share;
 
 namespace Jakar.Api
 {
-	public class Debug
+	public class Debug<TDeviceID, TViewPage>
 	{
 		public virtual bool  CanDebug      => Debugger.IsAttached;
 		public virtual bool  UseDebugLogin => CanDebug;
@@ -35,9 +34,9 @@ namespace Jakar.Api
 		protected bool _ApiEnabled { get; private set; }
 
 		private FileSystemApi? _fileSystemApi;
-		private IAppSettings? _services;
+		private IAppSettings<TDeviceID, TViewPage>? _services;
 
-		protected IAppSettings _Services
+		protected IAppSettings<TDeviceID, TViewPage> _Services
 		{
 			get => _services ?? throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_services)));
 			private set => _services = value;
@@ -46,12 +45,12 @@ namespace Jakar.Api
 
 	#region Init
 
-		public void Init( FileSystemApi api, IAppSettings services, string app_center_id, params Type[] appCenterServices )
+		public void Init( FileSystemApi api, IAppSettings<TDeviceID, TViewPage> services, string app_center_id, params Type[] appCenterServices )
 		{
 			Task.Run(async () => await InitAsync(api, services, app_center_id, appCenterServices).ConfigureAwait(true));
 		}
 
-		public async Task InitAsync( FileSystemApi api, IAppSettings services, string app_center_id, params Type[] appCenterServices )
+		public async Task InitAsync( FileSystemApi api, IAppSettings<TDeviceID, TViewPage> services, string app_center_id, params Type[] appCenterServices )
 		{
 			_fileSystemApi = api;
 			_Services      = services;
@@ -103,7 +102,7 @@ namespace Jakar.Api
 
 			byte[] screenShot = await Share.TakeScreenShot().ConfigureAwait(true);
 
-			PrintException(e);
+			e.PrintException();
 
 			await TrackError(e, screenShot).ConfigureAwait(true);
 		}
@@ -127,85 +126,14 @@ namespace Jakar.Api
 		}
 
 
-		protected virtual Dictionary<string, string> GetAppStateFromError( Exception e )
-		{
-			if ( e is null ) throw new ArgumentNullException(nameof(e));
-
-			Dictionary<string, string> dict = AppState();
-			Update(ref dict, e);
-
-			return dict;
-		}
-
-		protected virtual void Update( ref Dictionary<string, string> dict, Exception e )
-		{
-			dict[nameof(e.Source)]     = e.Source;
-			dict[nameof(e.Message)]    = e.Message;
-			dict[nameof(e.Source)]     = e.Source;
-			dict[nameof(e.StackTrace)] = e.StackTrace;
-			dict[nameof(e.ToString)]   = e.ToString();
-		}
-
-		protected virtual void Update( ref Dictionary<string, object?> dict, Exception e )
-		{
-			dict[nameof(e.Source)]     = e.Source;
-			dict[nameof(e.Message)]    = e.Message;
-			dict[nameof(e.Source)]     = e.Source;
-			dict[nameof(e.StackTrace)] = e.StackTrace;
-			dict[nameof(e.ToString)]   = e.ToString();
-		}
-
-		protected virtual Dictionary<string, object?> AppState( Exception e )
-		{
-			if ( e is null ) throw new ArgumentNullException(nameof(e));
-
-			var inner = new Dictionary<string, object?>();
-
-			var dict = new Dictionary<string, object?>
-					   {
-						   [nameof(AppState)]         = AppState(),
-						   [nameof(e.InnerException)] = GetInnerExceptions(e, ref inner),
-						   [nameof(e.Data)]           = GetData(e)
-					   };
-
-			Update(ref dict, e);
-
-			return dict;
-		}
-
-		protected virtual Dictionary<string, object?>? GetInnerExceptions( Exception e, ref Dictionary<string, object?> dict )
-		{
-			if ( e is null ) throw new ArgumentNullException(nameof(e));
-			if ( e.InnerException is null ) { return null; }
-
-			var inner = new Dictionary<string, object?>();
-			Update(ref inner, e);
-
-			Dictionary<string, object?>? result = GetInnerExceptions(e, ref inner);
-			if ( result is null ) { return dict; }
-
-			dict[nameof(e.InnerException)] = result;
-
-			return dict;
-		}
-
-		protected static Dictionary<string, string> GetData( Exception e )
-		{
-			var data = new Dictionary<string, string>();
-
-			foreach ( DictionaryEntry o in e.Data.Cast<DictionaryEntry>().Where(o => o.Key is not null && o.Value is not null) ) { data[o.Key.ToString()] = o.Value.ToString(); }
-
-			return data;
-		}
-
 		protected virtual Dictionary<string, string> AppState() =>
 			new()
 			{
-				[nameof(IAppSettings.CurrentViewPage)] = _Services.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(_Services.CurrentViewPage)),
-				[nameof(IAppSettings.AppName)]         = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
+				[nameof(IAppSettings<TDeviceID, TViewPage>.CurrentViewPage)] = _Services.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(_Services.CurrentViewPage)),
+				[nameof(IAppSettings<TDeviceID, TViewPage>.AppName)]         = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
 				[nameof(DateTime)]                     = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", CultureInfo.CurrentCulture),
-				[nameof(DeviceInfo.DeviceId)]          = DeviceInfo.DeviceId,
-				[nameof(DeviceInfo.VersionNumber)]     = DeviceInfo.VersionNumber,
+				[nameof(AppDeviceInfo.DeviceId)]       = AppDeviceInfo.DeviceId,
+				[nameof(AppDeviceInfo.VersionNumber)]  = AppDeviceInfo.VersionNumber,
 				[nameof(LanguageApi.SelectedLanguage)] = CultureInfo.CurrentCulture.DisplayName
 			};
 
@@ -214,17 +142,22 @@ namespace Jakar.Api
 
 	#region Track Exceptions
 
-		public async Task TrackError( Exception e )                                            => await TrackError(e,  GetAppStateFromError(e), AppState(e)).ConfigureAwait(true);
-		public async Task TrackError( Exception e,  byte[]                      screenShot )   => await TrackError(e,  GetAppStateFromError(e), AppState(e), screenShot).ConfigureAwait(true);
-		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails ) => await TrackError(ex, eventDetails,            appState: null).ConfigureAwait(true);
+		public async Task TrackError( Exception e ) =>
+			await TrackError(e, e.Details(), e.FullDetails()).ConfigureAwait(true);
 
-		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails, Dictionary<string, object?>? appState ) => await TrackError(ex,
-																																						  eventDetails,
-																																						  appState,
-																																						  null,
-																																						  null).ConfigureAwait(true);
+		public async Task TrackError( Exception e, byte[] screenShot ) =>
+			await TrackError(e, e.Details(), e.FullDetails(), screenShot).ConfigureAwait(true);
 
-		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails, Dictionary<string, object?>? appState, byte[] screenShot ) =>
+		public async Task TrackError( Exception ex, Dictionary<string, string?>? eventDetails ) =>
+			await TrackError(ex, eventDetails, appState: null).ConfigureAwait(true);
+
+		public async Task TrackError( Exception ex, Dictionary<string, string?>? eventDetails, Dictionary<string, object?>? appState ) => await TrackError(ex,
+																																						   eventDetails,
+																																						   appState,
+																																						   null,
+																																						   null).ConfigureAwait(true);
+
+		public async Task TrackError( Exception ex, Dictionary<string, string?>? eventDetails, Dictionary<string, object?>? appState, byte[] screenShot ) =>
 			await TrackError(ex,
 							 eventDetails,
 							 appState,
@@ -233,7 +166,7 @@ namespace Jakar.Api
 							 screenShot).ConfigureAwait(true);
 
 		public async Task TrackError( Exception                    ex,
-									  Dictionary<string, string>?  eventDetails,
+									  Dictionary<string, string?>?  eventDetails,
 									  Dictionary<string, object?>? appState,
 									  string?                      incomingText,
 									  string?                      outgoingText
@@ -245,7 +178,7 @@ namespace Jakar.Api
 							  null).ConfigureAwait(true);
 
 		public async Task TrackError( Exception                    ex,
-									  Dictionary<string, string>?  eventDetails,
+									  Dictionary<string, string?>?  eventDetails,
 									  Dictionary<string, object?>? appState,
 									  string?                      incomingText,
 									  string?                      outgoingText,
@@ -293,7 +226,7 @@ namespace Jakar.Api
 			await TrackError(ex, eventDetails, attachments.ToArray()).ConfigureAwait(true);
 		}
 
-		public async Task TrackError( Exception ex, Dictionary<string, string>? eventDetails, params ErrorAttachmentLog[] attachments )
+		public async Task TrackError( Exception ex, Dictionary<string, string?>? eventDetails, params ErrorAttachmentLog[] attachments )
 		{
 			ThrowIfNotEnabled();
 
@@ -326,67 +259,6 @@ namespace Jakar.Api
 			if ( !_Services.SendCrashes ) { return; }
 
 			Analytics.TrackEvent(source, eventDetails);
-		}
-
-	#endregion
-
-
-	#region Console
-
-		protected virtual void PrintException( Exception e )
-		{
-			if ( !CanDebug ) { return; }
-
-			System.Diagnostics.Debug.WriteLine("------------------------------------------------ Exception Start -----------------------------------------------");
-			System.Diagnostics.Debug.WriteLine("\n\n");
-			System.Diagnostics.Debug.WriteLine("-------------------------------------------------- Source ------------------------------------------------");
-			System.Diagnostics.Debug.WriteLine("\n\n");
-			System.Diagnostics.Debug.WriteLine($"{e.Source}");
-			System.Diagnostics.Debug.WriteLine("\n\n");
-			System.Diagnostics.Debug.WriteLine("--------------------------------------------------- Data -------------------------------------------------");
-			System.Diagnostics.Debug.WriteLine("\n\n");
-			System.Diagnostics.Debug.WriteLine($"{e.Data.ToPrettyJson()}");
-			System.Diagnostics.Debug.WriteLine("\n\n");
-			System.Diagnostics.Debug.WriteLine("------------------------------------------------- ToString -----------------------------------------------");
-			System.Diagnostics.Debug.WriteLine("\n\n");
-			System.Diagnostics.Debug.WriteLine($"{e}");
-			System.Diagnostics.Debug.WriteLine("\n\n");
-			System.Diagnostics.Debug.WriteLine("------------------------------------------------ StackTrace -----------------------------------------------");
-			System.Diagnostics.Debug.WriteLine("\n\n");
-			System.Diagnostics.Debug.WriteLine($"{e.StackTrace}");
-			System.Diagnostics.Debug.WriteLine("\n\n");
-			System.Diagnostics.Debug.WriteLine("------------------------------------------------ Exception End -------------------------------------------------");
-		}
-
-		public void PrintMessage( string s, string start = "--------- information ------------" )
-		{
-			if ( !CanDebug ) { return; }
-
-			System.Diagnostics.Debug.WriteLine($"{start}  {s}");
-		}
-
-		public void PrintError( string s, string start = "--------- warning ------------" )
-		{
-			if ( !CanDebug ) { return; }
-
-			System.Diagnostics.Debug.WriteLine($"{start}  {s}");
-		}
-
-
-		public void PrintJson( object jsonSerializablePayload ) => PrintJson(jsonSerializablePayload.ToPrettyJson());
-
-		public void PrintJson( string jsonString )
-		{
-			if ( string.IsNullOrWhiteSpace(jsonString) || !CanDebug ) { return; }
-
-			PrintMessage(jsonString.ToPrettyJson());
-		}
-
-		public void PrintCount( string source, int count, string start = "----------------------------------------------------------------------------" )
-		{
-			if ( !CanDebug ) { return; }
-
-			System.Diagnostics.Debug.WriteLine($"{start}   {source}.Count: => {count}");
 		}
 
 	#endregion

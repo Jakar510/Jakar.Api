@@ -10,7 +10,6 @@ using Jakar.Extensions.Exceptions.Networking;
 using Jakar.Extensions.Interfaces;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Share = Jakar.Api.Statics.Share;
 
 
 #pragma warning disable 1591
@@ -18,7 +17,7 @@ using Share = Jakar.Api.Statics.Share;
 #nullable enable
 namespace Jakar.Api
 {
-	public abstract class Prompts : IUserDialogs
+	public abstract class Prompts<TDeviceID, TViewPage> : IUserDialogs
 	{
 		private IAppSettings? _services;
 
@@ -28,9 +27,9 @@ namespace Jakar.Api
 			private set => _services = value;
 		}
 
-		private Debug? _debug;
+		private Debug<TDeviceID, TViewPage>? _debug;
 
-		protected Debug _Debug
+		protected Debug<TDeviceID, TViewPage> _Debug
 		{
 			get => _debug ?? throw new ApiDisabledException($"Must call {nameof(Init)} first.", new NullReferenceException(nameof(_services)));
 			private set => _debug = value;
@@ -45,7 +44,7 @@ namespace Jakar.Api
 		private IUserDialogs _Dialogs { get; } = UserDialogs.Instance;
 
 		public void Init( IAppSettings services ) => _Services = services;
-		public void Init( Debug        services ) => _Debug = services;
+		public void Init( Debug<TDeviceID, TViewPage> services ) => _Debug = services;
 
 
 		public abstract Task HandleExceptionAsync( Exception                e, Page page, CancellationToken token );
