@@ -18,7 +18,6 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Xamarin.Essentials;
-using Share = Jakar.Api.Statics.Share;
 
 
 #pragma warning disable 1591
@@ -100,7 +99,7 @@ namespace Jakar.Api
 
 			if ( !_Services.SendCrashes ) { return; }
 
-			byte[] screenShot = await Share.TakeScreenShot().ConfigureAwait(true);
+			byte[] screenShot = await AppShare.TakeScreenShot().ConfigureAwait(true);
 
 			e.PrintException();
 

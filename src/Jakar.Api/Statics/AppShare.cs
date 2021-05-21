@@ -18,7 +18,7 @@ using Xamarin.Forms;
 #nullable enable
 namespace Jakar.Api.Statics
 {
-	public static class Share
+	public static class AppShare
 	{
 		// TODO: add MimType extensions and overloads for ShareFile
 

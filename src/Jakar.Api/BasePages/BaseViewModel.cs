@@ -2,15 +2,12 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Jakar.Api.Interfaces;
 using Jakar.Api.Statics;
-using Jakar.Extensions;
 using Jakar.Extensions.Http;
 using Jakar.Extensions.Interfaces;
 using Jakar.Extensions.Models;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Share = Jakar.Api.Statics.Share;
 
 
 #pragma warning disable 1591

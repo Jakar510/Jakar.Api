@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>3.2.0</version>
+		<version>3.3.0</version>
 		<title>Base library for all others in Xamarin.Forms</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,10 +18,10 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Updates for Jakar.Extensions 2.2.1
-			Some breaking, but needed changes to ApiServices:
-			• IAppSettings now explicitly defines the type for CurrentViewPage. As a consequence of this, all other classes were updated as well.
-			• Part of Jakar.Api.Debug has been moved to a static class in Jakar.Extensions.General.ExceptionExtensions and Jakar.Extensions.General.ConsoleExtensions. This was done to allow it to be run on any platform (.net standard 2.1+), and be used as extension methods.
+Added Biometric static class to help with iOS user authentication. Use Plugin.Biometrics for full effect.
+Added missing iOS services.
+Updated ApiServices *breaking change*
+Misc bug fixes
 		</releaseNotes>
 		<tags>Xamarin.Forms Jakar Jakar.Api Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>
@@ -50,10 +50,10 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.2.1" />
+				            version="2.3.0" />
 
 				<dependency id="Acr.UserDialogs"
-				            version="7.1.0.483" />
+				            version="7.1.0.514" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 				            version="2.1.0" />
@@ -83,10 +83,10 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.2.1" />
+				            version="2.3.0" />
 
 				<dependency id="Acr.UserDialogs"
-				            version="7.1.0.483" />
+				            version="7.1.0.514" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 				            version="2.1.0" />
@@ -118,10 +118,13 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.2.1" />
+				            version="2.3.0" />
+
+				<dependency id="Plugin.CurrentActivity"
+				            version="2.1.0.4" />
 
 				<dependency id="Acr.UserDialogs"
-				            version="7.1.0.483" />
+				            version="7.1.0.514" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 				            version="2.1.0" />
@@ -157,10 +160,10 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.2.1" />
+				            version="2.3.0" />
 
 				<dependency id="Acr.UserDialogs"
-				            version="7.1.0.483" />
+				            version="7.1.0.514" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 				            version="2.1.0" />

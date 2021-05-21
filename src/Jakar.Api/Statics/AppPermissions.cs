@@ -13,7 +13,7 @@ using Xamarin.Forms;
 #nullable enable
 namespace Jakar.Api.Statics
 {
-	public static class Permissions
+	public static class AppPermissions
 	{
 		public static async Task<T?> Handle<T>( PermissionStatus status, Func<Task<T>>? denial, Func<Task<T>>? granted, Func<Task<T>>? unknown )
 		{

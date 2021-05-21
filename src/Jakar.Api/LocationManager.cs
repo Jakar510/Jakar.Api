@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Jakar.Api.Statics;
 using Xamarin.Essentials;
-using Permissions = Jakar.Api.Statics.Permissions;
 
 
 #pragma warning disable 1591
@@ -69,7 +69,7 @@ namespace Jakar.Api
 
 		public async Task<bool> Update()
 		{
-			if ( await Permissions.LocationWhenInUsePermission().ConfigureAwait(true) != PermissionStatus.Granted ) { return false; }
+			if ( await AppPermissions.LocationWhenInUsePermission().ConfigureAwait(true) != PermissionStatus.Granted ) { return false; }
 
 			State status = await GetLocationAsync().ConfigureAwait(true);
 			return status == State.Success;

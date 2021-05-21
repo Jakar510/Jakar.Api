@@ -15,16 +15,18 @@ namespace Jakar.Api
 									  TUser,
 									  TActiveUser,
 									  TAppSettings,
+									  TFileSystem,
+									  TLanguage,
 									  TResourceManager,
 									  TDeviceID,
-									  TViewPage,
-									  TLanguage> where TAccounts : AccountManager<TUser, TActiveUser>, new()
+									  TViewPage> where TAccounts : AccountManager<TUser, TActiveUser>, new()
 												 where TUser : class, IUser
 												 where TActiveUser : class, ICurrentUser<TUser>, new()
 												 where TAppSettings : IAppSettings<TDeviceID, TViewPage>, new()
 												 where TPrompts : Prompts<TDeviceID, TViewPage>, new()
 												 where TDebug : Debug<TDeviceID, TViewPage>, new()
 												 where TLanguage : LanguageApi, new()
+												 where TFileSystem : FileSystemApi, new()
 												 where TResourceManager : ResourceDictionaryManager, new()
 	{
 		public TDebug                         Debug      { get; } = new();
@@ -35,8 +37,8 @@ namespace Jakar.Api
 		public LocationManager                Location   { get; } = new();
 		public BarometerReader                Barometer  { get; } = new();
 		public TLanguage                      Language   { get; } = new();
+		public TFileSystem                    FileSystem { get; } = new();
 		public Commands<TDeviceID, TViewPage> Loading    { get; }
-		public FileSystemApi                  FileSystem { get; } = new();
 
 
 		/// <summary>
