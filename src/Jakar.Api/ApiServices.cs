@@ -1,5 +1,6 @@
 ﻿using System;
 using Jakar.Api.ResourceManager;
+using Jakar.Extensions;
 using Jakar.Extensions.Interfaces;
 using Jakar.Extensions.Languages;
 using Jakar.Extensions.Models;
@@ -13,24 +14,22 @@ namespace Jakar.Api
 									  TPrompts,
 									  TAccounts,
 									  TUser,
-									  TActiveUser,
 									  TAppSettings,
 									  TFileSystem,
 									  TLanguage,
 									  TResourceManager,
 									  TDeviceID,
-									  TViewPage> where TAccounts : AccountManager<TUser, TActiveUser>, new()
+									  TViewPage> where TAccounts : AccountManager<TUser>
 												 where TUser : class, IUser, new()
-												 where TActiveUser : class, ICurrentUser, new()
 												 where TAppSettings : IAppSettings<TDeviceID, TViewPage>, new()
 												 where TPrompts : Prompts<TDeviceID, TViewPage>, new()
 												 where TDebug : Debug<TDeviceID, TViewPage>, new()
 												 where TLanguage : LanguageApi, new()
-												 where TFileSystem : FileSystemApi, new()
+												 where TFileSystem : BaseFileSystemApi, new()
 												 where TResourceManager : ResourceDictionaryManager, new()
 	{
 		public TDebug                         Debug      { get; } = new();
-		public TAccounts                      Accounts   { get; } = new();
+		public TAccounts                      Accounts   { get; }
 		public TPrompts                       Prompts    { get; } = new();
 		public TAppSettings                   Settings   { get; } = new();
 		public TResourceManager               Resources  { get; } = new();
@@ -48,6 +47,7 @@ namespace Jakar.Api
 		/// <param name="appCenterServices"></param>
 		protected ApiServices( in string app_center_id, params Type[] appCenterServices )
 		{
+			Accounts = InstanceCreator.Create<TAccounts>(FileSystem);
 			Prompts.Init(Debug);
 			Prompts.Init(Settings);
 			Debug.Init(FileSystem, Settings, app_center_id, appCenterServices);

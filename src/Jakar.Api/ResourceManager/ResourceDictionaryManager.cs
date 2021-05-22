@@ -35,12 +35,16 @@ namespace Jakar.Api.ResourceManager
 
 		public void Add<TThemedKey>( in TThemedKey key, in Style light, in Style dark ) where TThemedKey : Enum
 		{
+			if ( key is null ) { throw new ArgumentNullException(nameof(key)); }
+
 			Add(OSAppTheme.Light, key, light);
 			Add(OSAppTheme.Dark,  key, dark);
 		}
 
 		public void Add<TThemedKey>( in TThemedKey key, in Style style ) where TThemedKey : Enum
 		{
+			if ( key is null ) { throw new ArgumentNullException(nameof(key)); }
+
 			Add(OSAppTheme.Light, key, style);
 			Add(OSAppTheme.Dark,  key, style);
 		}
@@ -49,7 +53,10 @@ namespace Jakar.Api.ResourceManager
 
 		public TValue Get<TThemedKey, TValue>( in OSAppTheme theme, in TThemedKey key ) where TThemedKey : Enum
 		{
-			if ( !_Current.TryGetValue(GetKey(theme, key), out object value) ) { throw new KeyNotFoundException(nameof(GetKey)); }
+			if ( key is null ) { throw new ArgumentNullException(nameof(key)); }
+
+			string k = GetKey(theme, key);
+			if ( !_Current.TryGetValue(k, out object value) ) { throw new KeyNotFoundException(k); }
 
 			if ( value is TValue item ) { return item; }
 
@@ -68,7 +75,9 @@ namespace Jakar.Api.ResourceManager
 		{
 			if ( key is null ) { throw new ArgumentNullException(nameof(key)); }
 
-			if ( !_Current.TryGetValue(key.ToString(), out object value) ) { throw new KeyNotFoundException(nameof(key)); }
+			string k = key.ToString();
+
+			if ( !_Current.TryGetValue(k, out object value) ) { throw new KeyNotFoundException(k); }
 
 			if ( value is TValue item ) { return item; }
 
@@ -76,9 +85,24 @@ namespace Jakar.Api.ResourceManager
 		}
 
 
+		/// <summary>
+		/// <see cref="Color"/> is used in <see cref="BindAppTheme{TValue, TThemedKey}"/>
+		/// </summary>
+		/// <typeparam name="TThemedKey"></typeparam>
+		/// <param name="bindable"></param>
+		/// <param name="property"></param>
+		/// <param name="key"></param>
 		public void BindAppTheme<TThemedKey>( in BindableObject bindable, in BindableProperty property, in TThemedKey key ) where TThemedKey : Enum =>
 			BindAppTheme<Color, TThemedKey>(bindable, property, key);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="TValue"></typeparam>
+		/// <typeparam name="TThemedKey"></typeparam>
+		/// <param name="bindable"></param>
+		/// <param name="property"></param>
+		/// <param name="key"></param>
 		public void BindAppTheme<TValue, TThemedKey>( in BindableObject bindable, in BindableProperty property, in TThemedKey key ) where TThemedKey : Enum
 		{
 			bindable.SetOnAppTheme(property, Get<TThemedKey, TValue>(OSAppTheme.Light, key), Get<TThemedKey, TValue>(OSAppTheme.Dark, key));

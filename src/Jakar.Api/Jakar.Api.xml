@@ -4,7 +4,7 @@
         <name>Jakar.Api</name>
     </assembly>
     <members>
-        <member name="M:Jakar.Api.ApiServices`11.#ctor(System.String@,System.Type[])">
+        <member name="M:Jakar.Api.ApiServices`10.#ctor(System.String@,System.Type[])">
             <summary>
             appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
             </summary>
@@ -42,6 +42,25 @@
             <param name="theme"></param>
             <param name="key"></param>
             <returns></returns>
+        </member>
+        <member name="M:Jakar.Api.ResourceManager.ResourceDictionaryManager.BindAppTheme``1(Xamarin.Forms.BindableObject@,Xamarin.Forms.BindableProperty@,``0@)">
+            <summary>
+            <see cref="T:Xamarin.Forms.Color"/> is used in <see cref="M:Jakar.Api.ResourceManager.ResourceDictionaryManager.BindAppTheme``2(Xamarin.Forms.BindableObject@,Xamarin.Forms.BindableProperty@,``1@)"/>
+            </summary>
+            <typeparam name="TThemedKey"></typeparam>
+            <param name="bindable"></param>
+            <param name="property"></param>
+            <param name="key"></param>
+        </member>
+        <member name="M:Jakar.Api.ResourceManager.ResourceDictionaryManager.BindAppTheme``2(Xamarin.Forms.BindableObject@,Xamarin.Forms.BindableProperty@,``1@)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TValue"></typeparam>
+            <typeparam name="TThemedKey"></typeparam>
+            <param name="bindable"></param>
+            <param name="property"></param>
+            <param name="key"></param>
         </member>
     </members>
 </doc>

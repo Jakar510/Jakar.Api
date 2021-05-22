@@ -32,7 +32,7 @@ namespace Jakar.Api
 
 		protected bool _ApiEnabled { get; private set; }
 
-		private FileSystemApi? _fileSystemApi;
+		private BaseFileSystemApi? _fileSystemApi;
 		private IAppSettings<TDeviceID, TViewPage>? _services;
 
 		protected IAppSettings<TDeviceID, TViewPage> _Services
@@ -44,12 +44,12 @@ namespace Jakar.Api
 
 	#region Init
 
-		public void Init( FileSystemApi api, IAppSettings<TDeviceID, TViewPage> services, string app_center_id, params Type[] appCenterServices )
+		public void Init( BaseFileSystemApi api, IAppSettings<TDeviceID, TViewPage> services, string app_center_id, params Type[] appCenterServices )
 		{
 			Task.Run(async () => await InitAsync(api, services, app_center_id, appCenterServices).ConfigureAwait(true));
 		}
 
-		public async Task InitAsync( FileSystemApi api, IAppSettings<TDeviceID, TViewPage> services, string app_center_id, params Type[] appCenterServices )
+		public async Task InitAsync( BaseFileSystemApi api, IAppSettings<TDeviceID, TViewPage> services, string app_center_id, params Type[] appCenterServices )
 		{
 			_fileSystemApi = api;
 			_Services      = services;
