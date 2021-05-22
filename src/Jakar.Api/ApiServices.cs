@@ -20,8 +20,8 @@ namespace Jakar.Api
 									  TResourceManager,
 									  TDeviceID,
 									  TViewPage> where TAccounts : AccountManager<TUser, TActiveUser>, new()
-												 where TUser : class, IUser
-												 where TActiveUser : class, ICurrentUser<TUser>, new()
+												 where TUser : class, IUser, new()
+												 where TActiveUser : class, ICurrentUser, new()
 												 where TAppSettings : IAppSettings<TDeviceID, TViewPage>, new()
 												 where TPrompts : Prompts<TDeviceID, TViewPage>, new()
 												 where TDebug : Debug<TDeviceID, TViewPage>, new()

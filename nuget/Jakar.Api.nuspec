@@ -4,24 +4,21 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>3.3.0</version>
+		<version>3.4.0</version>
 		<title>Base library for all others in Xamarin.Forms</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
 		<projectUrl>https://github.com/Jakar510/Jakar.Api</projectUrl>
 		<iconUrl>https://github.com/Jakar510/Jakar.Api/blob/master/images/icon.png</iconUrl>
 		<license type="file">LICENSE.txt</license>
-		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<requireLicenseAcceptance>true</requireLicenseAcceptance>
 		<copyright>Copyright (c) 2021</copyright>
 		<icon>icon.png</icon>
 		<description>
 			Base Library for all others
 		</description>
 		<releaseNotes>
-Added Biometric static class to help with iOS user authentication. Use Plugin.Biometrics for full effect.
-Added missing iOS services.
-Updated ApiServices *breaking change*
-Misc bug fixes
+			Support Jakar.Extensions v2.4.0
 		</releaseNotes>
 		<tags>Xamarin.Forms Jakar Jakar.Api Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>
@@ -50,7 +47,7 @@ Misc bug fixes
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.3.0" />
+				            version="2.4.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
@@ -83,7 +80,7 @@ Misc bug fixes
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.3.0" />
+				            version="2.4.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
@@ -118,7 +115,7 @@ Misc bug fixes
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.3.0" />
+				            version="2.4.0" />
 
 				<dependency id="Plugin.CurrentActivity"
 				            version="2.1.0.4" />
@@ -160,7 +157,7 @@ Misc bug fixes
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.3.0" />
+				            version="2.4.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
