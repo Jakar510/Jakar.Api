@@ -10,17 +10,6 @@ namespace Jakar.Api.ResourceManager
 	[SuppressMessage("ReSharper", "MemberHidesStaticFromOuterClass")]
 	public class KeyNames
 	{
-		internal static void Test()
-		{
-			var manager = new ResourceDictionaryManager();
-			manager.Add(OSAppTheme.Dark,  ThemedColor.Accent, Color.Wheat);
-			manager.Add(OSAppTheme.Light, ThemedColor.Accent, Color.Black);
-			manager.Add(OSAppTheme.Light, FontSize.PageTitle, 25);
-			manager.Add(OSAppTheme.Light, FontSize.Title,     20);
-		}
-
-
-
 		public enum FontSize
 		{
 			PageTitle,

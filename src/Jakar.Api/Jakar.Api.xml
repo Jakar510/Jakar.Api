@@ -4,6 +4,13 @@
         <name>Jakar.Api</name>
     </assembly>
     <members>
+        <member name="M:Jakar.Api.ApiServices`9.#ctor(System.String@,System.Type[])">
+            <summary>
+            appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
+            </summary>
+            <param name="app_center_id"></param>
+            <param name="appCenterServices"></param>
+        </member>
         <member name="M:Jakar.Api.ApiServices`10.#ctor(System.String@,System.Type[])">
             <summary>
             appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
@@ -27,11 +34,40 @@
             <param name="e"></param>
             <returns></returns>
         </member>
-        <member name="T:Jakar.Api.ResourceManager.ResourceDictionaryManager">
+        <member name="T:Jakar.Api.ResourceManager.BaseResourceDictionaryManager">
             <summary>
             Recommended class to use for the default implementation: <see cref="T:Jakar.Api.ResourceManager.KeyNames"/>
-            If you want to modify the implementation, override <see cref="M:Jakar.Api.ResourceManager.ResourceDictionaryManager.GetKey``1(Xamarin.Forms.OSAppTheme@,``0@)"/>
+            If you want to modify the implementation, override <see cref="!:GetKey&lt;TThemedKey&gt;"/>
             </summary>
+        </member>
+        <member name="M:Jakar.Api.ResourceManager.ResourceDictionaryManager`2.GetKey(Xamarin.Forms.OSAppTheme@,`1@)">
+            <summary>
+            Default implementation uses <see cref="!:GetFullKey&lt;TThemedKey&gt;"/>.
+            You may override this to use <see cref="!:GetShortKey&lt;TThemedKey&gt;"/> or which ever pattern you wish.
+            </summary>
+            <typeparam name="TThemedKey"></typeparam>
+            <param name="theme"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Jakar.Api.ResourceManager.ResourceDictionaryManager`2.BindAppTheme(Xamarin.Forms.BindableObject@,Xamarin.Forms.BindableProperty@,`1@)">
+            <summary>
+            <see cref="T:Xamarin.Forms.Color"/> is used in <see cref="!:BindAppTheme&lt;TValue, TThemedKey&gt;"/>
+            </summary>
+            <typeparam name="TThemedKey"></typeparam>
+            <param name="bindable"></param>
+            <param name="property"></param>
+            <param name="key"></param>
+        </member>
+        <member name="M:Jakar.Api.ResourceManager.ResourceDictionaryManager`2.BindAppTheme``1(Xamarin.Forms.BindableObject@,Xamarin.Forms.BindableProperty@,`1@)">
+            <summary>
+            
+            </summary>
+            <typeparam name="TValue"></typeparam>
+            <typeparam name="TThemedKey"></typeparam>
+            <param name="bindable"></param>
+            <param name="property"></param>
+            <param name="key"></param>
         </member>
         <member name="M:Jakar.Api.ResourceManager.ResourceDictionaryManager.GetKey``1(Xamarin.Forms.OSAppTheme@,``0@)">
             <summary>

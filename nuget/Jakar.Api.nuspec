@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>3.5.1</version>
+		<version>3.6.0</version>
 		<title>Base library for all others in Xamarin.Forms</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,7 +18,8 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Support Jakar.Extensions v2.5.0
+			Support Jakar.Extensions v2.5.1
+			Updated ResourceDictionaryManager and ApiServices
 		</releaseNotes>
 		<tags>Xamarin.Forms Jakar Jakar.Api Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>
@@ -47,7 +48,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.5.0" />
+				            version="2.5.1" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
@@ -80,7 +81,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.5.0" />
+				            version="2.5.1" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
@@ -115,7 +116,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.5.0" />
+				            version="2.5.1" />
 
 				<dependency id="Plugin.CurrentActivity"
 				            version="2.1.0.4" />
@@ -157,7 +158,7 @@
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.5.0" />
+				            version="2.5.1" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
