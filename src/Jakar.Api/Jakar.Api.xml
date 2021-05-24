@@ -4,7 +4,14 @@
         <name>Jakar.Api</name>
     </assembly>
     <members>
-        <member name="M:Jakar.Api.ApiServices`9.#ctor(System.String@,System.Type[])">
+        <member name="M:Jakar.Api.ApiServices`7.#ctor(System.String@,System.Type[])">
+            <summary>
+            appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
+            </summary>
+            <param name="app_center_id"></param>
+            <param name="appCenterServices"></param>
+        </member>
+        <member name="M:Jakar.Api.ApiServices`8.#ctor(System.String@,System.Type[])">
             <summary>
             appCenterServices: pass in the types you want to initialize, for example:  typeof(Microsoft.AppCenter.Analytics.Analytics), typeof(Microsoft.AppCenter.Crashes.Crashes)
             </summary>
