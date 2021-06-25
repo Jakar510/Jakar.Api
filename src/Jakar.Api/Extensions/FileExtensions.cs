@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Jakar.Extensions.FileSystemExtensions;
 using Jakar.Extensions.Models;
 using Plugin.Media.Abstractions;
 using Xamarin.Essentials;

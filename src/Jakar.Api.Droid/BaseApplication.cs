@@ -24,7 +24,7 @@ namespace Jakar.Api.Droid
 
 			Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this, savedInstanceState);
 			Acr.UserDialogs.UserDialogs.Init(this);
-
+			
 			Instance = this;
 		}
 

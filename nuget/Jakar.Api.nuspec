@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>3.7.0</version>
+		<version>3.8.0</version>
 		<title>Base library for all others in Xamarin.Forms</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,7 +18,7 @@
 			Base Library for all others
 		</description>
 		<releaseNotes>
-			Updated ApiServices. AccountManager is now optional and in an overload.
+			Support for Jakar.Extensions 3.0.0.
 		</releaseNotes>
 		<tags>Xamarin.Forms Jakar Jakar.Api Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>
@@ -37,23 +37,25 @@
 				            version="2.0.3" />
 
 				<dependency id="Microsoft.AppCenter"
-				            version="4.2.0" />
+				            version="4.3.0" />
 				<dependency id="Microsoft.AppCenter.Analytics"
-				            version="4.2.0" />
+				            version="4.3.0" />
 				<dependency id="Microsoft.AppCenter.Crashes"
-				            version="4.2.0" />
+				            version="4.3.0" />
 
 				<dependency id="Newtonsoft.Json"
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.5.1" />
+				            version="3.0.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 				            version="2.1.0" />
+				<dependency id="Xam.Plugin.Screenshot"
+				            version="2.0.3" />
 				<dependency id="Xam.Plugin.Media"
 				            version="5.0.1" />
 			</group>
@@ -70,23 +72,25 @@
 				            version="2.0.3" />
 
 				<dependency id="Microsoft.AppCenter"
-				            version="4.2.0" />
+				            version="4.3.0" />
 				<dependency id="Microsoft.AppCenter.Analytics"
-				            version="4.2.0" />
+				            version="4.3.0" />
 				<dependency id="Microsoft.AppCenter.Crashes"
-				            version="4.2.0" />
+				            version="4.3.0" />
 
 				<dependency id="Newtonsoft.Json"
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.5.1" />
+				            version="3.0.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 				            version="2.1.0" />
+				<dependency id="Xam.Plugin.Screenshot"
+				            version="2.0.3" />
 				<dependency id="Xam.Plugin.Media"
 				            version="5.0.1" />
 			</group>
@@ -105,17 +109,17 @@
 				            version="2.0.3" />
 
 				<dependency id="Microsoft.AppCenter"
-				            version="4.2.0" />
+				            version="4.3.0" />
 				<dependency id="Microsoft.AppCenter.Analytics"
-				            version="4.2.0" />
+				            version="4.3.0" />
 				<dependency id="Microsoft.AppCenter.Crashes"
-				            version="4.2.0" />
+				            version="4.3.0" />
 
 				<dependency id="Newtonsoft.Json"
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.5.1" />
+				            version="3.0.0" />
 
 				<dependency id="Plugin.CurrentActivity"
 				            version="2.1.0.4" />
@@ -125,6 +129,8 @@
 
 				<dependency id="Xam.Plugin.LatestVersion"
 				            version="2.1.0" />
+				<dependency id="Xam.Plugin.Screenshot"
+				            version="2.0.3" />
 				<dependency id="Xam.Plugin.Media"
 				            version="5.0.1" />
 			</group>
@@ -147,23 +153,25 @@
 				            version="2.0.3" />
 
 				<dependency id="Microsoft.AppCenter"
-				            version="4.2.0" />
+				            version="4.3.0" />
 				<dependency id="Microsoft.AppCenter.Analytics"
-				            version="4.2.0" />
+				            version="4.3.0" />
 				<dependency id="Microsoft.AppCenter.Crashes"
-				            version="4.2.0" />
+				            version="4.3.0" />
 
 				<dependency id="Newtonsoft.Json"
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="2.5.1" />
+				            version="3.0.0" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
 
 				<dependency id="Xam.Plugin.LatestVersion"
 				            version="2.1.0" />
+				<dependency id="Xam.Plugin.Screenshot"
+				            version="2.0.3" />
 				<dependency id="Xam.Plugin.Media"
 				            version="5.0.1" />
 			</group>

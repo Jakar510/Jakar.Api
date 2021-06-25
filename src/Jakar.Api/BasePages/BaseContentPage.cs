@@ -18,6 +18,6 @@ namespace Jakar.Api.BasePages
 		public TViewModel ViewModel { get; protected set; }
 
 
-		protected BaseContentPage() : base() => ViewModel = InstanceCreator.Create<TViewModel>(this);
+		protected BaseContentPage() : base() => ViewModel = InstanceCreator<TViewModel>.Create(this);
 	}
 }

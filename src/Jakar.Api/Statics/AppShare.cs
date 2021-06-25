@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Jakar.Api.Extensions;
+using Jakar.Extensions.FileSystemExtensions;
 using Jakar.Extensions.Http;
 using Jakar.Extensions.Interfaces;
 using Jakar.Extensions.Models;

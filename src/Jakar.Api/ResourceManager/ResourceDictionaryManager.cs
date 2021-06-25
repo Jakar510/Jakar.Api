@@ -9,10 +9,6 @@ using Xamarin.Forms;
 #nullable enable
 namespace Jakar.Api.ResourceManager
 {
-	/// <summary>
-	/// Recommended class to use for the default implementation: <see cref="KeyNames"/>
-	/// If you want to modify the implementation, override <see cref="GetKey{TThemedKey}"/>
-	/// </summary>
 	public abstract class BaseResourceDictionaryManager
 	{
 		protected static ResourceDictionary _ResourcesCurrent => Application.Current.Resources;
@@ -24,6 +20,11 @@ namespace Jakar.Api.ResourceManager
 
 
 
+	/// <summary>
+	/// For this implementation, a single Normal Enum and Themed Enum is needed. 
+	/// </summary>
+	/// <typeparam name="TKey">Normal Enum</typeparam>
+	/// <typeparam name="TThemedKey">Themed Enum</typeparam>
 	public abstract class ResourceDictionaryManager<TKey, TThemedKey> : BaseResourceDictionaryManager where TThemedKey : Enum
 																									  where TKey : Enum
 	{
@@ -31,10 +32,9 @@ namespace Jakar.Api.ResourceManager
 		public static string GetShortKey( in OSAppTheme theme, in TThemedKey key ) => $"{theme}{key}";
 
 		/// <summary>
-		/// Default implementation uses <see cref="GetFullKey{TThemedKey}"/>.
-		/// You may override this to use <see cref="GetShortKey{TThemedKey}"/> or which ever pattern you wish.
+		/// Default implementation uses <see cref="GetFullKey"/>.
+		/// You may override this to use <see cref="GetShortKey"/> or which ever pattern you wish.
 		/// </summary>
-		/// <typeparam name="TThemedKey"></typeparam>
 		/// <param name="theme"></param>
 		/// <param name="key"></param>
 		/// <returns></returns>
@@ -93,9 +93,8 @@ namespace Jakar.Api.ResourceManager
 
 
 		/// <summary>
-		/// <see cref="Color"/> is used in <see cref="BindAppTheme{TValue, TThemedKey}"/>
+		/// <see cref="Color"/> is used in <see cref="BindAppTheme"/>
 		/// </summary>
-		/// <typeparam name="TThemedKey"></typeparam>
 		/// <param name="bindable"></param>
 		/// <param name="property"></param>
 		/// <param name="key"></param>
@@ -106,7 +105,6 @@ namespace Jakar.Api.ResourceManager
 		/// 
 		/// </summary>
 		/// <typeparam name="TValue"></typeparam>
-		/// <typeparam name="TThemedKey"></typeparam>
 		/// <param name="bindable"></param>
 		/// <param name="property"></param>
 		/// <param name="key"></param>
@@ -118,6 +116,9 @@ namespace Jakar.Api.ResourceManager
 
 
 
+	/// <summary>
+	/// Recommended class to use for this implementation: <see cref="KeyNames"/>
+	/// </summary>
 	public abstract class ResourceDictionaryManager : BaseResourceDictionaryManager
 	{
 		public static string GetFullKey<TThemedKey>( in  OSAppTheme theme, in TThemedKey key ) where TThemedKey : Enum => $"{theme}.{typeof(TThemedKey).FullName}.{key}";
@@ -151,7 +152,7 @@ namespace Jakar.Api.ResourceManager
 		}
 
 		public void Add<TThemedKey, TValue>( in OSAppTheme theme, in TThemedKey key, TValue value ) where TThemedKey : Enum { _ResourcesCurrent.Add(GetKey(theme, key), value); }
-		
+
 		public void Add<TKey, TValue>( in TKey key, TValue value ) where TKey : Enum
 		{
 			if ( key is null ) { throw new ArgumentNullException(nameof(key)); }
