@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Jakar.Api.Interfaces;
 using Jakar.Api.Statics;
-using Jakar.Extensions;
 using Jakar.Extensions.Exceptions.General;
 using Jakar.Extensions.FileSystemExtensions;
 using Jakar.Extensions.General;
 using Jakar.Extensions.Interfaces;
 using Jakar.Extensions.Languages;
-using Jakar.Extensions.Models;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
@@ -100,7 +95,7 @@ namespace Jakar.Api
 
 			if ( !_Services.SendCrashes ) { return; }
 
-			byte[] screenShot = await AppShare.TakeScreenShot().ConfigureAwait(true);
+			ReadOnlyMemory<byte> screenShot = await AppShare.TakeScreenShot().ConfigureAwait(true);
 
 			e.PrintException();
 
@@ -131,10 +126,10 @@ namespace Jakar.Api
 			{
 				[nameof(IAppSettings<TDeviceID, TViewPage>.CurrentViewPage)] = _Services.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(_Services.CurrentViewPage)),
 				[nameof(IAppSettings<TDeviceID, TViewPage>.AppName)]         = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
-				[nameof(DateTime)]                     = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", CultureInfo.CurrentCulture),
-				[nameof(AppDeviceInfo.DeviceId)]       = AppDeviceInfo.DeviceId,
-				[nameof(AppDeviceInfo.VersionNumber)]  = AppDeviceInfo.VersionNumber,
-				[nameof(LanguageApi.SelectedLanguage)] = CultureInfo.CurrentCulture.DisplayName
+				[nameof(DateTime)]                                           = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", CultureInfo.CurrentCulture),
+				[nameof(AppDeviceInfo.DeviceId)]                             = AppDeviceInfo.DeviceId,
+				[nameof(AppDeviceInfo.VersionNumber)]                        = AppDeviceInfo.VersionNumber,
+				[nameof(LanguageApi.SelectedLanguage)]                       = CultureInfo.CurrentCulture.DisplayName
 			};
 
 	#endregion
@@ -145,7 +140,7 @@ namespace Jakar.Api
 		public async Task TrackError( Exception e ) =>
 			await TrackError(e, e.Details(), e.FullDetails()).ConfigureAwait(true);
 
-		public async Task TrackError( Exception e, byte[] screenShot ) =>
+		public async Task TrackError( Exception e, ReadOnlyMemory<byte> screenShot ) =>
 			await TrackError(e, e.Details(), e.FullDetails(), screenShot).ConfigureAwait(true);
 
 		public async Task TrackError( Exception ex, Dictionary<string, string?>? eventDetails ) =>
@@ -157,7 +152,7 @@ namespace Jakar.Api
 																																						   null,
 																																						   null).ConfigureAwait(true);
 
-		public async Task TrackError( Exception ex, Dictionary<string, string?>? eventDetails, Dictionary<string, object?>? appState, byte[] screenShot ) =>
+		public async Task TrackError( Exception ex, Dictionary<string, string?>? eventDetails, Dictionary<string, object?>? appState, ReadOnlyMemory<byte> screenShot ) =>
 			await TrackError(ex,
 							 eventDetails,
 							 appState,
@@ -166,7 +161,7 @@ namespace Jakar.Api
 							 screenShot).ConfigureAwait(true);
 
 		public async Task TrackError( Exception                    ex,
-									  Dictionary<string, string?>?  eventDetails,
+									  Dictionary<string, string?>? eventDetails,
 									  Dictionary<string, object?>? appState,
 									  string?                      incomingText,
 									  string?                      outgoingText
@@ -178,11 +173,11 @@ namespace Jakar.Api
 							  null).ConfigureAwait(true);
 
 		public async Task TrackError( Exception                    ex,
-									  Dictionary<string, string?>?  eventDetails,
+									  Dictionary<string, string?>? eventDetails,
 									  Dictionary<string, object?>? appState,
 									  string?                      incomingText,
 									  string?                      outgoingText,
-									  byte[]?                      screenShot
+									  ReadOnlyMemory<byte>?        screenShot
 		)
 		{
 			ThrowIfNotEnabled();
@@ -201,7 +196,7 @@ namespace Jakar.Api
 
 			ErrorAttachmentLog? screenShotAttachment = screenShot is null
 														   ? null
-														   : ErrorAttachmentLog.AttachmentWithBinary(screenShot, "screenShot.jpeg", "image/jpeg");
+														   : ErrorAttachmentLog.AttachmentWithBinary(( (ReadOnlyMemory<byte>) screenShot ).ToArray(), "screenShot.jpeg", "image/jpeg");
 
 			var attachments = new List<ErrorAttachmentLog>();
 
