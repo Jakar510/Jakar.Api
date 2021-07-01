@@ -105,9 +105,11 @@ namespace Jakar.Api
 
 	#region AppStates
 
-		protected static async Task SaveAppState( string path, Dictionary<string, object?> payload )
+		protected async Task SaveAppState( Dictionary<string, object?> payload )
 		{
-			await using var file = new LocalFile(path);
+			if ( _fileSystemApi is null ) { throw new NullReferenceException(nameof(_fileSystemApi)); }
+
+			await using var file = new LocalFile(_fileSystemApi.FeedBackFileName);
 			await file.WriteToFileAsync(payload).ConfigureAwait(true);
 		}
 
@@ -117,20 +119,20 @@ namespace Jakar.Api
 
 			var result = new Dictionary<string, object?> { [nameof(AppState)] = AppState(), [key] = feedback };
 
-			await SaveAppState(_fileSystemApi!.FeedBackFileName, result).ConfigureAwait(true);
+			await SaveAppState(result).ConfigureAwait(true);
 		}
 
 
-		protected virtual Dictionary<string, string> AppState() =>
-			new()
-			{
-				[nameof(IAppSettings<TDeviceID, TViewPage>.CurrentViewPage)] = _Services.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(_Services.CurrentViewPage)),
-				[nameof(IAppSettings<TDeviceID, TViewPage>.AppName)]         = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
-				[nameof(DateTime)]                                           = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", CultureInfo.CurrentCulture),
-				[nameof(AppDeviceInfo.DeviceId)]                             = AppDeviceInfo.DeviceId,
-				[nameof(AppDeviceInfo.VersionNumber)]                        = AppDeviceInfo.VersionNumber,
-				[nameof(LanguageApi.SelectedLanguage)]                       = CultureInfo.CurrentCulture.DisplayName
-			};
+		protected virtual Dictionary<string, string> AppState()
+			=> new()
+			   {
+				   [nameof(IAppSettings<TDeviceID, TViewPage>.CurrentViewPage)] = _Services.CurrentViewPage?.ToString() ?? throw new NullReferenceException(nameof(_Services.CurrentViewPage)),
+				   [nameof(IAppSettings<TDeviceID, TViewPage>.AppName)]         = _Services.AppName ?? throw new NullReferenceException(nameof(_Services.AppName)),
+				   [nameof(DateTime)]                                           = DateTime.Now.ToString("MM/dd/yyyy HH:mm tt", CultureInfo.CurrentCulture),
+				   [nameof(AppDeviceInfo.DeviceId)]                             = AppDeviceInfo.DeviceId,
+				   [nameof(AppDeviceInfo.VersionNumber)]                        = AppDeviceInfo.VersionNumber,
+				   [nameof(LanguageApi.SelectedLanguage)]                       = CultureInfo.CurrentCulture.DisplayName
+			   };
 
 	#endregion
 
@@ -184,7 +186,7 @@ namespace Jakar.Api
 
 			if ( !_Services.SendCrashes ) { return; }
 
-			if ( appState is not null ) await SaveAppState(_fileSystemApi!.AppStateFileName, appState).ConfigureAwait(true);
+			if ( appState is not null ) await SaveAppState(appState).ConfigureAwait(true);
 
 			ErrorAttachmentLog? state = appState is null
 											? null
