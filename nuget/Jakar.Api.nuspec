@@ -15,12 +15,11 @@
 		<copyright>Copyright (c) 2021</copyright>
 		<icon>icon.png</icon>
 		<description>
-			Base Library for all others
+			Base Library for all Xamarin.Forms mobile apps.
 		</description>
 		<releaseNotes>
-Support for Jakar.Extensions 3.5.3.
-Added VisualElementExtensions.
-Tweaked Jakar.Api.Debug
+Support for Jakar.Extensions 3.6.0.
+BugFix for NetworkManager.
 		</releaseNotes>
 		<tags>Xamarin.Forms Jakar Jakar.Api Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>

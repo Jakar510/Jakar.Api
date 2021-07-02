@@ -139,11 +139,17 @@ namespace Jakar.Api
 
 	#region Track Exceptions
 
-		public async Task TrackError( Exception e ) =>
-			await TrackError(e, e.Details(), e.FullDetails()).ConfigureAwait(true);
+		public async Task TrackError( Exception e )
+		{
+			e.Details(out Dictionary<string, string?> dict);
+			await TrackError(e, dict, e.FullDetails(true)).ConfigureAwait(true);
+		}
 
-		public async Task TrackError( Exception e, ReadOnlyMemory<byte> screenShot ) =>
-			await TrackError(e, e.Details(), e.FullDetails(), screenShot).ConfigureAwait(true);
+		public async Task TrackError( Exception e, ReadOnlyMemory<byte> screenShot )
+		{
+			e.Details(out Dictionary<string, string?> dict);
+			await TrackError(e, dict, e.FullDetails(true), screenShot).ConfigureAwait(true);
+		}
 
 		public async Task TrackError( Exception ex, Dictionary<string, string?>? eventDetails ) =>
 			await TrackError(ex, eventDetails, appState: null).ConfigureAwait(true);
