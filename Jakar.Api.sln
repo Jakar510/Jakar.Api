@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jakar.Api.Tests", "Jakar.Api.Tests\Jakar.Api.Tests.csproj", "{7B7DA517-A74A-482C-8F3E-81B9929F2FEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{F77BD70A-AC4A-4C6F-ABD1-2835CC23A4DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F77BD70A-AC4A-4C6F-ABD1-2835CC23A4DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F77BD70A-AC4A-4C6F-ABD1-2835CC23A4DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B7DA517-A74A-482C-8F3E-81B9929F2FEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B7DA517-A74A-482C-8F3E-81B9929F2FEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B7DA517-A74A-482C-8F3E-81B9929F2FEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B7DA517-A74A-482C-8F3E-81B9929F2FEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
