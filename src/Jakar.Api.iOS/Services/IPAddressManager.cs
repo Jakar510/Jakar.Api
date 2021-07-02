@@ -11,7 +11,6 @@ using Xamarin.Forms;
 
 #pragma warning disable 1591
 
-#nullable enable
 [assembly: Dependency(typeof(IpAddressManager))]
 
 #nullable enable
@@ -19,28 +18,6 @@ namespace Jakar.Api.iOS.Services
 {
 	public class IpAddressManager : INetworkManager
 	{
-		public string? GetIpAddress()
-		{
-			// ReSharper disable once LoopCanBeConvertedToQuery
-			foreach ( NetworkInterface netInterface in NetworkInterface.GetAllNetworkInterfaces() )
-			{
-				if ( netInterface.NetworkInterfaceType != NetworkInterfaceType.Wireless80211 && netInterface.NetworkInterfaceType != NetworkInterfaceType.Ethernet ) continue;
-
-				foreach ( UnicastIPAddressInformation addressInfo in netInterface.GetIPProperties().UnicastAddresses )
-				{
-					if ( addressInfo.Address.AddressFamily != AddressFamily.InterNetwork ) continue;
-
-					var ipAddress = addressInfo.Address.ToString();
-
-					if ( ipAddress.Contains("169.254", StringComparison.OrdinalIgnoreCase) ) continue;
-
-					return ipAddress;
-				}
-			}
-
-			return default;
-		}
-
 		public string GetIdentifier() => UIDevice.CurrentDevice.IdentifierForVendor.ToString();
 
 		public void OpenWifiSettings()
@@ -48,6 +25,7 @@ namespace Jakar.Api.iOS.Services
 			try
 			{
 				using var wifiUrl = new NSUrl(@"prefs:root=WIFI");
+
 				if ( UIApplication.SharedApplication.CanOpenUrl(wifiUrl) )
 				{
 					// Pre iOS 10
@@ -60,10 +38,7 @@ namespace Jakar.Api.iOS.Services
 					UIApplication.SharedApplication.OpenUrl(nSUrl);
 				}
 			}
-			catch ( Exception ex )
-			{
-				throw new WiFiException("Could not open Wifi Settings", ex);
-			}
+			catch ( Exception ex ) { throw new WiFiException("Could not open Wifi Settings", ex); }
 		}
-    }
+	}
 }
