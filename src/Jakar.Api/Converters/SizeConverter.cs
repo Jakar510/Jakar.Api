@@ -15,7 +15,7 @@ namespace Jakar.Api.Converters
 	{
 		public static Size Convert( string? value )
 		{
-			if ( string.IsNullOrWhiteSpace(value) ) { throw new InvalidOperationException($"Cannot convert \"{value}\" into {typeof(Size)}"); }
+			if ( string.IsNullOrWhiteSpace(value) ) { throw new InvalidOperationException($"Cannot convert \"{value}\" into {typeof(Size).FullName}"); }
 
 			string[] items = value.Split(',');
 
@@ -29,15 +29,14 @@ namespace Jakar.Api.Converters
 					return new Size(double.Parse(items[0]), double.Parse(items[1]));
 			}
 
-			throw new InvalidOperationException($"Cannot convert \"{value}\" into {typeof(Size)}");
+			throw new InvalidOperationException($"Cannot convert \"{value}\" into {typeof(Size).FullName}");
 		}
 
-		public string ConvertToInvariantString( object value ) =>
-			value switch
-			{
-				Size size => $"{size.Width},{size.Height}",
-				_         => value.ToString()
-			};
+		public string ConvertToInvariantString( object value ) => value switch
+																  {
+																	  Size size => $"{size.Width},{size.Height}",
+																	  _         => value.ToString()
+																  };
 
 
 		public override bool CanConvertFrom( Type? sourceType ) => sourceType is null || sourceType == typeof(string);

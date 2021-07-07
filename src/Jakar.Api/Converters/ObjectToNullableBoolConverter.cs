@@ -9,8 +9,8 @@ using Xamarin.Forms;
 #nullable enable
 namespace Jakar.Api.Converters
 {
-	[TypeConverter(typeof(bool))]
-	public class ObjectToBoolConverter : TypeConverter, IValueConverter, IExtendedTypeConverter
+	[TypeConverter(typeof(bool?))]
+	public class ObjectToNullableBoolConverter : TypeConverter, IValueConverter, IExtendedTypeConverter
 	{
 		public override bool CanConvertFrom( Type? sourceType ) => sourceType is null || sourceType.IsOneOf(typeof(bool),
 																											typeof(int),
@@ -21,11 +21,11 @@ namespace Jakar.Api.Converters
 																											typeof(double),
 																											typeof(string));
 
-		public static bool Convert( object? value )
+		public static bool? Convert( object? value )
 		{
 			return value switch
 				   {
-					   null     => false,
+					   null     => null,
 					   bool b   => b,
 					   int n    => n != 0,
 					   uint n   => n != 0,
@@ -40,17 +40,17 @@ namespace Jakar.Api.Converters
 				   };
 		}
 
-		protected virtual bool InternalConvert( object? value ) => Convert(value);
+		protected virtual bool? InternalConvert( object? value ) => Convert(value);
 
-		public virtual object Convert( object? value, Type targetType, object? parameter, CultureInfo culture ) => InternalConvert(value);
+		public virtual object? Convert( object? value, Type targetType, object? parameter, CultureInfo culture ) => InternalConvert(value);
 
 		public virtual object? ConvertBack( object? value, Type targetType, object? parameter, CultureInfo culture ) => value?.ToString();
 
 
-		public object ConvertFrom( CultureInfo            culture, object?          value, IServiceProvider serviceProvider ) => InternalConvert(value);
-		public object ConvertFromInvariantString( string? value,   IServiceProvider serviceProvider ) => InternalConvert(value);
+		public object? ConvertFrom( CultureInfo            culture, object?          value, IServiceProvider serviceProvider ) => InternalConvert(value);
+		public object? ConvertFromInvariantString( string? value,   IServiceProvider serviceProvider ) => InternalConvert(value);
 
 
-		public override object ConvertFromInvariantString( string? value ) => InternalConvert(value);
+		public override object? ConvertFromInvariantString( string? value ) => InternalConvert(value);
 	}
 }

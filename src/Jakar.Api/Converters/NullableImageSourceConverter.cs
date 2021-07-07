@@ -19,10 +19,9 @@ namespace Jakar.Api.Converters
 		public override bool    CanConvertFrom( Type?               sourceType ) => sourceType is null || sourceType == typeof(string);
 		public override object? ConvertFromInvariantString( string? value )      => Convert(value);
 
-		public ImageSource? Convert( string? value ) =>
-			string.IsNullOrWhiteSpace(value)
-				? null
-				: (ImageSource) _converter.ConvertFromInvariantString(value);
+		public ImageSource? Convert( string? value ) => string.IsNullOrWhiteSpace(value)
+															? null
+															: (ImageSource) _converter.ConvertFromInvariantString(value);
 
 		public string? ConvertToInvariantString( object? _ ) => throw new NotImplementedException();
 

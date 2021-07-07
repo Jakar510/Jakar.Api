@@ -8,6 +8,7 @@ using Xamarin.Forms;
 #nullable enable
 namespace Jakar.Api.Converters
 {
+	[TypeConverter(typeof(string))]
 	public class ObjectToStringConverter : TypeConverter, IValueConverter, IExtendedTypeConverter
 	{
 		public override bool CanConvertFrom( Type? sourceType ) => true;

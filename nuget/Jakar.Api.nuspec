@@ -4,7 +4,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
 		<id>Jakar.Api</id>
-		<version>3.9.3</version>
+		<version>3.9.2</version>
 		<title>Base library for all others in Xamarin.Forms</title>
 		<authors>Tyler Stegmaier</authors>
 		<owners>Jakar510/Jakar</owners>
@@ -18,8 +18,10 @@
 			Base Library for all Xamarin.Forms mobile apps.
 		</description>
 		<releaseNotes>
-Support for Jakar.Extensions 3.6.0.
+Support for Jakar.Extensions 3.6.1.
 BugFix for NetworkManager.
+Add ColorExtensions.
+Updated Converters.
 		</releaseNotes>
 		<tags>Xamarin.Forms Jakar Jakar.Api Jakar.Extensions Api Extensions</tags>
 		<language>en-US</language>
@@ -48,7 +50,7 @@ BugFix for NetworkManager.
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="3.5.3" />
+				            version="3.6.1" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
@@ -83,7 +85,7 @@ BugFix for NetworkManager.
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="3.5.3" />
+				            version="3.6.1" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />
@@ -120,7 +122,7 @@ BugFix for NetworkManager.
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="3.5.3" />
+				            version="3.6.1" />
 
 				<dependency id="Plugin.CurrentActivity"
 				            version="2.1.0.4" />
@@ -164,7 +166,7 @@ BugFix for NetworkManager.
 				            version="13.0.1" />
 
 				<dependency id="Jakar.Extensions"
-				            version="3.5.3" />
+				            version="3.6.1" />
 
 				<dependency id="Acr.UserDialogs"
 				            version="7.1.0.514" />

@@ -21,12 +21,11 @@ namespace Jakar.Api.Converters
 			return (TextAlignment) base.ConvertFromInvariantString(value);
 		}
 
-		public string? ConvertToInvariantString( object? value ) =>
-			value switch
-			{
-				null                    => null,
-				TextAlignment alignment => alignment.ToString(),
-				_                       => value.ToString()
-			};
+		public string? ConvertToInvariantString( object? value ) => value switch
+																	{
+																		null                    => null,
+																		TextAlignment alignment => alignment.ToString(),
+																		_                       => value.ToString()
+																	};
 	}
 }

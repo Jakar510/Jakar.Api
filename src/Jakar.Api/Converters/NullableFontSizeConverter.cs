@@ -18,12 +18,11 @@ namespace Jakar.Api.Converters
 		public override bool    CanConvertFrom( Type?               sourceType ) => sourceType is null || sourceType == typeof(string);
 		public override object? ConvertFromInvariantString( string? value )      => Convert(value);
 
-		public double? Convert( string? value ) =>
-			value switch
-			{
-				null => default,
-				_    => (double) base.ConvertFromInvariantString(value)
-			};
+		public double? Convert( string? value ) => value switch
+												   {
+													   null => default,
+													   _    => (double) base.ConvertFromInvariantString(value)
+												   };
 
 		public string? ConvertToInvariantString( object? value ) => value?.ToString();
 
